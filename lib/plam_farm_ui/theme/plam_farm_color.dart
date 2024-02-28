@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 abstract class PlamFarmColors {
   /// Light background
-  static const Color lightBackground = Color(0xFFF4F7FD);
+  static const Color lightBackground = Color(0xFFFFFFFF);
 
   /// Light on-background
   static const Color lightOnBackground = Color(0xFF25323F);
@@ -151,4 +151,13 @@ abstract class PlamFarmColors {
 
   /// Dark shadow 4
   static const Color darkShadow4 = Color(0x4C000000);
+
+  static const Color palmFarmPrimary1 = Color(0xFF02C3BD);
+  static const Color palmFarmPrimary2 = Color(0xFF9DEBEB);
+  static const Color palmFarmPrimary3 = Color(0xFF22B6F5);
+  static const Color palmFarmPrimary4 = Color(0xFF00CBA6);
+  static const Color palmFarmPrimary5 = Color(0xFFFF614D);
+  static const Color palmFarmPrimary6 = Color(0xFF383D50);
+  static const Color palmFarmPrimary7 = Color(0xFFF7F7F7);
+  static const Color palmFarmPrimary8 = Color(0xFF000000);
 }
