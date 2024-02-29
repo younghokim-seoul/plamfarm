@@ -115,6 +115,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                       widget.title!,
                       style: PlamFarmTextStyles.headline6Bold.copyWith(
                         color: PlamFarmColors.palmFarmPrimary8,
+                        fontWeight: FontWeight.w700
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
