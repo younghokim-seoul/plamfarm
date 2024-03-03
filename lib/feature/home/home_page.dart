@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
 import 'package:palmfarm/feature/widget/dialog/nick_name_dialog.dart';
+import 'package:palmfarm/plam_farm_ui/router/app_route.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
@@ -45,7 +45,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget deviceListText() => Text(
         '나의 기기 목록',
-        style: PlamFarmTextStyles.buttonLarge.copyWith(color: Color(0XFF383D50)),
+        style: PlamFarmTextStyles.buttonLarge.copyWith(color: const Color(0XFF383D50)),
       ).paddingSymmetric(horizontal: 20.w);
 
   Widget deviceRegisterView() => Padding(
@@ -62,11 +62,15 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: Row(
               children: [
                 Gap(10.w),
-                const Expanded(
-                  child: Text(
-                    'asdaasdasdasd',
-                    style: PlamFarmTextStyles.body2Bold,
-                  ),
+                 Expanded(
+                  child: InkWell(
+                    splashFactory: InkRipple.splashFactory,
+                    onTap: () => showNickNameDialog(context: context, title: "이름 수정하기", message: ""),
+                    child: const Text(
+                      'asdaasdasdasd',
+                      style: PlamFarmTextStyles.body2Bold,
+                    ),
+                  )
                 ),
                 Gap(10.w),
                 DecoratedBox(
@@ -77,9 +81,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ),
                     ),
                     child: InkWell(
-                      onTap: () {
-                        showNickNameDialog(context: context, title: "title", message: "message");
-                      },
+                      onTap: () => context.router.push(const DeviceDetailRoute()),
                       child: Text(
                         '기기 추가',
                         style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),

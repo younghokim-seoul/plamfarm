@@ -66,7 +66,7 @@ abstract class PlamFarmColors {
   static const Color lightSelectionHandle = Color(0xFF2265CB);
 
   /// Light shadow 1
-  static const Color lightShadow1 = Color(0x0C25323F);
+  static const Color lightShadow1 = Color(0xff383D50);
 
   /// Light shadow 2
   static const Color lightShadow2 = Color(0x3325323F);
@@ -160,4 +160,7 @@ abstract class PlamFarmColors {
   static const Color palmFarmPrimary6 = Color(0xFF383D50);
   static const Color palmFarmPrimary7 = Color(0xFFF7F7F7);
   static const Color palmFarmPrimary8 = Color(0xFF000000);
+  static const Color palmFarmPrimary9 = Color(0xFFEDEDED);
+  static const Color palmFarmNormalTextColor = Color(0xFF383D50);
+
 }

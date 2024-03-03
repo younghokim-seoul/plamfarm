@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
+import 'package:palmfarm/feature/widget/label_text_filed/labeled_input_field.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
@@ -35,75 +38,111 @@ class NickNameDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
-      elevation: 0,
-      actionsAlignment: MainAxisAlignment.end,
-      actionsPadding: const EdgeInsets.all(0),
-      actions: [
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: PlamFarmColors.lightBackground,
-            border: Border.all(
-              color: PlamFarmColors.palmFarmPrimary5,
-              width: 1,
-            ),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(8),
-            ),
-          ),
-          child: InkWell(
-            onTap: () {
-              context.router.pop();
-            },
-            child: Text(
-              '닫기',
-              style: PlamFarmTextStyles.body2Bold.copyWith(color: PlamFarmColors.palmFarmPrimary5),
-            ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
-          ),
-        ).paddingOnly(bottom: 24, right: 12),
-        DecoratedBox(
-          decoration: const BoxDecoration(
-            color: PlamFarmColors.palmFarmPrimary5,
-            borderRadius: BorderRadius.all(
-              Radius.circular(8),
-            ),
-          ),
-          child: InkWell(
-            onTap: () {
-              context.router.pop();
-            },
-            child: Text(
-              '저장하기',
-              style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
-            ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
-          ),
-        ).paddingOnly(right: 20, bottom: 24)
-      ],
-      content: SizedBox(
-        width: getScreenWidth(context),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: Theme.of(context).textTheme.titleMedium!.fontSize! * 1.5,
-                    child: Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(message),
-                ],
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32))),
+        elevation: 0,
+        actionsAlignment: MainAxisAlignment.end,
+        actionsPadding: EdgeInsets.zero,
+        insetPadding: EdgeInsets.all(36.w),
+        actions: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: PlamFarmColors.lightBackground,
+              border: Border.all(
+                color: PlamFarmColors.palmFarmPrimary5,
+                width: 1,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
               ),
             ),
-          ],
-        ),
-      )
+            child: InkWell(
+              onTap: () {
+                context.router.pop();
+              },
+              child: Text(
+                '닫기',
+                style: PlamFarmTextStyles.body2Bold
+                    .copyWith(color: PlamFarmColors.palmFarmPrimary5),
+              ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
+            ),
+          ).paddingOnly(bottom: 24, right: 12),
+          DecoratedBox(
+            decoration: const BoxDecoration(
+              color: PlamFarmColors.palmFarmPrimary5,
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
+              ),
+            ),
+            child: InkWell(
+              onTap: () {
+                context.router.pop();
+              },
+              child: Text(
+                '저장하기',
+                style:
+                    PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
+              ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
+            ),
+          ).paddingOnly(right: 20, bottom: 24)
+        ],
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: SizedBox(
+            width: getScreenWidth(context),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildTitleArea(context),
+                Gap(16.h),
+                _buildNameInputTextFiled(),
+                Gap(40.h),
+              ],
+            ),
+          ),
+        ));
+  }
+
+  Widget _buildTitleArea(BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: PlamFarmTextStyles.buttonLarge
+                .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16),
+          ),
+          InkWell(
+            splashFactory: InkRipple.splashFactory,
+            onTap: () {
+              context.router.pop();
+            },
+            child: const _Icon(
+              icon: CupertinoIcons.clear,
+            ),
+          )
+        ],
+      );
+
+  Widget _buildNameInputTextFiled() => LabeledInputField(
+    controller: TextEditingController(),
+    hintText: '이름을 입력해주세요.',
+    errorText: null,
+    keyboardType: TextInputType.text,
+  );
+
+}
+
+class _Icon extends StatelessWidget {
+  const _Icon({required this.icon});
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      icon,
+      size: 24,
+      color: Colors.black,
     );
   }
 }

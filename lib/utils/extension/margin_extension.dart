@@ -48,3 +48,17 @@ extension WidgetMarginX on Widget {
 extension WidgetSliverBoxX on Widget {
   Widget get sliverBox => SliverToBoxAdapter(child: this);
 }
+
+extension ChildrenIntersperse on Iterable<Widget> {
+  /// Inserts `element` between each pair of [Iterable] elements.
+  Iterable<Widget> intersperse(Widget element) sync* {
+    final iterator = this.iterator;
+    if (iterator.moveNext()) {
+      yield iterator.current;
+      while (iterator.moveNext()) {
+        yield element;
+        yield iterator.current;
+      }
+    }
+  }
+}

@@ -21,6 +21,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const ConnectorPage(),
       );
     },
+    DeviceDetailRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const DeviceDetailPage(),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -46,6 +52,20 @@ class ConnectorRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ConnectorRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [DeviceDetailPage]
+class DeviceDetailRoute extends PageRouteInfo<void> {
+  const DeviceDetailRoute({List<PageRouteInfo>? children})
+      : super(
+          DeviceDetailRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'DeviceDetailRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

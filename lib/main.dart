@@ -37,15 +37,15 @@ class _AppState extends ConsumerState<App> {
         themeMode: ThemeMode.light,
         builder: (context, child) {
           final theme = Theme.of(context);
-          final colors = theme.extension<GyverLampAppTheme>()!;
+          final colors = theme.extension<PlamFarmAppTheme>()!;
           final brightness = theme.brightness;
 
           final overlayStyle = brightness == Brightness.dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark;
 
           return AnnotatedRegion<SystemUiOverlayStyle>(
             value: overlayStyle.copyWith(
-              statusBarColor: Colors.white,
-
+              statusBarColor: Colors.transparent,
+              statusBarBrightness: Brightness.light,
               systemNavigationBarColor: colors.background,
               systemNavigationBarIconBrightness:
               brightness == Brightness.dark

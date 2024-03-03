@@ -4,11 +4,7 @@ import 'package:palmfarm/plam_farm_ui/theme/palm_farm_shadows.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 
-/// {@template gyver_lamp_theme}
-/// Gyver Lamp Theme.
-/// {@endtemplate}
 abstract class PlamFarmTheme {
-  /// Light [ThemeData] for Gyver Lamp.
   static ThemeData get lightThemeData {
     return ThemeData(
       useMaterial3: false,
@@ -67,7 +63,7 @@ abstract class PlamFarmTheme {
         primaryColor: PlamFarmColors.lightSelectionHandle,
       ),
       extensions: const [
-        GyverLampAppTheme(
+        PlamFarmAppTheme(
           background: PlamFarmColors.lightBackground,
           onBackground: PlamFarmColors.lightOnBackground,
           surfacePrimary: PlamFarmColors.lightSurfacePrimary,
@@ -95,7 +91,7 @@ abstract class PlamFarmTheme {
     );
   }
 
-  /// Dark [ThemeData] for Gyver Lamp.
+
   static ThemeData get darkThemeData {
     return ThemeData(
       useMaterial3: false,
@@ -153,7 +149,7 @@ abstract class PlamFarmTheme {
         primaryColor: PlamFarmColors.darkSelectionHandle,
       ),
       extensions: const [
-        GyverLampAppTheme(
+        PlamFarmAppTheme(
           background: PlamFarmColors.darkBackground,
           onBackground: PlamFarmColors.darkOnBackground,
           surfacePrimary: PlamFarmColors.darkSurfacePrimary,
@@ -182,13 +178,8 @@ abstract class PlamFarmTheme {
   }
 }
 
-/// {@template gyver_lamp_app_theme}
-/// Theme extension to hold specific colors and shadows without brightness
-/// mention.
-/// {@endtemplate}
-class GyverLampAppTheme extends ThemeExtension<GyverLampAppTheme> {
-  /// {@macro gyver_lamp_app_theme}
-  const GyverLampAppTheme({
+class PlamFarmAppTheme extends ThemeExtension<PlamFarmAppTheme> {
+  const PlamFarmAppTheme({
     required this.background,
     required this.onBackground,
     required this.surfacePrimary,
@@ -280,7 +271,7 @@ class GyverLampAppTheme extends ThemeExtension<GyverLampAppTheme> {
   final PlamFarmShadows shadows;
 
   @override
-  GyverLampAppTheme copyWith({
+  PlamFarmAppTheme copyWith({
     Color? background,
     Color? onBackground,
     Color? surfacePrimary,
@@ -304,7 +295,7 @@ class GyverLampAppTheme extends ThemeExtension<GyverLampAppTheme> {
     Color? selectionHandle,
     PlamFarmShadows? shadows,
   }) {
-    return GyverLampAppTheme(
+    return PlamFarmAppTheme(
       background: background ?? this.background,
       onBackground: onBackground ?? this.onBackground,
       surfacePrimary: surfacePrimary ?? this.surfacePrimary,
@@ -332,12 +323,12 @@ class GyverLampAppTheme extends ThemeExtension<GyverLampAppTheme> {
   }
 
   @override
-  GyverLampAppTheme lerp(GyverLampAppTheme? other, double t) {
-    if (other is! GyverLampAppTheme) {
+  PlamFarmAppTheme lerp(PlamFarmAppTheme? other, double t) {
+    if (other is! PlamFarmAppTheme) {
       return this;
     }
 
-    return GyverLampAppTheme(
+    return PlamFarmAppTheme(
       background: Color.lerp(
         background,
         other.background,

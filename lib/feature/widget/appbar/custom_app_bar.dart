@@ -2,9 +2,11 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_theme.dart';
+import 'package:palmfarm/utils/extension/margin_extension.dart';
 
 final kCustomAppBarSize = Size.fromHeight(40.h);
 
@@ -14,6 +16,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({
     this.leading,
     this.title,
+    this.actions,
     this.padding = const EdgeInsets.symmetric(
       horizontal: 4,
     ),
@@ -22,6 +25,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   final Widget? leading;
   final String? title;
+  final List<Widget>? actions;
   final EdgeInsets padding;
 
   @override
@@ -85,7 +89,7 @@ class CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).extension<GyverLampAppTheme>()!;
+    final theme = Theme.of(context).extension<PlamFarmAppTheme>()!;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -115,9 +119,21 @@ class CustomAppBarState extends State<CustomAppBar> {
                       widget.title!,
                       style: PlamFarmTextStyles.headline6Bold.copyWith(
                         color: PlamFarmColors.palmFarmPrimary8,
-                        fontWeight: FontWeight.w700
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16.sp
                       ),
                       overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                if (widget.actions != null)
+                  LayoutId(
+                    id: _CustomAppBarSlot.actions,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: widget.actions!
+                          .intersperse(const Gap(4))
+                          .toList(),
                     ),
                   ),
               ],
