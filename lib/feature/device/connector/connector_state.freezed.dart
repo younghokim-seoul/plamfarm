@@ -17,7 +17,6 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ConnectorState {
   DiscoveredDevice get discoveredDevices => throw _privateConstructorUsedError;
-  String get deviceName => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ConnectorStateCopyWith<ConnectorState> get copyWith =>
@@ -30,7 +29,7 @@ abstract class $ConnectorStateCopyWith<$Res> {
           ConnectorState value, $Res Function(ConnectorState) then) =
       _$ConnectorStateCopyWithImpl<$Res, ConnectorState>;
   @useResult
-  $Res call({DiscoveredDevice discoveredDevices, String deviceName});
+  $Res call({DiscoveredDevice discoveredDevices});
 }
 
 /// @nodoc
@@ -47,17 +46,12 @@ class _$ConnectorStateCopyWithImpl<$Res, $Val extends ConnectorState>
   @override
   $Res call({
     Object? discoveredDevices = null,
-    Object? deviceName = null,
   }) {
     return _then(_value.copyWith(
       discoveredDevices: null == discoveredDevices
           ? _value.discoveredDevices
           : discoveredDevices // ignore: cast_nullable_to_non_nullable
               as DiscoveredDevice,
-      deviceName: null == deviceName
-          ? _value.deviceName
-          : deviceName // ignore: cast_nullable_to_non_nullable
-              as String,
     ) as $Val);
   }
 }
@@ -70,7 +64,7 @@ abstract class _$$ConnectorStateImplCopyWith<$Res>
       __$$ConnectorStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({DiscoveredDevice discoveredDevices, String deviceName});
+  $Res call({DiscoveredDevice discoveredDevices});
 }
 
 /// @nodoc
@@ -85,17 +79,12 @@ class __$$ConnectorStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? discoveredDevices = null,
-    Object? deviceName = null,
   }) {
     return _then(_$ConnectorStateImpl(
       discoveredDevices: null == discoveredDevices
           ? _value.discoveredDevices
           : discoveredDevices // ignore: cast_nullable_to_non_nullable
               as DiscoveredDevice,
-      deviceName: null == deviceName
-          ? _value.deviceName
-          : deviceName // ignore: cast_nullable_to_non_nullable
-              as String,
     ));
   }
 }
@@ -103,17 +92,14 @@ class __$$ConnectorStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ConnectorStateImpl implements _ConnectorState {
-  _$ConnectorStateImpl(
-      {required this.discoveredDevices, required this.deviceName});
+  _$ConnectorStateImpl({required this.discoveredDevices});
 
   @override
   final DiscoveredDevice discoveredDevices;
-  @override
-  final String deviceName;
 
   @override
   String toString() {
-    return 'ConnectorState(discoveredDevices: $discoveredDevices, deviceName: $deviceName)';
+    return 'ConnectorState(discoveredDevices: $discoveredDevices)';
   }
 
   @override
@@ -122,13 +108,11 @@ class _$ConnectorStateImpl implements _ConnectorState {
         (other.runtimeType == runtimeType &&
             other is _$ConnectorStateImpl &&
             (identical(other.discoveredDevices, discoveredDevices) ||
-                other.discoveredDevices == discoveredDevices) &&
-            (identical(other.deviceName, deviceName) ||
-                other.deviceName == deviceName));
+                other.discoveredDevices == discoveredDevices));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, discoveredDevices, deviceName);
+  int get hashCode => Object.hash(runtimeType, discoveredDevices);
 
   @JsonKey(ignore: true)
   @override
@@ -139,14 +123,11 @@ class _$ConnectorStateImpl implements _ConnectorState {
 }
 
 abstract class _ConnectorState implements ConnectorState {
-  factory _ConnectorState(
-      {required final DiscoveredDevice discoveredDevices,
-      required final String deviceName}) = _$ConnectorStateImpl;
+  factory _ConnectorState({required final DiscoveredDevice discoveredDevices}) =
+      _$ConnectorStateImpl;
 
   @override
   DiscoveredDevice get discoveredDevices;
-  @override
-  String get deviceName;
   @override
   @JsonKey(ignore: true)
   _$$ConnectorStateImplCopyWith<_$ConnectorStateImpl> get copyWith =>

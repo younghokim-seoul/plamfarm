@@ -46,6 +46,24 @@ class NickNameDialog extends StatelessWidget {
         insetPadding: EdgeInsets.all(36.w),
         actions: [
           DecoratedBox(
+            decoration: const BoxDecoration(
+              color: PlamFarmColors.palmFarmPrimary5,
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
+              ),
+            ),
+            child: InkWell(
+              onTap: () {
+                context.router.pop();
+              },
+              child: Text(
+                '저장하기',
+                style:
+                PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
+              ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
+            ),
+          ).paddingOnly(right: 24, bottom: 24),
+          DecoratedBox(
             decoration: BoxDecoration(
               color: PlamFarmColors.lightBackground,
               border: Border.all(
@@ -66,25 +84,7 @@ class NickNameDialog extends StatelessWidget {
                     .copyWith(color: PlamFarmColors.palmFarmPrimary5),
               ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
             ),
-          ).paddingOnly(bottom: 24, right: 12),
-          DecoratedBox(
-            decoration: const BoxDecoration(
-              color: PlamFarmColors.palmFarmPrimary5,
-              borderRadius: BorderRadius.all(
-                Radius.circular(8),
-              ),
-            ),
-            child: InkWell(
-              onTap: () {
-                context.router.pop();
-              },
-              child: Text(
-                '저장하기',
-                style:
-                    PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
-              ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
-            ),
-          ).paddingOnly(right: 20, bottom: 24)
+          ).paddingOnly(bottom: 24, right: 24),
         ],
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 500),

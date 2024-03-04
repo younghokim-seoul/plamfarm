@@ -3,6 +3,7 @@ import 'package:palmfarm/feature/device/connector/connector_page.dart';
 import 'package:palmfarm/feature/device/detail/device_detail_page.dart';
 import 'package:palmfarm/feature/device/scan/scan_page.dart';
 import 'package:palmfarm/feature/home/home_page.dart';
+import 'package:palmfarm/feature/splash/splash_page.dart';
 
 part 'app_route.gr.dart';
 
@@ -11,9 +12,13 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
+          path: SplashPage.routeName,
+          page: SplashRoute.page,
+          initial: true,
+        ),
+        AutoRoute(
           path: HomePage.routeName,
           page: HomeRoute.page,
-          initial: true,
         ),
         CupertinoRoute(
           path: ConnectorPage.routeName,

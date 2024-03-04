@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:palmfarm/app_providers.dart';
+import 'package:palmfarm/feature/home/component/home_my_device_list_view.dart';
+import 'package:palmfarm/feature/home/home_view_model.dart';
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
 import 'package:palmfarm/feature/widget/dialog/nick_name_dialog.dart';
 import 'package:palmfarm/plam_farm_ui/router/app_route.dart';
@@ -20,12 +23,19 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState createState() => _HomePageState();
 }
 
-
 class _HomePageState extends ConsumerState<HomePage> {
+  late HomeViewModel _viewModel;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _viewModel = ref.read(homeViewModelProvider);
+    _viewModel.onLoadData();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: const CustomAppBar(
         padding: EdgeInsets.symmetric(
@@ -41,6 +51,11 @@ class _HomePageState extends ConsumerState<HomePage> {
           deviceRegisterView(),
           Gap(24.h),
           deviceListText(),
+          Gap(12.h),
+          Expanded(
+              child: HomeMyDeviceListView(
+            viewModel: _viewModel,
+          ))
         ],
       )),
     );
@@ -48,7 +63,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget deviceListText() => Text(
         '나의 기기 목록',
-        style: PlamFarmTextStyles.buttonLarge.copyWith(color: const Color(0XFF383D50)),
+        style: PlamFarmTextStyles.buttonLarge
+            .copyWith(color: const Color(0XFF383D50)),
       ).paddingSymmetric(horizontal: 20.w);
 
   Widget deviceRegisterView() => Padding(
@@ -61,20 +77,21 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
           child: Container(
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 17, bottom: 17),
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, top: 17, bottom: 17),
             child: Row(
               children: [
                 Gap(10.w),
-                 Expanded(
-                  child: InkWell(
-                    splashFactory: InkRipple.splashFactory,
-                    onTap: () => showNickNameDialog(context: context, title: "이름 수정하기", message: ""),
-                    child: const Text(
-                      'asdaasdasdasd',
-                      style: PlamFarmTextStyles.body2Bold,
-                    ),
-                  )
-                ),
+                Expanded(
+                    child: InkWell(
+                  splashFactory: InkRipple.splashFactory,
+                  onTap: () => showNickNameDialog(
+                      context: context, title: "이름 수정하기", message: ""),
+                  child: const Text(
+                    'asdaasdasdasd',
+                    style: PlamFarmTextStyles.body2Bold,
+                  ),
+                )),
                 Gap(10.w),
                 DecoratedBox(
                     decoration: const BoxDecoration(
@@ -87,7 +104,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                       onTap: () => context.router.push(const ConnectorRoute()),
                       child: Text(
                         '기기 추가',
-                        style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
+                        style: PlamFarmTextStyles.body2Bold
+                            .copyWith(color: Colors.white),
                       ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
                     )),
                 Gap(10.w),

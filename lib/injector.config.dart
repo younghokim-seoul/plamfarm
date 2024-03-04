@@ -13,11 +13,10 @@ import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:palmfarm/data/repository/ble_repository_impl.dart' as _i4;
 import 'package:palmfarm/domain/repository/ble_repository.dart' as _i3;
-import 'package:palmfarm/feature/device/connector/connector_view_model.dart'
-    as _i5;
 import 'package:palmfarm/feature/device/detail/device_detail_view_model.dart'
-    as _i6;
-import 'package:palmfarm/feature/device/scan/scan_view_model.dart' as _i7;
+    as _i5;
+import 'package:palmfarm/feature/device/scan/scan_view_model.dart' as _i6;
+import 'package:palmfarm/feature/splash/splash_view_model.dart' as _i7;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -31,11 +30,11 @@ extension GetItInjectableX on _i1.GetIt {
       environmentFilter,
     );
     gh.singleton<_i3.BleRepository>(_i4.BleRepositoryImpl());
-    gh.factory<_i5.ConnectorViewModel>(() => _i5.ConnectorViewModel());
-    gh.factory<_i6.DeviceDetailViewModel>(
-        () => _i6.DeviceDetailViewModel(gh<_i3.BleRepository>()));
-    gh.factory<_i7.ScanViewModel>(
-        () => _i7.ScanViewModel(gh<_i3.BleRepository>()));
+    gh.factory<_i5.DeviceDetailViewModel>(
+        () => _i5.DeviceDetailViewModel(gh<_i3.BleRepository>()));
+    gh.factory<_i6.ScanViewModel>(
+        () => _i6.ScanViewModel(gh<_i3.BleRepository>()));
+    gh.factory<_i7.SplashViewModel>(() => _i7.SplashViewModel());
     return this;
   }
 }

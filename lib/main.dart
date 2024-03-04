@@ -10,11 +10,15 @@ import 'package:palmfarm/utils/reactive/global_event.dart';
 
 final EventBus eventBus = EventBus();
 
-void main() {
+void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocate();
   configureDependencies();
   runApp(const ProviderScope(child: App()));
 }
+
+
 
 class App extends ConsumerStatefulWidget {
   const App({super.key});

@@ -7,6 +7,5 @@ part 'connector_state.freezed.dart';
 class ConnectorState with _$ConnectorState {
   factory ConnectorState({
     required DiscoveredDevice discoveredDevices,
-    required String deviceName,
   }) = _ConnectorState;
 }
