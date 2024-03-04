@@ -28,6 +28,8 @@ dependencies:
   permission_handler: ^11.3.0
   device_info_plus: ^9.1.2
 
+  yaru_widgets: ^3.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -43,6 +45,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/image/
 
 
   fonts:

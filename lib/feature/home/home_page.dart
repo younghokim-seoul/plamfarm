@@ -20,9 +20,12 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState createState() => _HomePageState();
 }
 
+
 class _HomePageState extends ConsumerState<HomePage> {
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: const CustomAppBar(
         padding: EdgeInsets.symmetric(
@@ -81,7 +84,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ),
                     ),
                     child: InkWell(
-                      onTap: () => context.router.push(const DeviceDetailRoute()),
+                      onTap: () => context.router.push(const ConnectorRoute()),
                       child: Text(
                         '기기 추가',
                         style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),

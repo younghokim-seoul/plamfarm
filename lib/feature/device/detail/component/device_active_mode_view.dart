@@ -31,7 +31,7 @@ class DeviceActiveModeView extends StatelessWidget {
             '기기 동작 모드 상태',
             style: PlamFarmTextStyles.headline5Bold.copyWith(
                 color: PlamFarmColors.palmFarmNormalTextColor,
-                fontSize: 16.sp,
+                fontSize: 16,
                 fontWeight: FontWeight.w800),
           ),
           DecoratedBox(
@@ -91,7 +91,7 @@ class DeviceActiveModeView extends StatelessWidget {
               title,
               style: PlamFarmTextStyles.headline5Bold.copyWith(
                   color: PlamFarmColors.palmFarmNormalTextColor,
-                  fontSize: 14.sp,
+                  fontSize: 14,
                   fontWeight: FontWeight.w400),
             ),
           ),
@@ -100,7 +100,7 @@ class DeviceActiveModeView extends StatelessWidget {
               title,
               style: PlamFarmTextStyles.headline5Bold.copyWith(
                   color: PlamFarmColors.palmFarmNormalTextColor,
-                  fontSize: 14.sp,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700),
             ),
           ),
@@ -111,7 +111,7 @@ class DeviceActiveModeView extends StatelessWidget {
         '동작중인 기기의 LED 펌프 상태는 아래의 ON/OFF 버튼에 표현 됩니다. 만약 1회성으로 현재 동작을 변경하고자 하는 경우 버튼을 이용해주세요. 상태를 재확인 하고싶은 경우에는 새로고침 버튼을 눌러주세요.',
         style: PlamFarmTextStyles.headline5Bold.copyWith(
             color: PlamFarmColors.palmFarmNormalTextColor,
-            fontSize: 12.sp,
+            fontSize: 12,
             fontWeight: FontWeight.w400),
       );
 }

@@ -120,7 +120,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                       style: PlamFarmTextStyles.headline6Bold.copyWith(
                         color: PlamFarmColors.palmFarmPrimary8,
                         fontWeight: FontWeight.w700,
-                        fontSize: 16.sp
+                        fontSize: 16
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),

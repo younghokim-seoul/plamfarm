@@ -4,17 +4,24 @@ import 'package:auto_route/auto_route.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:palmfarm/assets/assets.gen.dart';
+import 'package:palmfarm/feature/device/connector/connector_state.dart';
+import 'package:palmfarm/feature/device/connector/connector_view_model.dart';
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
 import 'package:palmfarm/feature/widget/appbar/flex_icon_button.dart';
 import 'package:palmfarm/feature/widget/label_text_filed/labeled_input_field.dart';
+import 'package:palmfarm/injector.dart';
 import 'package:palmfarm/plam_farm_ui/router/app_route.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
+import 'package:palmfarm/utils/extension/value_extension.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 @RoutePage()
@@ -28,6 +35,14 @@ class ConnectorPage extends ConsumerStatefulWidget {
 }
 
 class _ConnectorPageState extends ConsumerState<ConnectorPage> {
+  final _viewModel = getIt<ConnectorViewModel>();
+
+  @override
+  void dispose() {
+    _viewModel.disposeAll();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,14 +65,14 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
           Gap(24.h),
           Text(
             '연결된 디바이스',
-            style: PlamFarmTextStyles.buttonLarge.copyWith(
-                color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 12.sp),
+            style: PlamFarmTextStyles.buttonLarge.copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 12),
           ),
           Gap(24.h),
+          _buildConnectorDevice(),
+          Gap(40.h),
           Text(
             '기기 등록하기',
-            style: PlamFarmTextStyles.buttonLarge.copyWith(
-                color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 12.sp),
+            style: PlamFarmTextStyles.buttonLarge.copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 12),
           ),
           Gap(11.h),
           _buildNameInputTextFiled(),
@@ -65,6 +80,30 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
       ).paddingSymmetric(horizontal: 20.w)),
     );
   }
+
+  Widget _buildConnectorDevice() => _viewModel.connectorState.ui(builder: (builder, state) {
+        if (!state.hasData || state.data.isNullOrEmpty) return const SizedBox.shrink();
+
+        return Row(
+          children: [
+            DecoratedBox(
+              decoration: const BoxDecoration(color: PlamFarmColors.palmFarmPrimary4, shape: BoxShape.circle),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Assets.image.icBle.image(),
+              ),
+            ),
+            Gap(16.w),
+            Flexible(
+              child: Text(
+                "${state.data!.deviceName}[${state.data!.discoveredDevices.id}]",
+                style: PlamFarmTextStyles.body2
+                    .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16, fontWeight: FontWeight.w400),
+              ),
+            ),
+          ],
+        );
+      });
 
   Widget _buildNameInputTextFiled() => LabeledInputField(
         controller: TextEditingController(),
@@ -94,13 +133,18 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
 
             if (!mounted) return;
 
-            bool allPermissionsGranted =
-                permissionStatuses.values.every((status) => status.isGranted);
+            bool allPermissionsGranted = permissionStatuses.values.every((status) => status.isGranted);
 
             Log.i(":::allPermissionsGranted $allPermissionsGranted");
 
             if (allPermissionsGranted) {
-              context.router.push(const ScanRoute());
+              final result = await context.router.push(const ScanRoute());
+
+              if (!result.isNullOrEmpty) {
+                final model = result as DiscoveredDevice;
+                Log.d("::::Selected Device... " + model.toString());
+                _viewModel.loadState(ConnectorState(discoveredDevices: model, deviceName: model.name));
+              }
             }
           },
           child: Container(
@@ -108,8 +152,7 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
             child: Center(
               child: Text(
                 '블루투스 연결',
-                style: PlamFarmTextStyles.body2Bold
-                    .copyWith(color: Colors.white, fontSize: 17.sp),
+                style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white, fontSize: 17),
               ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
             ),
           ),

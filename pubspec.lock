@@ -971,7 +971,7 @@ packages:
     source: hosted
     version: "2.4.0"
   yaru_widgets:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: yaru_widgets
       sha256: "0bade922090f25eedcc88cdc15b8a6adbaba4e4b56d793e999224b22c95a19d2"
