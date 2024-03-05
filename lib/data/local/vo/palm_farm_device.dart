@@ -4,37 +4,42 @@ import 'package:floor/floor.dart';
 class PalmFarmDevice {
   @primaryKey
   final String macAddress;
-  final String name;
+  final String reName;
+  final String originName;
   final DateTime createdAt;
 
-  PalmFarmDevice(this.macAddress, this.name, this.createdAt);
+  PalmFarmDevice(this.macAddress, this.reName, this.originName, this.createdAt);
 
   factory PalmFarmDevice.create({
     required String macAddress,
-    required String name,
+    required String reName,
+    required String originName,
     DateTime? createdAt,
   }) =>
       PalmFarmDevice(
         macAddress,
-        name,
+        reName,
+        originName,
         createdAt ?? DateTime.now(),
       );
 
   PalmFarmDevice copyWith({
     String? macAddress,
-    String? name,
+    String? reName,
+    String? originName,
     DateTime? createdAt,
   }) {
     return PalmFarmDevice(
       macAddress ?? this.macAddress,
-      name ?? this.name,
+      reName ?? this.reName,
+      originName ?? this.originName,
       createdAt ?? this.createdAt,
     );
   }
 
   @override
   String toString() {
-    return 'PalmFarmDevice{id: $macAddress, name: $name, DateTime: $DateTime}';
+    return 'PalmFarmDevice{id: $macAddress, reName: $reName, originName: $originName,DateTime: $DateTime}';
   }
 
   @override
@@ -43,12 +48,16 @@ class PalmFarmDevice {
         other is PalmFarmDevice &&
             runtimeType == other.runtimeType &&
             macAddress == other.macAddress &&
-            name == other.name &&
+            reName == other.reName &&
+            originName == other.originName &&
             createdAt == other.createdAt;
   }
 
   @override
   int get hashCode {
-    return macAddress.hashCode ^ name.hashCode ^ createdAt.hashCode;
+    return macAddress.hashCode ^
+        reName.hashCode ^
+        originName.hashCode ^
+        createdAt.hashCode;
   }
 }

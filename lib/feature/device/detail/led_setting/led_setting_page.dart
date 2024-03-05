@@ -5,12 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:palmfarm/feature/device/detail/component/device_active_mode_view.dart';
-import 'package:palmfarm/feature/device/detail/component/device_farming_mode_view.dart';
-import 'package:palmfarm/feature/device/detail/component/device_private_mode_view.dart';
-import 'package:palmfarm/feature/device/detail/component/device_switch_mode_view.dart';
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
 import 'package:palmfarm/feature/widget/appbar/flex_icon_button.dart';
+import 'package:palmfarm/feature/widget/dialog/led_time_setting_dialog.dart';
 import 'package:palmfarm/feature/widget/label_text_filed/labeled_input_field.dart';
 import 'package:palmfarm/feature/widget/label_text_filed/range_text_input_formatter.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
@@ -52,6 +49,8 @@ class _LedSettingPageeState extends ConsumerState<LedSettingPage> {
             children: [
               Gap(44.h),
               _buildTimeInputGroup(),
+              Gap(60.h),
+              _buildLedTimeSaveButton(),
             ],
           ),
         ),
@@ -119,5 +118,31 @@ class _LedSettingPageeState extends ConsumerState<LedSettingPage> {
             ),
           ),
         ],
+      );
+
+  Widget _buildLedTimeSaveButton() => Align(
+        alignment: Alignment.center,
+        child: DecoratedBox(
+          decoration: const BoxDecoration(
+            color: PlamFarmColors.palmFarmPrimary5,
+            borderRadius: BorderRadius.all(
+              Radius.circular(8),
+            ),
+          ),
+          child: InkWell(
+            onTap: () async {
+              if (!mounted) return;
+              showLedTimeSettingDialog(
+                  context: context,
+                  message: '입력한 LED ON 시각 정보를\n기기에 적용하시겠습니까?',
+                  onTap: () {},
+                  onImmediateTap: () {});
+            },
+            child: Text(
+              '저장',
+              style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
+            ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
+          ),
+        ),
       );
 }

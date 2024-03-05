@@ -27,7 +27,7 @@ class HomeMyDeviceListView extends ConsumerWidget {
           itemBuilder: (context, index) {
             final model = state.data!.items[index];
             return InkWell(
-              onTap: () => {context.router.push(const DeviceDetailRoute())},
+              onTap: () => {context.router.push(DeviceDetailRoute(palmFarmDevice: model))},
               child: Column(
                 children: [
                   Row(
@@ -52,7 +52,7 @@ class HomeMyDeviceListView extends ConsumerWidget {
                       Gap(16.w),
                       Flexible(
                           child: Text(
-                        model.name,
+                        model.reName,
                         style: PlamFarmTextStyles.body2Bold
                             .copyWith(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),
                       ))

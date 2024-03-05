@@ -18,9 +18,8 @@ class ConnectorViewModel implements ViewModelInterface {
       return await _localRepository.save(
         PalmFarmDevice.create(
           macAddress: state.discoveredDevices.id,
-          name: reNameDevice.isNullOrEmpty
-              ? state.discoveredDevices.name
-              : reNameDevice,
+          reName: reNameDevice.isNullOrEmpty ? state.discoveredDevices.name : reNameDevice,
+          originName: state.discoveredDevices.name,
         ),
       );
 

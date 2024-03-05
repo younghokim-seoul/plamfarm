@@ -22,9 +22,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     DeviceDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<DeviceDetailRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const DeviceDetailPage(),
+        child: DeviceDetailPage(
+          key: args.key,
+          palmFarmDevice: args.palmFarmDevice,
+        ),
       );
     },
     HomeRoute.name: (routeData) {
@@ -70,16 +74,40 @@ class ConnectorRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [DeviceDetailPage]
-class DeviceDetailRoute extends PageRouteInfo<void> {
-  const DeviceDetailRoute({List<PageRouteInfo>? children})
-      : super(
+class DeviceDetailRoute extends PageRouteInfo<DeviceDetailRouteArgs> {
+  DeviceDetailRoute({
+    Key? key,
+    required PalmFarmDevice palmFarmDevice,
+    List<PageRouteInfo>? children,
+  }) : super(
           DeviceDetailRoute.name,
+          args: DeviceDetailRouteArgs(
+            key: key,
+            palmFarmDevice: palmFarmDevice,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'DeviceDetailRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<DeviceDetailRouteArgs> page =
+      PageInfo<DeviceDetailRouteArgs>(name);
+}
+
+class DeviceDetailRouteArgs {
+  const DeviceDetailRouteArgs({
+    this.key,
+    required this.palmFarmDevice,
+  });
+
+  final Key? key;
+
+  final PalmFarmDevice palmFarmDevice;
+
+  @override
+  String toString() {
+    return 'DeviceDetailRouteArgs{key: $key, palmFarmDevice: $palmFarmDevice}';
+  }
 }
 
 /// generated route for

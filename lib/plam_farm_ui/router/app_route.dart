@@ -1,4 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
 import 'package:palmfarm/feature/device/connector/connector_page.dart';
 import 'package:palmfarm/feature/device/detail/device_detail_page.dart';
 import 'package:palmfarm/feature/device/detail/led_setting/led_setting_page.dart';

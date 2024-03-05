@@ -30,13 +30,14 @@ class DeviceSwitchModeView extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          Gap(12.h),
           SwitchTitle(
             value: switchState.enableLed,
             onChanged: (v) {
               ref.read(selectStateProvider.notifier).switchingLed();
             },
             title: Text(
-              'LED 전원',
+              'LED ON/OFF',
               style: PlamFarmTextStyles.body2Bold
                   .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontWeight: FontWeight.w700),
             ),
@@ -47,7 +48,7 @@ class DeviceSwitchModeView extends ConsumerWidget {
               ref.read(selectStateProvider.notifier).switchingPump();
             },
             title: Text(
-              '펌프 전원',
+              '펌프 ON/OFF',
               style: PlamFarmTextStyles.body2Bold
                   .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontWeight: FontWeight.w700),
             ),

@@ -142,7 +142,7 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
               style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
             ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
           ),
-        ).paddingOnly(right: 20, bottom: 24),
+        ).paddingOnly(bottom: 24),
       );
 
   Widget _buildNameInputTextFiled() => LabeledInputField(

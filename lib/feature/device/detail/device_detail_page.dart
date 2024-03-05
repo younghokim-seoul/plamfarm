@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
 import 'package:palmfarm/feature/device/detail/component/device_active_mode_view.dart';
 import 'package:palmfarm/feature/device/detail/component/device_farming_mode_view.dart';
 import 'package:palmfarm/feature/device/detail/component/device_private_mode_view.dart';
@@ -20,7 +21,9 @@ import 'package:palmfarm/utils/extension/margin_extension.dart';
 class DeviceDetailPage extends ConsumerStatefulWidget {
   static const routeName = '/device_detail';
 
-  const DeviceDetailPage({super.key});
+  const DeviceDetailPage({super.key,required this.palmFarmDevice});
+
+  final PalmFarmDevice palmFarmDevice;
 
   @override
   ConsumerState createState() => _DeviceDetailPageState();

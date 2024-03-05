@@ -30,6 +30,7 @@ class _ScanPageState extends ConsumerState<ScanPage> {
   void initState() {
     super.initState();
     _viewModel.startScan();
+    _viewModel.setScanCallback();
   }
 
   @override

@@ -9,9 +9,10 @@ class DeviceDetailViewModel implements ViewModelInterface{
 
   DeviceDetailViewModel(this._bleRepository);
 
-  void onLoadData() {
-    _bleRepository.startScan();
+  void connect(String address) {
+    _bleRepository.connect(address);
   }
+
 
   @override
   disposeAll() {

@@ -2,32 +2,28 @@ import 'dart:async';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:injectable/injectable.dart';
+import 'package:palmfarm/data/repository/ble_channel_listener.dart';
 import 'package:palmfarm/domain/entity/ble_scanner_state.dart';
 import 'package:palmfarm/domain/repository/ble_repository.dart';
-import 'package:palmfarm/main.dart';
-import 'package:palmfarm/utils/constant.dart';
 import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/value_extension.dart';
 
 @Singleton(as: BleRepository)
 class BleRepositoryImpl extends BleRepository {
-  final flutterReactiveBle = FlutterReactiveBle();
+  final Map<String, BleChannelListener> _mChannelListener = Map.from({});
 
+  final flutterReactiveBle = FlutterReactiveBle();
 
   StreamSubscription<DiscoveredDevice>? _scanSubscription;
   StreamSubscription<ConnectionStateUpdate>? _connectionSubscription;
 
-
-  final StreamController<BleScannerState> _scanStateStreamController = StreamController.broadcast();
-
-
   final _devices = <DiscoveredDevice>[];
-
   String? macAddress;
-  ConnectionStateUpdate? currentDeviceState;
+
 
   @override
   Future<void> stopScan() async {
+    _devices.clear();
     _scanSubscription?.cancel();
     _scanSubscription = null;
   }
@@ -36,31 +32,36 @@ class BleRepositoryImpl extends BleRepository {
   void startScan() {
     _devices.clear();
     _scanSubscription?.cancel();
-    _scanSubscription = flutterReactiveBle
-        .scanForDevices(withServices: [Uuid.parse(serviceUuid)], scanMode: ScanMode.lowLatency).listen((device) {
-      Log.d(":::Device... $device");
+    _scanSubscription = flutterReactiveBle.scanForDevices(
+        withServices: [],
+        scanMode: ScanMode.lowLatency).listen((device) {
+
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
         _devices[knownDeviceIndex] = device;
       } else {
         _devices.add(device);
       }
-
-      _pushScanState();
+      _notifyScanScanDiscovered();
     }, onError: (Object e) => Log.e('Device scan fails with error: $e'));
-    _pushScanState();
+    _notifyScanScanDiscovered();
   }
 
   @override
   Future<void> connect(String address) async {
     macAddress = address;
-    _connectionSubscription = flutterReactiveBle.connectToDevice(id: address).listen(
-      (update) {
-        Log.d('ConnectionState for device $address : ${update.connectionState}');
-        eventBus.fire(update);
-      },
-      onError: (Object e) => Log.e('Connecting to device $address resulted in error $e'),
-    );
+    _connectionSubscription =
+        flutterReactiveBle.connectToDevice(id: address).listen(
+              (update) {
+            Log.d(
+                'ConnectionState for device $address : ${update
+                    .connectionState}');
+            _notifyConnectionChanged(update);
+            // eventBus.fire(update);
+          },
+          onError: (Object e) =>
+              Log.e('Connecting to device $address resulted in error $e'),
+        );
   }
 
   @override
@@ -76,7 +77,14 @@ class BleRepositoryImpl extends BleRepository {
     } on Exception catch (e, _) {
       Log.e("Error disconnecting from a device: $e");
     } finally {
-      eventBus.fire(
+      // eventBus.fire(
+      //   ConnectionStateUpdate(
+      //     deviceId: macAddress ?? "Unknown",
+      //     connectionState: DeviceConnectionState.disconnected,
+      //     failure: null,
+      //   ),
+      // );
+      _notifyConnectionChanged(
         ConnectionStateUpdate(
           deviceId: macAddress ?? "Unknown",
           connectionState: DeviceConnectionState.disconnected,
@@ -87,17 +95,37 @@ class BleRepositoryImpl extends BleRepository {
     }
   }
 
-  @override
-  Stream<BleScannerState> get scanCallback => _scanStateStreamController.stream;
+
+
 
   @override
-  Stream<BleStatus> get bleStatusCallback => flutterReactiveBle.statusStream;
+  void addChannelListener(String tag, BleChannelListener listener) {
+    _mChannelListener[tag] = listener;
+  }
+
+  @override
+  void removeChannelListener(String tag) {
+    _mChannelListener.remove(tag);
+  }
+
+  @override
+  void removeAllChannelListener() {
+    _mChannelListener.clear();
+  }
 
 
-  void _pushScanState() => _scanStateStreamController.add(
-    BleScannerState(
-      discoveredDevices: _devices,
-      scanIsInProgress: _scanSubscription != null,
-    ),
-  );
+  void _notifyConnectionChanged(ConnectionStateUpdate state) {
+    for (BleChannelListener listener in _mChannelListener.values) {
+      listener.onDeviceStatusChanged?.call(state);
+    }
+  }
+
+  void _notifyScanScanDiscovered() {
+    for (BleChannelListener listener in _mChannelListener.values) {
+      listener.onDeviceScanDiscovered?.call(BleScannerState(
+        discoveredDevices: _devices,
+        scanIsInProgress: _scanSubscription != null,
+      ));
+    }
+  }
 }

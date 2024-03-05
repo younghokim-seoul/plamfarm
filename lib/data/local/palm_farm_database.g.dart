@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `PalmFarmDevice` (`macAddress` TEXT NOT NULL, `name` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY (`macAddress`))');
+            'CREATE TABLE IF NOT EXISTS `PalmFarmDevice` (`macAddress` TEXT NOT NULL, `reName` TEXT NOT NULL, `originName` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY (`macAddress`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -109,7 +109,8 @@ class _$PalmFarmDAO extends PalmFarmDAO {
             'PalmFarmDevice',
             (PalmFarmDevice item) => <String, Object?>{
                   'macAddress': item.macAddress,
-                  'name': item.name,
+                  'reName': item.reName,
+                  'originName': item.originName,
                   'createdAt': _dateTimeConverter.encode(item.createdAt)
                 },
             changeListener),
@@ -119,7 +120,8 @@ class _$PalmFarmDAO extends PalmFarmDAO {
             ['macAddress'],
             (PalmFarmDevice item) => <String, Object?>{
                   'macAddress': item.macAddress,
-                  'name': item.name,
+                  'reName': item.reName,
+                  'originName': item.originName,
                   'createdAt': _dateTimeConverter.encode(item.createdAt)
                 },
             changeListener);
@@ -140,7 +142,8 @@ class _$PalmFarmDAO extends PalmFarmDAO {
         'SELECT * FROM PalmFarmDevice ORDER BY createdAt',
         mapper: (Map<String, Object?> row) => PalmFarmDevice(
             row['macAddress'] as String,
-            row['name'] as String,
+            row['reName'] as String,
+            row['originName'] as String,
             _dateTimeConverter.decode(row['createdAt'] as int)),
         queryableName: 'PalmFarmDevice',
         isView: false);
