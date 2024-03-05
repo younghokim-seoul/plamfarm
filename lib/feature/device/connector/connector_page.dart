@@ -64,36 +64,39 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
         ),
       ),
       body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.zero,
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Gap(4.h),
-          _buildBluetoothScanButton(),
-          Gap(24.h),
-          Text(
-            '연결된 블루투스',
-            style: PlamFarmTextStyles.buttonLarge.copyWith(
-                color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 12),
-          ),
-          Gap(12.h),
-          _buildConnectorDevice(),
-          Gap(60.h),
-          Text(
-            '기기 등록하기',
-            style: PlamFarmTextStyles.buttonLarge.copyWith(
-                color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 12),
-          ),
-          Gap(11.h),
-          _buildNameInputTextFiled(),
-          Gap(24.h),
-          _buildDeviceSaveButton(),
-        ],
-      ).paddingSymmetric(horizontal: 20.w)),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Gap(4.h),
+              _buildBluetoothScanButton(),
+              Gap(24.h),
+              Text(
+                '연결된 블루투스',
+                style: PlamFarmTextStyles.buttonLarge
+                    .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 12),
+              ),
+              Gap(12.h),
+              _buildConnectorDevice(),
+              Gap(60.h),
+              Text(
+                '기기 등록하기',
+                style: PlamFarmTextStyles.buttonLarge
+                    .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 12),
+              ),
+              Gap(11.h),
+              _buildNameInputTextFiled(),
+              Gap(24.h),
+              _buildDeviceSaveButton(),
+            ],
+          ).paddingSymmetric(horizontal: 20.w),
+        ),
+      ),
     );
   }
 
-  Widget _buildConnectorDevice() =>
-      _viewModel.connectorState.ui(builder: (builder, state) {
+  Widget _buildConnectorDevice() => _viewModel.connectorState.ui(builder: (builder, state) {
         if (!state.hasData || state.data.isNullOrEmpty) {
           return const SizedBox.shrink();
         }
@@ -101,9 +104,7 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
         return Row(
           children: [
             DecoratedBox(
-              decoration: const BoxDecoration(
-                  color: PlamFarmColors.palmFarmPrimary4,
-                  shape: BoxShape.circle),
+              decoration: const BoxDecoration(color: PlamFarmColors.palmFarmPrimary4, shape: BoxShape.circle),
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Assets.image.icBle.image(),
@@ -113,10 +114,8 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
             Flexible(
               child: Text(
                 "${state.data!.discoveredDevices.name}[${state.data!.discoveredDevices.id}]",
-                style: PlamFarmTextStyles.body2.copyWith(
-                    color: PlamFarmColors.palmFarmNormalTextColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400),
+                style: PlamFarmTextStyles.body2
+                    .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16, fontWeight: FontWeight.w400),
               ),
             ),
           ],
@@ -141,7 +140,7 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
             child: Text(
               '등록',
               style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
-            ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
+            ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
           ),
         ).paddingOnly(right: 20, bottom: 24),
       );
@@ -174,8 +173,7 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
 
             if (!mounted) return;
 
-            bool allPermissionsGranted =
-                permissionStatuses.values.every((status) => status.isGranted);
+            bool allPermissionsGranted = permissionStatuses.values.every((status) => status.isGranted);
 
             Log.i(":::allPermissionsGranted $allPermissionsGranted");
 
@@ -197,8 +195,7 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
             child: Center(
               child: Text(
                 '블루투스 연결',
-                style: PlamFarmTextStyles.body2Bold
-                    .copyWith(color: Colors.white, fontSize: 17),
+                style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white, fontSize: 17),
               ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
             ),
           ),

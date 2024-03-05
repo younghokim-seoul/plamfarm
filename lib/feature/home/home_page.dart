@@ -106,7 +106,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                         '기기 추가',
                         style: PlamFarmTextStyles.body2Bold
                             .copyWith(color: Colors.white),
-                      ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
+                      ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
                     )),
                 Gap(10.w),
               ],

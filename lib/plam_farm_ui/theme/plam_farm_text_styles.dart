@@ -125,7 +125,7 @@ abstract class PlamFarmTextStyles {
     fontFamily: fontFamily,
     fontWeight: FontWeight.w600,
     fontSize: 15,
-    height: 1.26,
+    height: 1.135,
     letterSpacing: 0.25,
   );
 

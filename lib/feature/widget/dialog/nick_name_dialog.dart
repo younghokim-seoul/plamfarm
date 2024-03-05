@@ -60,7 +60,7 @@ class NickNameDialog extends StatelessWidget {
                 '저장하기',
                 style:
                 PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
-              ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
+              ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
             ),
           ).paddingOnly(right: 24, bottom: 24),
           DecoratedBox(
@@ -82,7 +82,7 @@ class NickNameDialog extends StatelessWidget {
                 '닫기',
                 style: PlamFarmTextStyles.body2Bold
                     .copyWith(color: PlamFarmColors.palmFarmPrimary5),
-              ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
+              ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
             ),
           ).paddingOnly(bottom: 24, right: 24),
         ],

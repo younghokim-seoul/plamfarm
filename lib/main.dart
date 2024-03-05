@@ -7,18 +7,14 @@ import 'package:palmfarm/injector.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_theme.dart';
 import 'package:palmfarm/utils/reactive/global_event.dart';
 
-
 final EventBus eventBus = EventBus();
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   setupLocate();
   configureDependencies();
   runApp(const ProviderScope(child: App()));
 }
-
-
 
 class App extends ConsumerStatefulWidget {
   const App({super.key});

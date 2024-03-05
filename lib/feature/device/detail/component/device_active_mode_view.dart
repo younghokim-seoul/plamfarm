@@ -29,32 +29,30 @@ class DeviceActiveModeView extends StatelessWidget {
         children: [
           Text(
             '기기 동작 모드 상태',
-            style: PlamFarmTextStyles.headline5Bold.copyWith(
-                color: PlamFarmColors.palmFarmNormalTextColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w800),
+            style: PlamFarmTextStyles.headline5Bold
+                .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16, fontWeight: FontWeight.w800),
           ),
           DecoratedBox(
-              decoration: BoxDecoration(
-                color: PlamFarmColors.palmFarmPrimary5,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: PlamFarmColors.palmFarmPrimary6.withOpacity(0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 1),
-                  )
-                ],
+            decoration: BoxDecoration(
+              color: PlamFarmColors.palmFarmPrimary5,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(8),
               ),
-              child: InkWell(
-                child: Text(
-                  '개인모드 추가',
-                  style: PlamFarmTextStyles.body2Bold
-                      .copyWith(color: Colors.white),
-                ).paddingSymmetric(horizontal: 12.w, vertical: 8.w),
-              )),
+              boxShadow: [
+                BoxShadow(
+                  color: PlamFarmColors.palmFarmPrimary6.withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 1),
+                )
+              ],
+            ),
+            child: InkWell(
+              child: Text(
+                '개인모드 추가',
+                style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
+              ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
+            ),
+          ),
         ],
       );
 
@@ -81,27 +79,21 @@ class DeviceActiveModeView extends StatelessWidget {
         ).paddingSymmetric(horizontal: 16.w, vertical: 24.h),
       );
 
-  Widget _buildSettingTile(BuildContext context,
-          {required String title, required String value}) =>
-      Row(
+  Widget _buildSettingTile(BuildContext context, {required String title, required String value}) => Row(
         children: [
           SizedBox(
             width: getScreenWidth(context) * 0.30,
             child: Text(
               title,
-              style: PlamFarmTextStyles.headline5Bold.copyWith(
-                  color: PlamFarmColors.palmFarmNormalTextColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400),
+              style: PlamFarmTextStyles.headline5Bold
+                  .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 14, fontWeight: FontWeight.w400),
             ),
           ),
           Expanded(
             child: Text(
               title,
-              style: PlamFarmTextStyles.headline5Bold.copyWith(
-                  color: PlamFarmColors.palmFarmNormalTextColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700),
+              style: PlamFarmTextStyles.headline5Bold
+                  .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 14, fontWeight: FontWeight.w700),
             ),
           ),
         ],
@@ -109,9 +101,7 @@ class DeviceActiveModeView extends StatelessWidget {
 
   Widget _buildNoticeTile() => Text(
         '동작중인 기기의 LED 펌프 상태는 아래의 ON/OFF 버튼에 표현 됩니다. 만약 1회성으로 현재 동작을 변경하고자 하는 경우 버튼을 이용해주세요. 상태를 재확인 하고싶은 경우에는 새로고침 버튼을 눌러주세요.',
-        style: PlamFarmTextStyles.headline5Bold.copyWith(
-            color: PlamFarmColors.palmFarmNormalTextColor,
-            fontSize: 12,
-            fontWeight: FontWeight.w400),
+        style: PlamFarmTextStyles.headline5Bold
+            .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 12, fontWeight: FontWeight.w400),
       );
 }

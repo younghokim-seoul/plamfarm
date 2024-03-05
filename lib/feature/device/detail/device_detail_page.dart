@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:palmfarm/feature/device/detail/component/device_active_mode_view.dart';
+import 'package:palmfarm/feature/device/detail/component/device_switch_mode_view.dart';
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
 import 'package:palmfarm/feature/widget/appbar/flex_icon_button.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
@@ -45,6 +46,9 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
                   children: [
                     Gap(16.h),
                     const DeviceActiveModeView(),
+                    Gap(24.h),
+                    const DeviceSwitchModeView(),
+
                   ],
                 ),
               ),

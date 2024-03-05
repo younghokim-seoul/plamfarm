@@ -32,18 +32,22 @@ class ScanResultListView extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      DecoratedBox(
-                          decoration: const BoxDecoration(
-                            color: PlamFarmColors.palmFarmPrimary4,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
-                            ),
+                      Container(
+                        width: 40.h,
+                        height: 40.h,
+                        decoration: const BoxDecoration(
+                          color: PlamFarmColors.palmFarmPrimary4,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
                           ),
-                          child: Text(
-                            (index + 1).toString(),
-                            style: PlamFarmTextStyles.body2Bold
-                                .copyWith(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),
-                          ).paddingSymmetric(horizontal: 16.w, vertical: 14.h)),
+                        ),
+                        child: Text(
+                          (index + 1).toString(),
+                          textAlign: TextAlign.center,
+                          style: PlamFarmTextStyles.body2Bold
+                              .copyWith(color: Colors.black, fontWeight: FontWeight.w700, height: 1.583, fontSize: 16),
+                        ).marginOnly(top: 4),
+                      ),
                       Gap(16.w),
                       Flexible(
                           child: Text(
