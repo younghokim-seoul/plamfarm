@@ -9,6 +9,8 @@ abstract class BleRepository {
 
   Future<void> disconnect();
 
+  Future<void> write(List<int> command);
+
   void addChannelListener(String tag, BleChannelListener listener);
 
   void removeChannelListener(String tag);

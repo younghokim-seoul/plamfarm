@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:palmfarm/data/repository/ble_channel_listener.dart';
 import 'package:palmfarm/domain/entity/ble_scanner_state.dart';
 import 'package:palmfarm/domain/repository/ble_repository.dart';
+import 'package:palmfarm/utils/constant.dart';
 import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/value_extension.dart';
 
@@ -16,10 +17,9 @@ class BleRepositoryImpl extends BleRepository {
 
   StreamSubscription<DiscoveredDevice>? _scanSubscription;
   StreamSubscription<ConnectionStateUpdate>? _connectionSubscription;
-
+  StreamSubscription<List<int>>? _notifySubscription;
   final _devices = <DiscoveredDevice>[];
   String? macAddress;
-
 
   @override
   Future<void> stopScan() async {
@@ -33,9 +33,8 @@ class BleRepositoryImpl extends BleRepository {
     _devices.clear();
     _scanSubscription?.cancel();
     _scanSubscription = flutterReactiveBle.scanForDevices(
-        withServices: [],
+        withServices: [Uuid.parse(serviceUuid)],
         scanMode: ScanMode.lowLatency).listen((device) {
-
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
         _devices[knownDeviceIndex] = device;
@@ -50,18 +49,18 @@ class BleRepositoryImpl extends BleRepository {
   @override
   Future<void> connect(String address) async {
     macAddress = address;
-    _connectionSubscription =
-        flutterReactiveBle.connectToDevice(id: address).listen(
-              (update) {
-            Log.d(
-                'ConnectionState for device $address : ${update
-                    .connectionState}');
-            _notifyConnectionChanged(update);
-            // eventBus.fire(update);
-          },
-          onError: (Object e) =>
-              Log.e('Connecting to device $address resulted in error $e'),
-        );
+    _connectionSubscription = flutterReactiveBle.connectToDevice(id: address).listen(
+      (update) {
+        Log.d(
+            'ConnectionState for device $address : ${update.connectionState}');
+
+        if(update.connectionState == DeviceConnectionState.connected){
+          subscribeCharacteristic();
+        }
+        _notifyConnectionChanged(update);
+      },
+      onError: (Object e) => Log.e('Connecting to device $address resulted in error $e'),
+    );
   }
 
   @override
@@ -77,13 +76,6 @@ class BleRepositoryImpl extends BleRepository {
     } on Exception catch (e, _) {
       Log.e("Error disconnecting from a device: $e");
     } finally {
-      // eventBus.fire(
-      //   ConnectionStateUpdate(
-      //     deviceId: macAddress ?? "Unknown",
-      //     connectionState: DeviceConnectionState.disconnected,
-      //     failure: null,
-      //   ),
-      // );
       _notifyConnectionChanged(
         ConnectionStateUpdate(
           deviceId: macAddress ?? "Unknown",
@@ -94,9 +86,6 @@ class BleRepositoryImpl extends BleRepository {
       macAddress = null;
     }
   }
-
-
-
 
   @override
   void addChannelListener(String tag, BleChannelListener listener) {
@@ -113,6 +102,16 @@ class BleRepositoryImpl extends BleRepository {
     _mChannelListener.clear();
   }
 
+  Future<void> subscribeCharacteristic() async {
+    final characteristic = QualifiedCharacteristic(serviceId: Uuid.parse(serviceUuid), characteristicId: Uuid.parse(notifyUuid), deviceId: macAddress!);
+    _notifySubscription = flutterReactiveBle
+        .subscribeToCharacteristic(characteristic)
+        .listen((event) {
+      Log.e(":::subscribeCharacteristic event... " + event.toString());
+    }, onError: (error) {
+      Log.e(":::subscribeCharacteristic error... " + error);
+    });
+  }
 
   void _notifyConnectionChanged(ConnectionStateUpdate state) {
     for (BleChannelListener listener in _mChannelListener.values) {
@@ -127,5 +126,12 @@ class BleRepositoryImpl extends BleRepository {
         scanIsInProgress: _scanSubscription != null,
       ));
     }
+  }
+
+  @override
+  Future<void> write(List<int> command) async {
+    final characteristic = QualifiedCharacteristic(serviceId: Uuid.parse(serviceUuid), characteristicId: Uuid.parse(writeUuid), deviceId: macAddress!);
+    Log.d(":::command " + command.toString());
+    await flutterReactiveBle.writeCharacteristicWithoutResponse(characteristic, value: command);
   }
 }
