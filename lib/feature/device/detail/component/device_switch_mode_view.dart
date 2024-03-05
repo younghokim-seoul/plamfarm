@@ -1,11 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:palmfarm/feature/device/detail/switch_state.dart';
+import 'package:palmfarm/feature/widget/dialog/device_disconnect_dialog.dart';
 import 'package:palmfarm/feature/widget/switch/switch_title.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
+import 'package:palmfarm/utils/constant.dart';
+import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
 
 class DeviceSwitchModeView extends ConsumerWidget {
@@ -38,16 +42,17 @@ class DeviceSwitchModeView extends ConsumerWidget {
             ),
           ),
           SwitchTitle(
-              value: switchState.enablePump,
-              onChanged: (v) {
-                ref.read(selectStateProvider.notifier).switchingPump();
-              },
+            value: switchState.enablePump,
+            onChanged: (v) {
+              ref.read(selectStateProvider.notifier).switchingPump();
+            },
             title: Text(
               '펌프 전원',
               style: PlamFarmTextStyles.body2Bold
                   .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontWeight: FontWeight.w700),
-            ),),
-           Gap(24.h),
+            ),
+          ),
+          Gap(24.h),
           DecoratedBox(
             decoration: BoxDecoration(
               color: PlamFarmColors.palmFarmPrimary5,
@@ -63,9 +68,18 @@ class DeviceSwitchModeView extends ConsumerWidget {
               ],
             ),
             child: InkWell(
+              onTap: () => showDeviceDisconnectDialog(
+                context: context,
+                title: dialog_disconnect_title,
+                message: dialog_disconnect_content,
+                onTap: () {
+                  Log.d(":::::팝업창 클릭");
+                  context.router.pop();
+                }
+              ),
               child: Text(
                 '새로고침',
-                style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white,height: 1.135),
+                style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white, height: 1.135),
               ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
             ),
           ),

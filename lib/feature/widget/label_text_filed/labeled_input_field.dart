@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 
 class LabeledInputField extends StatefulWidget {
@@ -10,6 +11,7 @@ class LabeledInputField extends StatefulWidget {
     this.hintText,
     this.errorText,
     this.onChanged,
+    this.formatters,
     super.key,
   });
 
@@ -24,6 +26,8 @@ class LabeledInputField extends StatefulWidget {
   final String? errorText;
 
   final ValueChanged<String>? onChanged;
+
+  final List<TextInputFormatter>? formatters;
 
   bool get hasError => errorText != null && errorText!.isNotEmpty;
 
@@ -94,6 +98,7 @@ class _LabeledInputFieldState extends State<LabeledInputField> {
                   ),
                 ),
               ),
+              inputFormatters: widget.formatters ,
               enableSuggestions: false,
               autocorrect: false,
               textAlignVertical: TextAlignVertical.center,
