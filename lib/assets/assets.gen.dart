@@ -19,8 +19,21 @@ class $AssetsImageGen {
   /// File path: assets/image/ic_ble.png
   AssetGenImage get icBle => const AssetGenImage('assets/image/ic_ble.png');
 
+  /// File path: assets/image/ic_flowers_mode.png
+  AssetGenImage get icFlowersMode =>
+      const AssetGenImage('assets/image/ic_flowers_mode.png');
+
+  /// File path: assets/image/ic_strawberry_mode.png
+  AssetGenImage get icStrawberryMode =>
+      const AssetGenImage('assets/image/ic_strawberry_mode.png');
+
+  /// File path: assets/image/ic_vegetable_mode.png
+  AssetGenImage get icVegetableMode =>
+      const AssetGenImage('assets/image/ic_vegetable_mode.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [appLanding, icBle];
+  List<AssetGenImage> get values =>
+      [appLanding, icBle, icFlowersMode, icStrawberryMode, icVegetableMode];
 }
 
 class Assets {
