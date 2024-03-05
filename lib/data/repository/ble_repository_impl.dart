@@ -49,7 +49,7 @@ class BleRepositoryImpl extends BleRepository {
   @override
   Future<void> connect(String address) async {
     macAddress = address;
-    _connectionSubscription = flutterReactiveBle.connectToDevice(id: address).listen(
+    _connectionSubscription = flutterReactiveBle.connectToDevice(id: address,connectionTimeout: Duration(seconds: 3)).listen(
       (update) {
         Log.d(
             'ConnectionState for device $address : ${update.connectionState}');
