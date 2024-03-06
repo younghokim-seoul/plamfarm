@@ -84,6 +84,7 @@ class BleRepositoryImpl extends BleRepository {
           failure: null,
         ),
       );
+      _notifySubscription?.cancel();
       macAddress = null;
     }
   }
