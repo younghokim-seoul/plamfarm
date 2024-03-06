@@ -4,10 +4,10 @@ import 'package:palmfarm/domain/repository/ble_repository.dart';
 import 'package:palmfarm/feature/viewmodel_interface.dart';
 
 @Injectable()
-class LedSettingViewModel implements ViewModelInterface{
+class PrivateSettingViewModel implements ViewModelInterface{
   final BleRepository _bleRepository;
 
-  LedSettingViewModel(this._bleRepository);
+  PrivateSettingViewModel(this._bleRepository);
 
   void onLoadData() {
     _bleRepository.startScan();

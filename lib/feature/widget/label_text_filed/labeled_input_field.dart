@@ -61,7 +61,7 @@ class _LabeledInputFieldState extends State<LabeledInputField> {
             const Positioned.fill(
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: PlamFarmColors.palmFarmPrimary9,
+                  color: PlamFarmColors.palmFarmPrimary7,
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
               ),

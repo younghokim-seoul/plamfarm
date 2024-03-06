@@ -55,7 +55,8 @@ class BleRepositoryImpl extends BleRepository {
             'ConnectionState for device $address : ${update.connectionState}');
 
         if(update.connectionState == DeviceConnectionState.connected){
-          subscribeCharacteristic();
+          // subscribeCharacteristic();
+          readCharacteristic();
         }
         _notifyConnectionChanged(update);
       },
@@ -111,6 +112,12 @@ class BleRepositoryImpl extends BleRepository {
     }, onError: (error) {
       Log.e(":::subscribeCharacteristic error... " + error);
     });
+  }
+
+  Future<void> readCharacteristic() async {
+    final characteristic = QualifiedCharacteristic(serviceId: Uuid.parse(serviceUuid), characteristicId: Uuid.parse(notifyUuid), deviceId: macAddress!);
+    final response = await  flutterReactiveBle.readCharacteristic(characteristic);
+    Log.d(":::::response.. " + response.toString());
   }
 
   void _notifyConnectionChanged(ConnectionStateUpdate state) {

@@ -43,6 +43,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const LedSettingPage(),
       );
     },
+    PrivateSettingRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const PrivateSettingPage(),
+      );
+    },
     ScanRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -134,6 +140,20 @@ class LedSettingRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'LedSettingRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [PrivateSettingPage]
+class PrivateSettingRoute extends PageRouteInfo<void> {
+  const PrivateSettingRoute({List<PageRouteInfo>? children})
+      : super(
+          PrivateSettingRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PrivateSettingRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

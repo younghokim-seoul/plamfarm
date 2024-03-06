@@ -162,6 +162,8 @@ abstract class PlamFarmColors {
   static const Color palmFarmPrimary8 = Color(0xFF000000);
   static const Color palmFarmPrimary9 = Color(0xFFEDEDED);
   static const Color palmFarmPrimary10 = Color(0xFFF6A2BB);
+  static const Color palmFarmPrimary11 = Color(0xFF9F9F9F);
+  static const Color palmFarmPrimary12 = Color(0xFF0500FF);
   static const Color palmFarmNormalTextColor = Color(0xFF383D50);
 
 }

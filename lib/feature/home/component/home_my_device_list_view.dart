@@ -18,7 +18,7 @@ class HomeMyDeviceListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return viewModel.homeListUiState.ui(builder: (build, state) {
-      if (!state.hasData || state.data.isNullOrEmpty) return Container();
+      if (!state.hasData || state.data.isNullOrEmpty) return SizedBox.shrink();
 
       return ListView.builder(
           primary: true,

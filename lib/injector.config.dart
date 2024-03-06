@@ -17,8 +17,10 @@ import 'package:palmfarm/feature/device/detail/device_detail_view_model.dart'
     as _i5;
 import 'package:palmfarm/feature/device/detail/led_setting/led_setting_view_model.dart'
     as _i6;
-import 'package:palmfarm/feature/device/scan/scan_view_model.dart' as _i7;
-import 'package:palmfarm/feature/splash/splash_view_model.dart' as _i8;
+import 'package:palmfarm/feature/device/detail/private_setting/private_setting_view_model.dart'
+    as _i7;
+import 'package:palmfarm/feature/device/scan/scan_view_model.dart' as _i8;
+import 'package:palmfarm/feature/splash/splash_view_model.dart' as _i9;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -34,11 +36,13 @@ extension GetItInjectableX on _i1.GetIt {
     gh.singleton<_i3.BleRepository>(_i4.BleRepositoryImpl());
     gh.factory<_i5.DeviceDetailViewModel>(
         () => _i5.DeviceDetailViewModel(gh<_i3.BleRepository>()));
-    gh.factory<_i6.LedSettingPageViewModel>(
-        () => _i6.LedSettingPageViewModel(gh<_i3.BleRepository>()));
-    gh.factory<_i7.ScanViewModel>(
-        () => _i7.ScanViewModel(gh<_i3.BleRepository>()));
-    gh.factory<_i8.SplashViewModel>(() => _i8.SplashViewModel());
+    gh.factory<_i6.LedSettingViewModel>(
+        () => _i6.LedSettingViewModel(gh<_i3.BleRepository>()));
+    gh.factory<_i7.PrivateSettingViewModel>(
+        () => _i7.PrivateSettingViewModel(gh<_i3.BleRepository>()));
+    gh.factory<_i8.ScanViewModel>(
+        () => _i8.ScanViewModel(gh<_i3.BleRepository>()));
+    gh.factory<_i9.SplashViewModel>(() => _i9.SplashViewModel());
     return this;
   }
 }

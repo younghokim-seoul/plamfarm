@@ -44,20 +44,22 @@ class _HomePageState extends ConsumerState<HomePage> {
         title: "기기 리스트",
       ),
       body: SafeArea(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Gap(4.h),
-          deviceRegisterView(),
-          Gap(24.h),
-          deviceListText(),
-          Gap(12.h),
-          Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Gap(4.h),
+            deviceRegisterView(),
+            Gap(24.h),
+            deviceListText(),
+            Gap(12.h),
+            Expanded(
               child: HomeMyDeviceListView(
-            viewModel: _viewModel,
-          ))
-        ],
-      )),
+                viewModel: _viewModel,
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -101,7 +103,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ),
                     ),
                     child: InkWell(
-                      onTap: () => context.router.push(const ConnectorRoute()),
+                      // onTap: () => context.router.push(const ConnectorRoute()),
+                      onTap: () => context.router.push(const PrivateSettingRoute()),
                       child: Text(
                         '기기 추가',
                         style: PlamFarmTextStyles.body2Bold

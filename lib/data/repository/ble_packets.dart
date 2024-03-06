@@ -10,5 +10,5 @@ class QueryCurrentStatus extends BlePacket{
   String get header => "AA";
 
   @override
-  String get body => "PN";
+  String get body => "QS";
 }

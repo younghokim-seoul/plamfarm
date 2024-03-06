@@ -4,6 +4,7 @@ import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
 import 'package:palmfarm/feature/device/connector/connector_page.dart';
 import 'package:palmfarm/feature/device/detail/device_detail_page.dart';
 import 'package:palmfarm/feature/device/detail/led_setting/led_setting_page.dart';
+import 'package:palmfarm/feature/device/detail/private_setting/private_page.dart';
 import 'package:palmfarm/feature/device/scan/scan_page.dart';
 import 'package:palmfarm/feature/home/home_page.dart';
 import 'package:palmfarm/feature/splash/splash_page.dart';
@@ -19,7 +20,7 @@ class AppRouter extends _$AppRouter {
           page: SplashRoute.page,
           initial: true,
         ),
-        AutoRoute(
+        CupertinoRoute(
           path: HomePage.routeName,
           page: HomeRoute.page,
         ),
@@ -42,6 +43,10 @@ class AppRouter extends _$AppRouter {
         CupertinoRoute(
           path: LedSettingPage.routeName,
           page: LedSettingRoute.page,
+        ),
+        CupertinoRoute(
+          path: PrivateSettingPage.routeName,
+          page: PrivateSettingRoute.page,
         ),
       ];
 }
