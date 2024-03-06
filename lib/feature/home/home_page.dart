@@ -103,8 +103,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ),
                     ),
                     child: InkWell(
-                      // onTap: () => context.router.push(const ConnectorRoute()),
-                      onTap: () => context.router.push(const PrivateSettingRoute()),
+                      onTap: () => context.router.push(const ConnectorRoute()),
                       child: Text(
                         '기기 추가',
                         style: PlamFarmTextStyles.body2Bold

@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:palmfarm/plam_farm_ui/router/app_route.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
@@ -31,11 +33,12 @@ class DevicePrivateModeView extends ConsumerWidget {
                 )
               ],
             ),
-            child: InkWell(
+            child: GestureDetector(
+              onLongPress: () => context.router.push(PrivateSettingRoute()),
               child: SizedBox(
                 width: (1.sw - 2 * 20.w - 14.w) / 2,
                 child: Text(
-                  '개인모드 1',
+                  '개인모드 ' + (index + 1).toString(),
                   textAlign: TextAlign.center,
                   style: PlamFarmTextStyles.headline6Bold.copyWith(
                       color: PlamFarmColors.palmFarmPrimary8, fontWeight: FontWeight.w700, fontSize: 16, height: 1.135),

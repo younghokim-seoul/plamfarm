@@ -28,7 +28,7 @@ class PrivatePumpIntervalView extends ConsumerWidget {
         ),
         Gap(16.h),
         SizedBox(
-          width: (1.sw - 20.w) / 2,
+          width: (1.sw) / 2,
           child: Row(
             children: [
               Text(
@@ -66,7 +66,7 @@ class PrivatePumpIntervalView extends ConsumerWidget {
         ),
         Gap(24.h),
         SizedBox(
-          width: (1.sw - 20.w) / 2,
+          width: (1.sw) / 2,
           child: Row(
             children: [
               Text(

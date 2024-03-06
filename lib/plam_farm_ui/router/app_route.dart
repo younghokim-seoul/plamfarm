@@ -20,7 +20,7 @@ class AppRouter extends _$AppRouter {
           page: SplashRoute.page,
           initial: true,
         ),
-        CupertinoRoute(
+        AutoRoute(
           path: HomePage.routeName,
           page: HomeRoute.page,
         ),
