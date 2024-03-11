@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:palmfarm/app_providers.dart';
 import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
-import 'package:palmfarm/data/repository/ble_packets.dart';
 import 'package:palmfarm/feature/device/connection_ui_state.dart';
 import 'package:palmfarm/feature/device/detail/component/device_active_mode_view.dart';
 import 'package:palmfarm/feature/device/detail/component/device_farming_mode_view.dart';
@@ -47,7 +46,7 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
   void setObserve() {
     _viewModel.connectionUiState.stream.listen((event) {
       if (event is Connected) {
-        _viewModel.write(QueryCurrentStatus());
+        _viewModel.getCurrentStatus();
       }
 
       if (event is Disconnected) {
@@ -92,13 +91,19 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Gap(16.h),
-            const DeviceActiveModeView(),
+            DeviceActiveModeView(
+              viewModel: _viewModel,
+            ),
             Gap(24.h),
-            const DeviceSwitchModeView(),
+            DeviceSwitchModeView(
+              viewModel: _viewModel,
+            ),
             Gap(24.h),
             const DeviceFarmingModeView(),
             Gap(16.h),
-            DevicePrivateModeView(viewModel: _viewModel,),
+            DevicePrivateModeView(
+              viewModel: _viewModel,
+            ),
             Gap(16.h),
           ],
         ),

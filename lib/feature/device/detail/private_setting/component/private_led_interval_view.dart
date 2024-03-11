@@ -8,6 +8,7 @@ import 'package:palmfarm/feature/widget/label_text_filed/labeled_input_field.dar
 import 'package:palmfarm/feature/widget/label_text_filed/range_text_input_formatter.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
+import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
 
 class PrivateLedIntervalView extends ConsumerWidget {
@@ -44,131 +45,159 @@ class PrivateLedIntervalView extends ConsumerWidget {
   }
 
   Widget _buildLedOnSettingGroup(WidgetRef ref) => Row(
-    children: [
-      SizedBox(
-        width: (1.sw - 2 * 20.w - 25.w) / 2,
-        child: Row(
-          children: [
-            Expanded(
-              child: LabeledInputField(
-                controller: TextEditingController(text: ref.read(privateStateProvider).ledOnHour != -1 ? ref.read(privateStateProvider).ledOnHour.toString() : ""),
-                hintText: '00 ~ 23',
-                errorText: null,
-                keyboardType: TextInputType.number,
-                formatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  CustomRangeTextInputFormatter(min: 0, max: 23),
-                ],
-                onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOnHour(v),
-              ),
+        children: [
+          SizedBox(
+            width: (1.sw - 2 * 20.w - 25.w) / 2,
+            child: Row(
+              children: [
+                Expanded(
+                  child: LabeledInputField(
+                    controller: TextEditingController(
+                        text: ref.read(privateStateProvider).ledOnHour != -1 ? ref.read(privateStateProvider).ledOnHour.toString()
+                            : ""),
+                    hintText: '00 ~ 23',
+                    errorText: null,
+                    keyboardType: TextInputType.number,
+                    onChanged: (v) {
+                      Log.d("::::v => " + v);
+                      ref.watch(privateStateProvider.notifier).setLedOnHour(v);
+                    },
+                    formatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CustomRangeTextInputFormatter(min: 0, max: 23),
+                    ],
+                  ),
+                ),
+                Gap(16.w),
+                Text(
+                  '시',
+                  style: PlamFarmTextStyles.headline5Bold.copyWith(
+                      color: PlamFarmColors.palmFarmNormalTextColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      height: 1.17),
+                ),
+              ],
             ),
-            Gap(16.w),
-            Text(
-              '시',
-              style: PlamFarmTextStyles.headline5Bold.copyWith(
-                  color: PlamFarmColors.palmFarmNormalTextColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  height: 1.17),
+          ),
+          Gap(25.w),
+          SizedBox(
+            width: (1.sw - 2 * 20.w - 25.w) / 2,
+            child: Row(
+              children: [
+                Expanded(
+                  child: LabeledInputField(
+                    controller: TextEditingController(
+                        text: ref.read(privateStateProvider).ledOnMinute != -1
+                            ? ref
+                                .read(privateStateProvider)
+                                .ledOnMinute
+                                .toString()
+                            : ""),
+                    hintText: '00 ~ 59',
+                    errorText: null,
+                    keyboardType: TextInputType.number,
+                    onChanged: (v) => ref
+                        .watch(privateStateProvider.notifier)
+                        .setLedOnMinute(v),
+                    formatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CustomRangeTextInputFormatter(min: 0, max: 59),
+                    ],
+                  ),
+                ),
+                Gap(16.w),
+                Text(
+                  '분',
+                  style: PlamFarmTextStyles.headline5Bold.copyWith(
+                      color: PlamFarmColors.palmFarmNormalTextColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      height: 1.17),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      Gap(25.w),
-      SizedBox(
-        width: (1.sw - 2 * 20.w - 25.w) / 2,
-        child: Row(
-          children: [
-            Expanded(
-              child: LabeledInputField(
-                controller: TextEditingController(text: ref.read(privateStateProvider).ledOnMinute != -1 ? ref.read(privateStateProvider).ledOnMinute.toString() : ""),
-                hintText: '00 ~ 59',
-                errorText: null,
-                keyboardType: TextInputType.number,
-                onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOnMinute(v),
-                formatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  CustomRangeTextInputFormatter(min: 0, max: 59),
-                ],
-              ),
-            ),
-            Gap(16.w),
-            Text(
-              '분',
-              style: PlamFarmTextStyles.headline5Bold.copyWith(
-                  color: PlamFarmColors.palmFarmNormalTextColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  height: 1.17),
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
-
+          ),
+        ],
+      );
 
   Widget _buildLedOffSettingGroup(WidgetRef ref) => Row(
-    children: [
-      SizedBox(
-        width: (1.sw - 2 * 20.w - 25.w) / 2,
-        child: Row(
-          children: [
-            Expanded(
-              child: LabeledInputField(
-                controller: TextEditingController(text: ref.read(privateStateProvider).ledOffHour != -1 ? ref.read(privateStateProvider).ledOffHour.toString() : ""),
-                hintText: '00 ~ 23',
-                errorText: null,
-                keyboardType: TextInputType.number,
-                formatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  CustomRangeTextInputFormatter(min: 0, max: 23),
-                ],
-                onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOffHour(v),
-              ),
+        children: [
+          SizedBox(
+            width: (1.sw - 2 * 20.w - 25.w) / 2,
+            child: Row(
+              children: [
+                Expanded(
+                  child: LabeledInputField(
+                    controller: TextEditingController(
+                        text: ref.read(privateStateProvider).ledOffHour != -1
+                            ? ref
+                                .read(privateStateProvider)
+                                .ledOffHour
+                                .toString()
+                            : ""),
+                    hintText: '00 ~ 23',
+                    errorText: null,
+                    keyboardType: TextInputType.number,
+                    formatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CustomRangeTextInputFormatter(min: 0, max: 23),
+                    ],
+                    onChanged: (v) => ref
+                        .watch(privateStateProvider.notifier)
+                        .setLedOffHour(v),
+                  ),
+                ),
+                Gap(16.w),
+                Text(
+                  '시',
+                  style: PlamFarmTextStyles.headline5Bold.copyWith(
+                      color: PlamFarmColors.palmFarmNormalTextColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      height: 1.17),
+                ),
+              ],
             ),
-            Gap(16.w),
-            Text(
-              '시',
-              style: PlamFarmTextStyles.headline5Bold.copyWith(
-                  color: PlamFarmColors.palmFarmNormalTextColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  height: 1.17),
+          ),
+          Gap(25.w),
+          SizedBox(
+            width: (1.sw - 2 * 20.w - 25.w) / 2,
+            child: Row(
+              children: [
+                Expanded(
+                  child: LabeledInputField(
+                    controller: TextEditingController(
+                        text: ref.read(privateStateProvider).ledOffMinute != -1
+                            ? ref
+                                .read(privateStateProvider)
+                                .ledOffMinute
+                                .toString()
+                            : ""),
+                    hintText: '00 ~ 59',
+                    errorText: null,
+                    keyboardType: TextInputType.number,
+                    formatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CustomRangeTextInputFormatter(min: 0, max: 59),
+                    ],
+                    onChanged: (v) => ref
+                        .watch(privateStateProvider.notifier)
+                        .setLedOffMinute(v),
+                  ),
+                ),
+                Gap(16.w),
+                Text(
+                  '분',
+                  style: PlamFarmTextStyles.headline5Bold.copyWith(
+                      color: PlamFarmColors.palmFarmNormalTextColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      height: 1.17),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-      Gap(25.w),
-      SizedBox(
-        width: (1.sw - 2 * 20.w - 25.w) / 2,
-        child: Row(
-          children: [
-            Expanded(
-              child: LabeledInputField(
-                controller: TextEditingController(text: ref.read(privateStateProvider).ledOffMinute != -1 ? ref.read(privateStateProvider).ledOffMinute.toString() : ""),
-                hintText: '00 ~ 59',
-                errorText: null,
-                keyboardType: TextInputType.number,
-                formatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  CustomRangeTextInputFormatter(min: 0, max: 59),
-                ],
-                onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOffMinute(v),
-              ),
-            ),
-            Gap(16.w),
-            Text(
-              '분',
-              style: PlamFarmTextStyles.headline5Bold.copyWith(
-                  color: PlamFarmColors.palmFarmNormalTextColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  height: 1.17),
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
+          ),
+        ],
+      );
 }

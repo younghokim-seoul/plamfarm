@@ -43,7 +43,7 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Log.d("::::widget ..  " + widget.privateSetting.toString());
-      ref.watch(privateStateProvider.notifier).setPrivateSettingModel(widget.privateSetting);
+      ref.read(privateStateProvider.notifier).setPrivateSettingModel(widget.privateSetting);
     });
   }
 
@@ -106,7 +106,9 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
             ),
           ),
           child: InkWell(
-            onTap: () async {},
+            onTap: () async {
+             final state = ref.read(privateStateProvider);
+            },
             child: Text(
               '등록',
               style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
@@ -116,7 +118,7 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
       );
 
   Widget _buildNameInputTextFiled() => LabeledInputField(
-        controller: TextEditingController(text: ref.watch(privateStateProvider).modeName),
+        controller: TextEditingController(text: ref.read(privateStateProvider).modeName),
         hintText: '등록할 개인모드 명칭을 입력하세요.',
         errorText: null,
         keyboardType: TextInputType.text,

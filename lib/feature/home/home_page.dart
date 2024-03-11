@@ -96,16 +96,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                 )),
                 Gap(10.w),
                 DecoratedBox(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: PlamFarmColors.palmFarmPrimary5,
                       borderRadius: BorderRadius.all(
                         Radius.circular(8),
                       ),
                     ),
                     child: InkWell(
-                      onTap: () => {
-                        context.router.push(const ConnectorRoute())
-
+                      onTap: () {
+                        // final  String aaqs = "AAQS1302540205150730213010";
+                        // parseResponse(aaqs);
+                        context.router.push(const ConnectorRoute());
                       },
                       child: Text(
                         '기기 추가',

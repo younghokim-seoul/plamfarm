@@ -42,7 +42,9 @@ class BleRepositoryImpl extends BleRepository {
   void startScan() {
     _devices.clear();
     _scanSubscription?.cancel();
-    _scanSubscription = flutterReactiveBle.scanForDevices(withServices: [Uuid.parse(serviceUuid)], scanMode: ScanMode.lowLatency).listen((device) {
+    _scanSubscription = flutterReactiveBle.scanForDevices(
+        withServices: [Uuid.parse(serviceUuid)],
+        scanMode: ScanMode.lowLatency).listen((device) {
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
         _devices[knownDeviceIndex] = device;
@@ -57,8 +59,9 @@ class BleRepositoryImpl extends BleRepository {
   @override
   Future<void> connect(String address) async {
     macAddress = address;
-    _connectionSubscription =
-        flutterReactiveBle.connectToDevice(id: address, connectionTimeout: Duration(seconds: 3)).listen(
+    _connectionSubscription = flutterReactiveBle
+        .connectToDevice(id: address, connectionTimeout: Duration(seconds: 3))
+        .listen(
       (update) {
         Log.d('ConnectionState for device $address : ${update.connectionState}');
 
@@ -68,7 +71,8 @@ class BleRepositoryImpl extends BleRepository {
         }
         _notifyConnectionChanged(update);
       },
-      onError: (Object e) => Log.e('Connecting to device $address resulted in error $e'),
+      onError: (Object e) =>
+          Log.e('Connecting to device $address resulted in error $e'),
     );
   }
 
@@ -114,16 +118,22 @@ class BleRepositoryImpl extends BleRepository {
   }
 
   Future<void> subscribeCharacteristic() async {
+
+    await flutterReactiveBle.requestMtu(deviceId: macAddress!, mtu: 128);
+
+
     final characteristic = QualifiedCharacteristic(
       serviceId: Uuid.parse(serviceUuid),
       characteristicId: Uuid.parse(notifyUuid),
       deviceId: macAddress!,
     );
-    _notifySubscription = flutterReactiveBle.subscribeToCharacteristic(characteristic).listen((event) {
+    _notifySubscription = flutterReactiveBle
+        .subscribeToCharacteristic(characteristic)
+        .listen((event) {
       Log.e(":::subscribeCharacteristic event... " + event.toString());
       try {
-        // final data = utf8.decode(event);
-        _responseCompleter.complete(parseResponse("AAQS1302540205150730213010"));
+        final data = utf8.decode(event);
+        _responseCompleter.complete(parseResponse(data));
       } catch (e, t) {
         _responseCompleter.completeError(BleException(e, t));
       }
@@ -135,8 +145,11 @@ class BleRepositoryImpl extends BleRepository {
 
   Future<void> readCharacteristic() async {
     final characteristic = QualifiedCharacteristic(
-        serviceId: Uuid.parse(serviceUuid), characteristicId: Uuid.parse(notifyUuid), deviceId: macAddress!);
-    final response = await flutterReactiveBle.readCharacteristic(characteristic);
+        serviceId: Uuid.parse(serviceUuid),
+        characteristicId: Uuid.parse(notifyUuid),
+        deviceId: macAddress!);
+    final response =
+        await flutterReactiveBle.readCharacteristic(characteristic);
     Log.d(":::::response.. " + response.toString());
   }
 
@@ -179,16 +192,17 @@ class BleRepositoryImpl extends BleRepository {
           deviceId: macAddress!,
         );
 
-        Log.d(":::패킷... " +  utf8.encode(request.command).toString());
+        await Future.delayed(Duration(milliseconds: 200));
+
         await flutterReactiveBle.writeCharacteristicWithoutResponse(
           characteristic,
-          value: utf8.encode("#vv\r\n"),
+          value: utf8.encode(request.command),
         );
         final response = await _responseCompleter.future.timeout(Duration(seconds: 3));
         Log.d("::::결과값.. " + response.toString());
         completer.complete(response);
       } catch (e, t) {
-        Log.e("::::e => " + e.toString());
+        Log.e("::::e => " + e.toString() + " t " + t.toString());
         completer.completeError(BleException(e, t));
       }
 

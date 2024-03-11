@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palmfarm/data/local/vo/private_setting.dart';
 import 'package:palmfarm/feature/device/detail/private_setting/provider/private_state.dart';
+import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/value_extension.dart';
 
 final privateStateProvider =
@@ -45,18 +46,24 @@ class PrivateSettingNotifier extends StateNotifier<PrivateSettingState> {
   }
 
   void setPumpOnInterval(String interval) {
-    state = state.copyWith(pumpOnInterval: int.parse(interval));
+    if (!interval.isNullOrEmpty) {
+      state = state.copyWith(pumpOnInterval: int.parse(interval));
+    }
   }
 
   void setPumpOffInterval(String interval) {
-    state = state.copyWith(pumpOffInterval: int.parse(interval));
+    if (!interval.isNullOrEmpty) {
+      state = state.copyWith(pumpOffInterval: int.parse(interval));
+    }
   }
 
   void setLedOnHour(String interval) {
+    Log.d("::setLedOnHour " + interval);
     if (!interval.isNullOrEmpty) {
       state = state.copyWith(ledOnHour: int.parse(interval));
       calLedLiveTime();
     }
+
   }
 
   void setLedOnMinute(String interval) {
