@@ -44,9 +44,13 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     PrivateSettingRoute.name: (routeData) {
+      final args = routeData.argsAs<PrivateSettingRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const PrivateSettingPage(),
+        child: PrivateSettingPage(
+          key: args.key,
+          privateSetting: args.privateSetting,
+        ),
       );
     },
     ScanRoute.name: (routeData) {
@@ -146,16 +150,40 @@ class LedSettingRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [PrivateSettingPage]
-class PrivateSettingRoute extends PageRouteInfo<void> {
-  const PrivateSettingRoute({List<PageRouteInfo>? children})
-      : super(
+class PrivateSettingRoute extends PageRouteInfo<PrivateSettingRouteArgs> {
+  PrivateSettingRoute({
+    Key? key,
+    required PrivateSetting privateSetting,
+    List<PageRouteInfo>? children,
+  }) : super(
           PrivateSettingRoute.name,
+          args: PrivateSettingRouteArgs(
+            key: key,
+            privateSetting: privateSetting,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'PrivateSettingRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<PrivateSettingRouteArgs> page =
+      PageInfo<PrivateSettingRouteArgs>(name);
+}
+
+class PrivateSettingRouteArgs {
+  const PrivateSettingRouteArgs({
+    this.key,
+    required this.privateSetting,
+  });
+
+  final Key? key;
+
+  final PrivateSetting privateSetting;
+
+  @override
+  String toString() {
+    return 'PrivateSettingRouteArgs{key: $key, privateSetting: $privateSetting}';
+  }
 }
 
 /// generated route for

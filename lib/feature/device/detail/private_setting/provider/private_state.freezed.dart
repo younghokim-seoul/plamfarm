@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PrivateSettingState {
+  String get modeName => throw _privateConstructorUsedError;
   int get ledMode => throw _privateConstructorUsedError;
   int get pumpOnInterval => throw _privateConstructorUsedError;
   int get pumpOffInterval => throw _privateConstructorUsedError;
@@ -37,7 +38,8 @@ abstract class $PrivateSettingStateCopyWith<$Res> {
       _$PrivateSettingStateCopyWithImpl<$Res, PrivateSettingState>;
   @useResult
   $Res call(
-      {int ledMode,
+      {String modeName,
+      int ledMode,
       int pumpOnInterval,
       int pumpOffInterval,
       int ledOnHour,
@@ -60,6 +62,7 @@ class _$PrivateSettingStateCopyWithImpl<$Res, $Val extends PrivateSettingState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? modeName = null,
     Object? ledMode = null,
     Object? pumpOnInterval = null,
     Object? pumpOffInterval = null,
@@ -70,6 +73,10 @@ class _$PrivateSettingStateCopyWithImpl<$Res, $Val extends PrivateSettingState>
     Object? ledLiveTime = null,
   }) {
     return _then(_value.copyWith(
+      modeName: null == modeName
+          ? _value.modeName
+          : modeName // ignore: cast_nullable_to_non_nullable
+              as String,
       ledMode: null == ledMode
           ? _value.ledMode
           : ledMode // ignore: cast_nullable_to_non_nullable
@@ -115,7 +122,8 @@ abstract class _$$PrivateSettingStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int ledMode,
+      {String modeName,
+      int ledMode,
       int pumpOnInterval,
       int pumpOffInterval,
       int ledOnHour,
@@ -136,6 +144,7 @@ class __$$PrivateSettingStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? modeName = null,
     Object? ledMode = null,
     Object? pumpOnInterval = null,
     Object? pumpOffInterval = null,
@@ -146,6 +155,10 @@ class __$$PrivateSettingStateImplCopyWithImpl<$Res>
     Object? ledLiveTime = null,
   }) {
     return _then(_$PrivateSettingStateImpl(
+      modeName: null == modeName
+          ? _value.modeName
+          : modeName // ignore: cast_nullable_to_non_nullable
+              as String,
       ledMode: null == ledMode
           ? _value.ledMode
           : ledMode // ignore: cast_nullable_to_non_nullable
@@ -186,7 +199,8 @@ class __$$PrivateSettingStateImplCopyWithImpl<$Res>
 
 class _$PrivateSettingStateImpl implements _PrivateSettingState {
   _$PrivateSettingStateImpl(
-      {required this.ledMode,
+      {required this.modeName,
+      required this.ledMode,
       required this.pumpOnInterval,
       required this.pumpOffInterval,
       required this.ledOnHour,
@@ -195,6 +209,8 @@ class _$PrivateSettingStateImpl implements _PrivateSettingState {
       required this.ledOffMinute,
       required this.ledLiveTime});
 
+  @override
+  final String modeName;
   @override
   final int ledMode;
   @override
@@ -214,7 +230,7 @@ class _$PrivateSettingStateImpl implements _PrivateSettingState {
 
   @override
   String toString() {
-    return 'PrivateSettingState(ledMode: $ledMode, pumpOnInterval: $pumpOnInterval, pumpOffInterval: $pumpOffInterval, ledOnHour: $ledOnHour, ledOnMinute: $ledOnMinute, ledOffHour: $ledOffHour, ledOffMinute: $ledOffMinute, ledLiveTime: $ledLiveTime)';
+    return 'PrivateSettingState(modeName: $modeName, ledMode: $ledMode, pumpOnInterval: $pumpOnInterval, pumpOffInterval: $pumpOffInterval, ledOnHour: $ledOnHour, ledOnMinute: $ledOnMinute, ledOffHour: $ledOffHour, ledOffMinute: $ledOffMinute, ledLiveTime: $ledLiveTime)';
   }
 
   @override
@@ -222,6 +238,8 @@ class _$PrivateSettingStateImpl implements _PrivateSettingState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PrivateSettingStateImpl &&
+            (identical(other.modeName, modeName) ||
+                other.modeName == modeName) &&
             (identical(other.ledMode, ledMode) || other.ledMode == ledMode) &&
             (identical(other.pumpOnInterval, pumpOnInterval) ||
                 other.pumpOnInterval == pumpOnInterval) &&
@@ -242,6 +260,7 @@ class _$PrivateSettingStateImpl implements _PrivateSettingState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      modeName,
       ledMode,
       pumpOnInterval,
       pumpOffInterval,
@@ -261,7 +280,8 @@ class _$PrivateSettingStateImpl implements _PrivateSettingState {
 
 abstract class _PrivateSettingState implements PrivateSettingState {
   factory _PrivateSettingState(
-      {required final int ledMode,
+      {required final String modeName,
+      required final int ledMode,
       required final int pumpOnInterval,
       required final int pumpOffInterval,
       required final int ledOnHour,
@@ -270,6 +290,8 @@ abstract class _PrivateSettingState implements PrivateSettingState {
       required final int ledOffMinute,
       required final String ledLiveTime}) = _$PrivateSettingStateImpl;
 
+  @override
+  String get modeName;
   @override
   int get ledMode;
   @override

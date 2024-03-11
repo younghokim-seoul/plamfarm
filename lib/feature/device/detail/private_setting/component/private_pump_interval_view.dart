@@ -42,6 +42,7 @@ class PrivatePumpIntervalView extends ConsumerWidget {
               Gap(16.w),
               Expanded(
                 child: LabeledInputField(
+                  controller: TextEditingController(text: ref.read(privateStateProvider).pumpOnInterval != -1 ? ref.read(privateStateProvider).pumpOnInterval.toString() : ""),
                   hintText: '00 ~ 59',
                   errorText: null,
                   keyboardType: TextInputType.number,
@@ -80,6 +81,7 @@ class PrivatePumpIntervalView extends ConsumerWidget {
               Gap(10.w),
               Expanded(
                 child: LabeledInputField(
+                  controller: TextEditingController(text: ref.read(privateStateProvider).pumpOffInterval != -1 ? ref.read(privateStateProvider).pumpOffInterval.toString() : ""),
                   hintText: '01 ~ 60',
                   errorText: null,
                   keyboardType: TextInputType.number,

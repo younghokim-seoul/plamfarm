@@ -7,8 +7,8 @@ abstract class BlePacket{
 
 class QueryCurrentStatus extends BlePacket{
   @override
-  String get header => "AA";
+  String get header => "#";
 
   @override
-  String get body => "QS";
+  String get body => "vv";
 }

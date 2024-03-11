@@ -28,7 +28,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
         ),
         Gap(16.h),
         _buildLedOnSettingGroup(ref),
-        Gap(32.w),
+        Gap(32.h),
         Text(
           "LED OFF 시각",
           style: PlamFarmTextStyles.headline6Bold.copyWith(
@@ -51,6 +51,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
           children: [
             Expanded(
               child: LabeledInputField(
+                controller: TextEditingController(text: ref.read(privateStateProvider).ledOnHour != -1 ? ref.read(privateStateProvider).ledOnHour.toString() : ""),
                 hintText: '00 ~ 23',
                 errorText: null,
                 keyboardType: TextInputType.number,
@@ -80,6 +81,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
           children: [
             Expanded(
               child: LabeledInputField(
+                controller: TextEditingController(text: ref.read(privateStateProvider).ledOnMinute != -1 ? ref.read(privateStateProvider).ledOnMinute.toString() : ""),
                 hintText: '00 ~ 59',
                 errorText: null,
                 keyboardType: TextInputType.number,
@@ -114,6 +116,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
           children: [
             Expanded(
               child: LabeledInputField(
+                controller: TextEditingController(text: ref.read(privateStateProvider).ledOffHour != -1 ? ref.read(privateStateProvider).ledOffHour.toString() : ""),
                 hintText: '00 ~ 23',
                 errorText: null,
                 keyboardType: TextInputType.number,
@@ -143,6 +146,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
           children: [
             Expanded(
               child: LabeledInputField(
+                controller: TextEditingController(text: ref.read(privateStateProvider).ledOffMinute != -1 ? ref.read(privateStateProvider).ledOffMinute.toString() : ""),
                 hintText: '00 ~ 59',
                 errorText: null,
                 keyboardType: TextInputType.number,

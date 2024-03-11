@@ -1,4 +1,6 @@
 import 'package:palmfarm/data/repository/ble_channel_listener.dart';
+import 'package:palmfarm/data/repository/request.dart';
+import 'package:palmfarm/data/repository/response.dart';
 
 abstract class BleRepository {
   void startScan();
@@ -9,7 +11,7 @@ abstract class BleRepository {
 
   Future<void> disconnect();
 
-  Future<void> write(List<int> command);
+  Future<PalmFarmResponse> write(Request request);
 
   void addChannelListener(String tag, BleChannelListener listener);
 

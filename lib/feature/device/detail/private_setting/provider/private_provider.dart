@@ -1,15 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:palmfarm/data/local/vo/private_setting.dart';
 import 'package:palmfarm/feature/device/detail/private_setting/provider/private_state.dart';
 import 'package:palmfarm/utils/extension/value_extension.dart';
 
-final privateStateProvider = StateNotifierProvider.autoDispose<
-    PrivateSettingNotifier,
-    PrivateSettingState>((ref) => PrivateSettingNotifier());
+final privateStateProvider =
+    StateNotifierProvider.autoDispose<PrivateSettingNotifier, PrivateSettingState>((ref) => PrivateSettingNotifier());
 
 class PrivateSettingNotifier extends StateNotifier<PrivateSettingState> {
   PrivateSettingNotifier()
       : super(
           PrivateSettingState(
+            modeName: "",
             ledMode: 0,
             pumpOnInterval: -1,
             pumpOffInterval: -1,
@@ -20,6 +21,24 @@ class PrivateSettingNotifier extends StateNotifier<PrivateSettingState> {
             ledLiveTime: "00시간 00분",
           ),
         );
+
+  void setPrivateSettingModel(PrivateSetting model) {
+    state = state.copyWith(
+      modeName: model.modeName,
+      ledMode: model.ledMode,
+      pumpOnInterval: model.pumpOnInterval,
+      pumpOffInterval: model.pumpOffInterval,
+      ledOnHour: model.ledOnStartTime,
+      ledOnMinute: model.ledOffEndTime,
+      ledOffHour: model.ledOffStartTime,
+      ledOffMinute: model.ledOffEndTime,
+    );
+    calLedLiveTime();
+  }
+
+  void onChangedModelName(String name){
+    state = state.copyWith(modeName: name);
+  }
 
   void onChangedLedMode(int mode) {
     state = state.copyWith(ledMode: mode);
@@ -62,13 +81,10 @@ class PrivateSettingNotifier extends StateNotifier<PrivateSettingState> {
   }
 
   void calLedLiveTime() {
-    _calculateLedOnOffDuration(state.ledOnHour, state.ledOnMinute,
-        state.ledOffHour, state.ledOffMinute);
+    _calculateLedOnOffDuration(state.ledOnHour, state.ledOnMinute, state.ledOffHour, state.ledOffMinute);
   }
 
-  void _calculateLedOnOffDuration(
-      int onHour, int onMinute, int offHour, int offMinute) {
-
+  void _calculateLedOnOffDuration(int onHour, int onMinute, int offHour, int offMinute) {
     if (onHour == -1 || onMinute == -1 || offHour == -1 || offMinute == -1) {
       return;
     }
@@ -89,8 +105,7 @@ class PrivateSettingNotifier extends StateNotifier<PrivateSettingState> {
     int durationMinutes = durationInMinutes % 60;
 
     // 결과 문자열 형식으로 변환
-    String result =
-        "${durationHours.toString().padLeft(2, '0')}시간${durationMinutes.toString().padLeft(2, '0')}분";
+    String result = "${durationHours.toString().padLeft(2, '0')}시간${durationMinutes.toString().padLeft(2, '0')}분";
     state = state.copyWith(ledLiveTime: result);
   }
 }

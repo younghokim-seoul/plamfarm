@@ -1,8 +1,13 @@
 import 'dart:async';
+import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:injectable/injectable.dart';
 import 'package:palmfarm/data/repository/ble_channel_listener.dart';
+import 'package:palmfarm/data/repository/parser.dart';
+import 'package:palmfarm/data/repository/request.dart';
+import 'package:palmfarm/data/repository/response.dart';
 import 'package:palmfarm/domain/entity/ble_scanner_state.dart';
 import 'package:palmfarm/domain/repository/ble_repository.dart';
 import 'package:palmfarm/utils/constant.dart';
@@ -18,6 +23,11 @@ class BleRepositoryImpl extends BleRepository {
   StreamSubscription<DiscoveredDevice>? _scanSubscription;
   StreamSubscription<ConnectionStateUpdate>? _connectionSubscription;
   StreamSubscription<List<int>>? _notifySubscription;
+
+  bool _isProcessingQueue = false;
+  Completer<PalmFarmResponse> _responseCompleter = Completer();
+  final _requestQueue = Queue<Future<void> Function()>();
+
   final _devices = <DiscoveredDevice>[];
   String? macAddress;
 
@@ -32,9 +42,7 @@ class BleRepositoryImpl extends BleRepository {
   void startScan() {
     _devices.clear();
     _scanSubscription?.cancel();
-    _scanSubscription = flutterReactiveBle.scanForDevices(
-        withServices: [Uuid.parse(serviceUuid)],
-        scanMode: ScanMode.lowLatency).listen((device) {
+    _scanSubscription = flutterReactiveBle.scanForDevices(withServices: [Uuid.parse(serviceUuid)], scanMode: ScanMode.lowLatency).listen((device) {
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
         _devices[knownDeviceIndex] = device;
@@ -49,14 +57,14 @@ class BleRepositoryImpl extends BleRepository {
   @override
   Future<void> connect(String address) async {
     macAddress = address;
-    _connectionSubscription = flutterReactiveBle.connectToDevice(id: address,connectionTimeout: Duration(seconds: 3)).listen(
+    _connectionSubscription =
+        flutterReactiveBle.connectToDevice(id: address, connectionTimeout: Duration(seconds: 3)).listen(
       (update) {
-        Log.d(
-            'ConnectionState for device $address : ${update.connectionState}');
+        Log.d('ConnectionState for device $address : ${update.connectionState}');
 
-        if(update.connectionState == DeviceConnectionState.connected){
-          // subscribeCharacteristic();
-          readCharacteristic();
+        if (update.connectionState == DeviceConnectionState.connected) {
+          subscribeCharacteristic();
+          // readCharacteristic();
         }
         _notifyConnectionChanged(update);
       },
@@ -85,6 +93,7 @@ class BleRepositoryImpl extends BleRepository {
         ),
       );
       _notifySubscription?.cancel();
+      _responseCompleter = Completer();
       macAddress = null;
     }
   }
@@ -105,19 +114,29 @@ class BleRepositoryImpl extends BleRepository {
   }
 
   Future<void> subscribeCharacteristic() async {
-    final characteristic = QualifiedCharacteristic(serviceId: Uuid.parse(serviceUuid), characteristicId: Uuid.parse(notifyUuid), deviceId: macAddress!);
-    _notifySubscription = flutterReactiveBle
-        .subscribeToCharacteristic(characteristic)
-        .listen((event) {
+    final characteristic = QualifiedCharacteristic(
+      serviceId: Uuid.parse(serviceUuid),
+      characteristicId: Uuid.parse(notifyUuid),
+      deviceId: macAddress!,
+    );
+    _notifySubscription = flutterReactiveBle.subscribeToCharacteristic(characteristic).listen((event) {
       Log.e(":::subscribeCharacteristic event... " + event.toString());
+      try {
+        // final data = utf8.decode(event);
+        _responseCompleter.complete(parseResponse("AAQS1302540205150730213010"));
+      } catch (e, t) {
+        _responseCompleter.completeError(BleException(e, t));
+      }
+      _responseCompleter = Completer();
     }, onError: (error) {
       Log.e(":::subscribeCharacteristic error... " + error);
     });
   }
 
   Future<void> readCharacteristic() async {
-    final characteristic = QualifiedCharacteristic(serviceId: Uuid.parse(serviceUuid), characteristicId: Uuid.parse(notifyUuid), deviceId: macAddress!);
-    final response = await  flutterReactiveBle.readCharacteristic(characteristic);
+    final characteristic = QualifiedCharacteristic(
+        serviceId: Uuid.parse(serviceUuid), characteristicId: Uuid.parse(notifyUuid), deviceId: macAddress!);
+    final response = await flutterReactiveBle.readCharacteristic(characteristic);
     Log.d(":::::response.. " + response.toString());
   }
 
@@ -137,9 +156,67 @@ class BleRepositoryImpl extends BleRepository {
   }
 
   @override
-  Future<void> write(List<int> command) async {
-    final characteristic = QualifiedCharacteristic(serviceId: Uuid.parse(serviceUuid), characteristicId: Uuid.parse(writeUuid), deviceId: macAddress!);
-    Log.d(":::command " + command.toString());
-    await flutterReactiveBle.writeCharacteristicWithoutResponse(characteristic, value: command);
+  Future<PalmFarmResponse> write(Request request) async {
+    try {
+      final response = await send(request: request);
+      request.onResponse?.call(request.command, response);
+      return response;
+    } catch (e) {
+      request.onError?.call(request.command, e);
+      rethrow;
+    }
   }
+
+  Future<PalmFarmResponse> send({required Request request}) async {
+    final completer = Completer<PalmFarmResponse>();
+
+    _requestQueue.add(() async {
+      try {
+        Log.i("::[Request Queue] " + request.toString());
+        final characteristic = QualifiedCharacteristic(
+          serviceId: Uuid.parse(serviceUuid),
+          characteristicId: Uuid.parse(writeUuid),
+          deviceId: macAddress!,
+        );
+
+        Log.d(":::패킷... " +  utf8.encode(request.command).toString());
+        await flutterReactiveBle.writeCharacteristicWithoutResponse(
+          characteristic,
+          value: utf8.encode("#vv\r\n"),
+        );
+        final response = await _responseCompleter.future.timeout(Duration(seconds: 3));
+        Log.d("::::결과값.. " + response.toString());
+        completer.complete(response);
+      } catch (e, t) {
+        Log.e("::::e => " + e.toString());
+        completer.completeError(BleException(e, t));
+      }
+
+      _responseCompleter = Completer();
+    });
+
+    if (!_isProcessingQueue) {
+      unawaited(_processQueue());
+    }
+
+    return completer.future;
+  }
+
+  Future<void> _processQueue() async {
+    _isProcessingQueue = true;
+
+    while (_requestQueue.isNotEmpty) {
+      final request = _requestQueue.removeFirst();
+      await request();
+    }
+
+    _isProcessingQueue = false;
+  }
+}
+
+class BleException implements Exception {
+  const BleException(this.cause, this.stackTrace);
+
+  final dynamic cause;
+  final StackTrace stackTrace;
 }

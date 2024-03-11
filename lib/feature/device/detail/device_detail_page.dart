@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:palmfarm/app_providers.dart';
 import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
 import 'package:palmfarm/data/repository/ble_packets.dart';
 import 'package:palmfarm/feature/device/connection_ui_state.dart';
@@ -15,11 +16,8 @@ import 'package:palmfarm/feature/device/detail/device_detail_view_model.dart';
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
 import 'package:palmfarm/feature/widget/appbar/flex_icon_button.dart';
 import 'package:palmfarm/feature/widget/dialog/device_disconnect_dialog.dart';
-import 'package:palmfarm/injector.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
-import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/constant.dart';
-import 'package:palmfarm/utils/extension/margin_extension.dart';
 
 @RoutePage()
 class DeviceDetailPage extends ConsumerStatefulWidget {
@@ -34,14 +32,15 @@ class DeviceDetailPage extends ConsumerStatefulWidget {
 }
 
 class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
-  final _viewModel = getIt<DeviceDetailViewModel>();
+  late DeviceDetailViewModel _viewModel;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _viewModel = ref.read(deviceDetailViewModelProvider);
+    _viewModel.loadPrivateSetting(widget.palmFarmDevice.macAddress);
     _viewModel.connect(widget.palmFarmDevice.macAddress);
-    _viewModel.addBleChannelListener();
     setObserve();
   }
 
@@ -85,33 +84,6 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
           icon: CupertinoIcons.left_chevron,
           onPressed: () => context.router.pop(),
         ),
-        actions: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: PlamFarmColors.palmFarmPrimary5,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(8),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: PlamFarmColors.palmFarmPrimary6.withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 1),
-                )
-              ],
-            ),
-            child: InkWell(
-              child: Text(
-                '개인모드\n추가',
-                textAlign: TextAlign.center,
-                style: PlamFarmTextStyles.body2Bold.copyWith(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800),
-              ).paddingSymmetric(horizontal: 12.w, vertical: 2.h),
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
           child: SingleChildScrollView(
@@ -126,7 +98,7 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
             Gap(24.h),
             const DeviceFarmingModeView(),
             Gap(16.h),
-            DevicePrivateModeView(),
+            DevicePrivateModeView(viewModel: _viewModel,),
             Gap(16.h),
           ],
         ),

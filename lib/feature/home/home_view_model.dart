@@ -4,7 +4,6 @@ import 'package:palmfarm/feature/viewmodel_interface.dart';
 import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/reactive/arc_subject.dart';
 
-
 class HomeViewModel implements ViewModelInterface {
   final LocalRepository _localRepository;
 
@@ -18,7 +17,6 @@ class HomeViewModel implements ViewModelInterface {
       homeListUiState.val = HomeListUiState(items: event);
     });
   }
-
   @override
   disposeAll() {
     Log.d(":::HomeViewModel disposeAll");

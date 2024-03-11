@@ -6,6 +6,7 @@ part 'private_state.freezed.dart';
 @freezed
 class PrivateSettingState with _$PrivateSettingState {
   factory PrivateSettingState({
+    required String modeName,
     required int ledMode,
     required int pumpOnInterval,
     required int pumpOffInterval,

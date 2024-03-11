@@ -1,5 +1,6 @@
 import 'package:palmfarm/data/local/palm_farm_dao.dart';
 import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
+import 'package:palmfarm/data/local/vo/private_setting.dart';
 import 'package:palmfarm/domain/repository/local_repository.dart';
 
 class LocalRepositoryImpl extends LocalRepository {
@@ -8,11 +9,20 @@ class LocalRepositoryImpl extends LocalRepository {
   LocalRepositoryImpl(this._palmFarmDAO);
 
   @override
-  Future<void> delete(PalmFarmDevice model) async => await _palmFarmDAO.deletePalmFarmDevice(model);
+  Future<void> deleteDevice(PalmFarmDevice model) async => await _palmFarmDAO.deletePalmFarmDevice(model);
 
   @override
   Stream<List<PalmFarmDevice>> getAllPalmFarmItems() => _palmFarmDAO.findAllPalmFarmDevicesAsStream();
 
   @override
-  Future<void> save(PalmFarmDevice model) async => await _palmFarmDAO.insertPalmFarmDevice(model);
+  Future<void> saveDevice(PalmFarmDevice model) async => await _palmFarmDAO.insertPalmFarmDevice(model);
+
+  @override
+  Stream<List<PrivateSetting>> getAllPrivateSettingItems(String macAddress) => _palmFarmDAO.findAllPrivateSettingsAsStream(macAddress);
+
+  @override
+  Future<void> savePrivateSetting(PrivateSetting model) async => await _palmFarmDAO.insertPrivateSetting(model);
+
+  @override
+  Future<void> savePrivateSettings(List<PrivateSetting> models) async => await _palmFarmDAO.insertPrivateSettings(models);
 }

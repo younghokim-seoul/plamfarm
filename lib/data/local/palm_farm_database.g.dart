@@ -86,6 +86,8 @@ class _$AppDatabase extends AppDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `PalmFarmDevice` (`macAddress` TEXT NOT NULL, `reName` TEXT NOT NULL, `originName` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY (`macAddress`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `PrivateSetting` (`deviceCode` TEXT NOT NULL, `macAddress` TEXT NOT NULL, `modeName` TEXT NOT NULL, `ledMode` INTEGER NOT NULL, `pumpOnInterval` INTEGER NOT NULL, `pumpOffInterval` INTEGER NOT NULL, `ledOnStartTime` INTEGER NOT NULL, `ledOnEndTime` INTEGER NOT NULL, `ledOffStartTime` INTEGER NOT NULL, `ledOffEndTime` INTEGER NOT NULL, `secretNumber` INTEGER NOT NULL, PRIMARY KEY (`deviceCode`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -114,6 +116,23 @@ class _$PalmFarmDAO extends PalmFarmDAO {
                   'createdAt': _dateTimeConverter.encode(item.createdAt)
                 },
             changeListener),
+        _privateSettingInsertionAdapter = InsertionAdapter(
+            database,
+            'PrivateSetting',
+            (PrivateSetting item) => <String, Object?>{
+                  'deviceCode': item.deviceCode,
+                  'macAddress': item.macAddress,
+                  'modeName': item.modeName,
+                  'ledMode': item.ledMode,
+                  'pumpOnInterval': item.pumpOnInterval,
+                  'pumpOffInterval': item.pumpOffInterval,
+                  'ledOnStartTime': item.ledOnStartTime,
+                  'ledOnEndTime': item.ledOnEndTime,
+                  'ledOffStartTime': item.ledOffStartTime,
+                  'ledOffEndTime': item.ledOffEndTime,
+                  'secretNumber': item.secretNumber
+                },
+            changeListener),
         _palmFarmDeviceDeletionAdapter = DeletionAdapter(
             database,
             'PalmFarmDevice',
@@ -134,6 +153,8 @@ class _$PalmFarmDAO extends PalmFarmDAO {
 
   final InsertionAdapter<PalmFarmDevice> _palmFarmDeviceInsertionAdapter;
 
+  final InsertionAdapter<PrivateSetting> _privateSettingInsertionAdapter;
+
   final DeletionAdapter<PalmFarmDevice> _palmFarmDeviceDeletionAdapter;
 
   @override
@@ -150,8 +171,42 @@ class _$PalmFarmDAO extends PalmFarmDAO {
   }
 
   @override
+  Stream<List<PrivateSetting>> findAllPrivateSettingsAsStream(
+      String macAddress) {
+    return _queryAdapter.queryListStream(
+        'SELECT * FROM PrivateSetting WHERE macAddress = ?1 ORDER BY secretNumber',
+        mapper: (Map<String, Object?> row) => PrivateSetting(
+            row['deviceCode'] as String,
+            row['macAddress'] as String,
+            row['modeName'] as String,
+            row['ledMode'] as int,
+            row['pumpOnInterval'] as int,
+            row['pumpOffInterval'] as int,
+            row['ledOnStartTime'] as int,
+            row['ledOnEndTime'] as int,
+            row['ledOffStartTime'] as int,
+            row['ledOffEndTime'] as int,
+            row['secretNumber'] as int),
+        arguments: [macAddress],
+        queryableName: 'PrivateSetting',
+        isView: false);
+  }
+
+  @override
   Future<void> insertPalmFarmDevice(PalmFarmDevice model) async {
     await _palmFarmDeviceInsertionAdapter.insert(
+        model, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> insertPrivateSettings(List<PrivateSetting> settingList) async {
+    await _privateSettingInsertionAdapter.insertList(
+        settingList, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> insertPrivateSetting(PrivateSetting model) async {
+    await _privateSettingInsertionAdapter.insert(
         model, OnConflictStrategy.replace);
   }
 
