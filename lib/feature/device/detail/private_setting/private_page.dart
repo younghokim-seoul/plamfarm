@@ -12,17 +12,15 @@ import 'package:palmfarm/feature/device/detail/private_setting/component/private
 import 'package:palmfarm/feature/device/detail/private_setting/component/private_led_mode_view.dart';
 import 'package:palmfarm/feature/device/detail/private_setting/component/private_pump_interval_view.dart';
 import 'package:palmfarm/feature/device/detail/private_setting/private_setting_view_model.dart';
-import 'package:palmfarm/feature/device/detail/private_setting/provider/private_provider.dart';
-
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
 import 'package:palmfarm/feature/widget/appbar/flex_icon_button.dart';
 import 'package:palmfarm/feature/widget/label_text_filed/labeled_input_field.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/dev_log.dart';
-
 import 'package:palmfarm/utils/extension/margin_extension.dart';
 import 'package:palmfarm/utils/extension/value_extension.dart';
+import 'package:palmfarm/utils/helper_message.dart';
 
 @RoutePage()
 class PrivateSettingPage extends ConsumerStatefulWidget {
@@ -40,7 +38,7 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
   late PrivateSettingViewModel _viewModel;
 
   late TextEditingController _modeNameController;
-  late  TextEditingController _pumpOnTimeController;
+  late TextEditingController _pumpOnTimeController;
   late TextEditingController _pumpOffTimeController;
   late TextEditingController _ledOnHourController;
   late TextEditingController _ledOnMinuteController;
@@ -51,24 +49,16 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
   void initState() {
     super.initState();
 
+    _viewModel = ref.read(privateSettingViewModelProvider);
     final model = widget.privateSetting;
-    _modeNameController = TextEditingController(text: "");
-    _pumpOnTimeController =
-        TextEditingController(text: model.pumpOnInterval != -1 ? model.pumpOnInterval.toString() : "");
-    _pumpOffTimeController =
-        TextEditingController(text: model.pumpOffInterval != -1 ? model.pumpOffInterval.toString() : "");
-    _ledOnHourController =
-        TextEditingController(text: model.ledOnStartTime != -1 ? model.ledOnStartTime.toString() : "");
-    _ledOnMinuteController = TextEditingController(text: model.ledOnEndTime != -1 ? model.ledOnEndTime.toString() : "");
-    _ledOffHourController =
-        TextEditingController(text: model.ledOffStartTime != -1 ? model.ledOffStartTime.toString() : "");
-    _ledOffMinuteController =
-        TextEditingController(text: model.ledOffEndTime != -1 ? model.ledOffEndTime.toString() : "");
-
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _viewModel = ref.read(privateSettingViewModelProvider);
-    });
+    _viewModel.setPrivateSetting(model);
+    _modeNameController = TextEditingController(text: model.modeName);
+    _pumpOnTimeController = _initController(model.pumpOnInterval);
+    _pumpOffTimeController = _initController(model.pumpOffInterval);
+    _ledOnHourController = _initController(model.ledOnStartTime);
+    _ledOnMinuteController = _initController(model.ledOnEndTime);
+    _ledOffHourController = _initController(model.ledOffStartTime);
+    _ledOffMinuteController = _initController(model.ledOffEndTime);
   }
 
   @override
@@ -79,10 +69,6 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
     return Scaffold(
       appBar: CustomAppBar(
         padding: const EdgeInsets.symmetric(
@@ -100,11 +86,17 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Gap(16.h),
-            PrivateDeleteHistoryView(),
+            PrivateDeleteHistoryView(
+                viewModel: _viewModel,
+                onTap: () {
+                  context.router.pop();
+                }),
             Gap(16.h),
             _buildNameInputTextFiled(),
             Gap(32.h),
-            PrivateLedModeView(),
+            PrivateLedModeView(
+              viewModel: _viewModel,
+            ),
             Gap(32.h),
             PrivatePumpIntervalView(
               pumpOnTimeController: _pumpOnTimeController,
@@ -115,10 +107,13 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
               ledOnHourController: _ledOnHourController,
               ledOnMinuteController: _ledOnMinuteController,
               ledOffHourController: _ledOffHourController,
-              ledOffMinuteController: _ledOnMinuteController,
+              ledOffMinuteController: _ledOffMinuteController,
+              viewModel: _viewModel,
             ),
             Gap(32.h),
-            PrivateLedLifeTimeView(),
+            PrivateLedLifeTimeView(
+              viewModel: _viewModel,
+            ),
             Gap(32.h),
             _buildPrivateSettingSaveButton(),
             Gap(13.h),
@@ -139,27 +134,35 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
           ),
           child: InkWell(
             onTap: () async {
-
-              final modeName = _modeNameController.text.isNullOrEmpty ? "" : _modeNameController.text;
-              final pumpOnTime = _pumpOnTimeController.text.isNullOrEmpty ? "-1" :  _pumpOnTimeController.text;
-              final pumpOffTime = _pumpOffTimeController.text.isNullOrEmpty ? "-1" :  _pumpOffTimeController.text;
-              final ledOnHour = _ledOnHourController.text.isNullOrEmpty ? "-1" :  _ledOnHourController.text;
-              final ledOnMinute = _ledOnMinuteController.text.isNullOrEmpty ? "-1" :  _ledOnMinuteController.text;
-              final ledOffHour = _ledOffHourController.text.isNullOrEmpty ? "-1" :  _ledOffHourController.text;
-              final ledOffMinute = _ledOffMinuteController.text.isNullOrEmpty ? "-1" :  _ledOffMinuteController.text;
-
+              final modeName = _modeNameController.text.trim().isEmpty
+                  ? ""
+                  : _modeNameController.text.trim();
+              final pumpOnTime = _parseOrDefault(_pumpOnTimeController, -1);
+              final pumpOffTime = _parseOrDefault(_pumpOffTimeController, -1);
+              final ledOnHour = _parseOrDefault(_ledOnHourController, -1);
+              final ledOnMinute = _parseOrDefault(_ledOnMinuteController, -1);
+              final ledOffHour = _parseOrDefault(_ledOffHourController, -1);
+              final ledOffMinute = _parseOrDefault(_ledOffMinuteController, -1);
+              final ledModel = _viewModel.get().ledMode;
 
               final privateSettingModel = widget.privateSetting.copyWith(
-                modeName: modeName,
-                pumpOnInterval: int.parse(pumpOnTime),
-                pumpOffInterval: int.parse(pumpOffTime),
-                ledOnStartTime: int.parse(ledOnHour),
-                ledOnEndTime: int.parse(ledOnMinute),
-                ledOffStartTime: int.parse(ledOffHour),
-                ledOffEndTime: int.parse(ledOffMinute),
-              );
+                  modeName: modeName,
+                  pumpOnInterval: pumpOnTime,
+                  pumpOffInterval: pumpOffTime,
+                  ledOnStartTime: ledOnHour,
+                  ledOnEndTime: ledOnMinute,
+                  ledOffStartTime: ledOffHour,
+                  ledOffEndTime: ledOffMinute,
+                  ledMode: ledModel);
+
+              if (!privateSettingModel.isEnableSetting()) {
+                AppMessage.showMessage("모든 값을 입력해주세요.");
+                return;
+              }
 
               Log.d("privateSettingModel... " + privateSettingModel.toString());
+              await _viewModel.savePrivateSetting(privateSettingModel);
+              context.router.pop();
             },
             child: Text(
               '등록',
@@ -175,6 +178,20 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
       hintText: '등록할 개인모드 명칭을 입력하세요.',
       errorText: null,
       keyboardType: TextInputType.text,
+      onClear: () {
+        _modeNameController.text = "";
+      },
     ).paddingSymmetric(horizontal: 20.w);
+  }
+
+  int _parseOrDefault(TextEditingController controller, int defaultValue) {
+    final text = controller.text.trim();
+    return text.isEmpty ? defaultValue : int.tryParse(text) ?? defaultValue;
+  }
+
+  TextEditingController _initController(int value) {
+    return TextEditingController(
+      text: value != -1 ? value.toString() : "",
+    );
   }
 }

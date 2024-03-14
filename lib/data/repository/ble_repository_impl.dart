@@ -43,7 +43,7 @@ class BleRepositoryImpl extends BleRepository {
     _devices.clear();
     _scanSubscription?.cancel();
     _scanSubscription = flutterReactiveBle.scanForDevices(
-        withServices: [Uuid.parse(serviceUuid)],
+        withServices: [],
         scanMode: ScanMode.lowLatency).listen((device) {
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
@@ -182,7 +182,6 @@ class BleRepositoryImpl extends BleRepository {
 
   Future<PalmFarmResponse> send({required Request request}) async {
     final completer = Completer<PalmFarmResponse>();
-
     _requestQueue.add(() async {
       try {
         Log.i("::[Request Queue] " + request.toString());

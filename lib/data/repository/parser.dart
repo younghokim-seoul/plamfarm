@@ -43,6 +43,10 @@ PalmFarmResponse parseResponse(String data) {
     //0702070010200700
     //0707360110200700
 
+    if(data.startsWith(setCurrentTime)){
+      return PalmFarmSetCurrentTimeResponse(data: data);
+    }
+
     Log.d(":::..data " + data);
     Log.d(":::..data SIZE " + data.length.toString());
     if (data.startsWith(queryCurrentStatus)) {
@@ -65,7 +69,6 @@ PalmFarmResponse parseResponse(String data) {
         );
       }
     }
-
     if(data.startsWith(setPowerOn)){
       return PalmFarmPowerOffResponse(isPowerOn: true);
     }

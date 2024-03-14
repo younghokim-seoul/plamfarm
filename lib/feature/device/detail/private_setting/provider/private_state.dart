@@ -17,4 +17,17 @@ class PrivateSettingState with _$PrivateSettingState {
     required String ledLiveTime,
   }) = _PrivateSettingState;
 
+
+  factory PrivateSettingState.create() =>
+      PrivateSettingState(
+        modeName: "",
+        ledMode: 0,
+        pumpOnInterval: -1,
+        pumpOffInterval: -1,
+        ledOnHour: -1,
+        ledOnMinute: -1,
+        ledOffHour: -1,
+        ledOffMinute: -1,
+        ledLiveTime: "00시간 00분",
+      );
 }

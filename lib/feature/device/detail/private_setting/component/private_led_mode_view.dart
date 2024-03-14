@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:palmfarm/feature/device/detail/private_setting/provider/private_provider.dart';
+import 'package:palmfarm/feature/device/detail/private_setting/private_setting_view_model.dart';
 import 'package:palmfarm/feature/widget/switch/radio_group.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
 
 class PrivateLedModeView extends ConsumerWidget {
-  const PrivateLedModeView({super.key});
+  const PrivateLedModeView({super.key, required this.viewModel});
+
+  final PrivateSettingViewModel viewModel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,24 +27,27 @@ class PrivateLedModeView extends ConsumerWidget {
               fontWeight: FontWeight.w800),
         ).paddingSymmetric(horizontal: 20.w),
         Gap(12.h),
-        for (var i = 0; i < 2; ++i)
-          RadioGroup<int>(
-            contentPadding: EdgeInsets.zero,
-            value: i,
-            groupValue: ref.watch(privateStateProvider).ledMode,
-            onChanged: (v) => {
-              ref.read(privateStateProvider.notifier).onChangedLedMode(v!),
-            },
-            toggleable: false,
-            title: Text(
-              i == 0 ? "PURPLE MODE" : "RED MODE",
-              style: PlamFarmTextStyles.headline5Bold.copyWith(
-                  color: PlamFarmColors.palmFarmNormalTextColor,
-                  fontSize: 16,
-                  height: 1.1,
-                  fontWeight: FontWeight.w700),
-            ),
-          ).paddingSymmetric(horizontal: 13.w),
+        viewModel.privateUiSettingState.ui(builder: (build, state) {
+          return Column(
+            children: List<Widget>.generate(
+                2,
+                (index) => RadioGroup<int>(
+                      contentPadding: EdgeInsets.zero,
+                      value: index,
+                      groupValue: viewModel.get().ledMode,
+                      onChanged: (v) => {viewModel.onChangedLedMode(v!)},
+                      toggleable: false,
+                      title: Text(
+                        index == 0 ? "PURPLE MODE" : "RED MODE",
+                        style: PlamFarmTextStyles.headline5Bold.copyWith(
+                            color: PlamFarmColors.palmFarmNormalTextColor,
+                            fontSize: 16,
+                            height: 1.1,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ).paddingSymmetric(horizontal: 13.w)).toList(),
+          );
+        }),
         Gap(16.h),
         DecoratedBox(
           decoration: BoxDecoration(

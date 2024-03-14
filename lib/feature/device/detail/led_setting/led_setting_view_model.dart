@@ -44,8 +44,8 @@ class LedSettingViewModel implements ViewModelInterface {
   Future<void> onClickOnlySave(String hour, String minute) async {
     var response = await _localRepository.findPalmFarmDevice(address);
 
-    String hourTime = createLedTime(int.parse(hour));
-    String minuteTime = createLedTime(int.parse(minute));
+    String hourTime = int.parse(hour).crateTime();
+    String minuteTime = int.parse(minute).crateTime();
     Log.d(":::starTIme.. " + hourTime + " endTime.. " + minuteTime);
 
     switch (mode) {

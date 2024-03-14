@@ -41,6 +41,7 @@ class DevicePrivateModeView extends ConsumerWidget {
                       ),
                       child: GestureDetector(
                         onLongPress: () => context.router.push(PrivateSettingRoute(privateSetting: e)),
+                        onTap: () => viewModel.setPrivateGrowingMode(e),
                         child: SizedBox(
                           width: (1.sw - 2 * 20.w - 14.w) / 2,
                           child: Text(

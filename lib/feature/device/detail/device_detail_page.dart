@@ -17,6 +17,7 @@ import 'package:palmfarm/feature/widget/appbar/flex_icon_button.dart';
 import 'package:palmfarm/feature/widget/dialog/device_disconnect_dialog.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/utils/constant.dart';
+import 'package:palmfarm/utils/dev_log.dart';
 
 @RoutePage()
 class DeviceDetailPage extends ConsumerStatefulWidget {
@@ -35,7 +36,6 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _viewModel = ref.read(deviceDetailViewModelProvider);
     _viewModel.loadPrivateSetting(widget.palmFarmDevice.macAddress);
@@ -46,7 +46,7 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
   void setObserve() {
     _viewModel.connectionUiState.stream.listen((event) {
       if (event is Connected) {
-        _viewModel.getCurrentStatus();
+        Log.d("::Connected!!...");
       }
 
       if (event is Disconnected) {
@@ -99,7 +99,10 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
               viewModel: _viewModel,
             ),
             Gap(24.h),
-            DeviceFarmingModeView(deviceId: widget.palmFarmDevice.macAddress),
+            DeviceFarmingModeView(
+              deviceId: widget.palmFarmDevice.macAddress,
+              viewModel: _viewModel,
+            ),
             Gap(16.h),
             DevicePrivateModeView(
               viewModel: _viewModel,

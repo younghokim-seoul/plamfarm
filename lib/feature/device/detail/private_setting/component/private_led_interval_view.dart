@@ -3,12 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:palmfarm/feature/device/detail/private_setting/provider/private_provider.dart';
+import 'package:palmfarm/feature/device/detail/private_setting/private_setting_view_model.dart';
 import 'package:palmfarm/feature/widget/label_text_filed/labeled_input_field.dart';
 import 'package:palmfarm/feature/widget/label_text_filed/range_text_input_formatter.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
-import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
 
 class PrivateLedIntervalView extends ConsumerWidget {
@@ -18,9 +17,12 @@ class PrivateLedIntervalView extends ConsumerWidget {
      this.ledOnMinuteController,
      this.ledOffHourController,
      this.ledOffMinuteController,
+     required this.viewModel,
      super.key,
    });
 
+
+  final PrivateSettingViewModel viewModel;
   final TextEditingController? ledOnHourController;
   final TextEditingController? ledOnMinuteController;
   final TextEditingController? ledOffHourController;
@@ -66,7 +68,8 @@ class PrivateLedIntervalView extends ConsumerWidget {
                       FilteringTextInputFormatter.digitsOnly,
                       CustomRangeTextInputFormatter(min: 0, max: 23),
                     ],
-                    onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOnHour(v),
+                    onChanged: (v) => viewModel.setLedOnHour(v),
+                    onClear: () => viewModel.setLedOnHour(""),
                   ),
                 ),
                 Gap(16.w),
@@ -96,7 +99,8 @@ class PrivateLedIntervalView extends ConsumerWidget {
                       FilteringTextInputFormatter.digitsOnly,
                       CustomRangeTextInputFormatter(min: 0, max: 59),
                     ],
-                    onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOnMinute(v),
+                    onChanged: (v) => viewModel.setLedOnMinute(v),
+                    onClear: () => viewModel.setLedOnMinute(""),
                   ),
                 ),
                 Gap(16.w),
@@ -130,7 +134,8 @@ class PrivateLedIntervalView extends ConsumerWidget {
                       FilteringTextInputFormatter.digitsOnly,
                       CustomRangeTextInputFormatter(min: 0, max: 23),
                     ],
-                    onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOffHour(v),
+                    onChanged: (v) => viewModel.setLedOffHour(v),
+                    onClear: () => viewModel.setLedOffHour(""),
                   ),
                 ),
                 Gap(16.w),
@@ -160,7 +165,8 @@ class PrivateLedIntervalView extends ConsumerWidget {
                       FilteringTextInputFormatter.digitsOnly,
                       CustomRangeTextInputFormatter(min: 0, max: 59),
                     ],
-                    onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOffMinute(v),
+                    onChanged: (v) => viewModel.setLedOffMinute(v),
+                    onClear: () => viewModel.setLedOffMinute(""),
                   ),
                 ),
                 Gap(16.w),

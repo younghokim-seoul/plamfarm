@@ -12,6 +12,7 @@ class LabeledInputField extends StatefulWidget {
     this.errorText,
     this.onChanged,
     this.formatters,
+    this.onClear,
     super.key,
   });
 
@@ -28,6 +29,8 @@ class LabeledInputField extends StatefulWidget {
   final ValueChanged<String>? onChanged;
 
   final List<TextInputFormatter>? formatters;
+
+  final VoidCallback? onClear;
 
   bool get hasError => errorText != null && errorText!.isNotEmpty;
 
@@ -91,6 +94,7 @@ class _LabeledInputFieldState extends State<LabeledInputField> {
                           onTap: () {
                             _effectiveFocusNode.requestFocus();
                             _effectiveController.clear();
+                            widget.onClear?.call();
                           },
                         ),
                       );

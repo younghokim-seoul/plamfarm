@@ -7,6 +7,7 @@ import 'package:palmfarm/data/repository/response.dart';
 import 'package:palmfarm/domain/repository/ble_repository.dart';
 import 'package:palmfarm/domain/repository/local_repository.dart';
 import 'package:palmfarm/feature/device/connection_ui_state.dart';
+import 'package:palmfarm/feature/device/detail/component/farming_mode_box.dart';
 import 'package:palmfarm/feature/device/detail/device_current_state.dart';
 import 'package:palmfarm/feature/device/detail/device_detail_page.dart';
 import 'package:palmfarm/feature/viewmodel_interface.dart';
@@ -26,6 +27,77 @@ class DeviceDetailViewModel implements ViewModelInterface {
 
   final ledOnOff = false.sbj;
   final pumpOnOff = false.sbj;
+
+
+
+  Future<void> setRealCurrentTime() async {
+    Log.d("::");
+    try {
+      final data = DateTime.now().convertRTC();
+      Log.d("::::data... " + data);
+      final response = await _bleRepository.write(
+        Request(
+          command: setCurrentTime + data,
+        ),
+      );
+
+      Log.d(":::response... " + response.toString());
+    } catch (e) {
+      Log.e("[setRealCurrentTime] => e " + e.toString());
+      await _bleRepository.disconnect();
+    }
+  }
+
+  void setPrivateGrowingMode(PrivateSetting setting) async {
+
+    Log.d("::setting.. " + setting.toString());
+    if(setting.isEnableSetting()){
+      //- “AAMD/15/0930/2330/02/1530” DATA 값 해석
+      // 재배모드 15(개인모드) / LED ON 시각 09:30 / LED OFF 시각 23:30 / RED LED MODE / 펌프주기 ON:15분 OFF:30분
+      try {
+        final privateModeIndex =  '${setting.secretNumber}';
+        final ledOnTime = setting.ledOnStartTime.toString().padLeft(2, '0') + setting.ledOnEndTime.toString().padLeft(2, '0');
+        final ledOffTime = setting.ledOffStartTime.toString().padLeft(2, '0') + setting.ledOffEndTime.toString().padLeft(2, '0');
+        final redLedMode = setting.ledMode.toString().padLeft(2, '0');
+        final pumpInterval = setting.pumpOnInterval.toString().padLeft(2, '0') + setting.pumpOffInterval.toString().padLeft(2, '0');
+
+
+        final response = await _bleRepository.write(
+          Request(
+            command: setGrowingMode + privateModeIndex + ledOnTime + ledOffTime + redLedMode + pumpInterval,
+          ),
+        );
+
+        Log.d(":::response... " + response.toString());
+      } catch (e) {
+        Log.e("[setBaseGrowingMode] => e " + e.toString());
+        await _bleRepository.disconnect();
+      }
+    }
+  }
+
+  void setBaseGrowingMode(FarmingMode mode,String deviceId) async {
+    final db = await _localRepository.findPalmFarmDevice(deviceId);
+
+    if (!db.isNullOrEmpty) {
+      try {
+        final growingIndex = mode.baseGrowingModeIndex;
+        final growingTime = mode.getGrowingTime(db!);
+        Log.d("::::growingIndex... " + growingIndex);
+        Log.d("::::growingTime... " + growingTime);
+        final response = await _bleRepository.write(
+          Request(
+            command: setGrowingMode + growingIndex + growingTime,
+          ),
+        );
+
+        Log.d(":::response... " + response.toString());
+      } catch (e) {
+        Log.e("[setBaseGrowingMode] => e " + e.toString());
+        await _bleRepository.disconnect();
+      }
+    }
+  }
 
   void onChangeLedStatus(bool isOn) async {
     Log.d("::onChangeLedStatus " + isOn.toString());
@@ -64,8 +136,8 @@ class DeviceDetailViewModel implements ViewModelInterface {
     }
   }
 
-  void loadPrivateSetting(String address) {
-    _localRepository.getAllPrivateSettingItems(address).listen((event) {
+  void loadPrivateSetting(String deviceId) {
+    _localRepository.getAllPrivateSettingItems(deviceId).listen((event) {
       Log.d(":::private Settings... " + event.length.toString());
       privateSettings.val = event;
     });
@@ -75,10 +147,12 @@ class DeviceDetailViewModel implements ViewModelInterface {
     _bleRepository.startScan();
     _bleRepository.addChannelListener(
         DeviceDetailPage.routeName,
-        BleChannelListener(onDeviceStatusChanged: (update) {
+        BleChannelListener(onDeviceStatusChanged: (update) async {
           Log.d(":::onDeviceStatusChanged... " + update.toString());
           switch (update.connectionState) {
             case DeviceConnectionState.connected:
+              await setRealCurrentTime();
+              await getCurrentStatus();
               loadState(Connected());
               break;
             case DeviceConnectionState.disconnected:
@@ -102,7 +176,7 @@ class DeviceDetailViewModel implements ViewModelInterface {
         }));
   }
 
-  void getCurrentStatus() async {
+  Future<void> getCurrentStatus() async {
     try {
       final response =
           await _bleRepository.write(Request(command: queryCurrentStatus));

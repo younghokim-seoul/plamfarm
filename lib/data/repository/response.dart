@@ -44,6 +44,15 @@ class PalmFarmCurrentStatusResponse extends PalmFarmResponse {
   List<Object?> get props => [currentTime, currentMode,pumpOnInterval,pumpOffInterval,ledOnTime,ledOffTime,ledStatus,pumpStatus];
 }
 
+class PalmFarmSetCurrentTimeResponse extends PalmFarmResponse {
+  PalmFarmSetCurrentTimeResponse({required this.data});
+
+  final String data;
+
+  @override
+  List<Object?> get props => [data];
+}
+
 class PalmFarmUnknownResponse extends PalmFarmResponse {
   PalmFarmUnknownResponse({required this.data});
 
