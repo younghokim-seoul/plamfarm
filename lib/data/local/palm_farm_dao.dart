@@ -14,6 +14,8 @@ abstract class PalmFarmDAO {
   @Query('SELECT * FROM PalmFarmDevice ORDER BY createdAt')
   Stream<List<PalmFarmDevice>> findAllPalmFarmDevicesAsStream();
 
+  @Query('SELECT * FROM PalmFarmDevice WHERE macAddress = :macAddress')
+  Future<PalmFarmDevice?> findPalmFarmDevice(String macAddress);
 
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertPrivateSettings(List<PrivateSetting> settingList);

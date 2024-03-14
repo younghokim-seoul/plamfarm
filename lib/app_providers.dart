@@ -5,6 +5,7 @@ import 'package:palmfarm/domain/repository/ble_repository.dart';
 import 'package:palmfarm/domain/repository/local_repository.dart';
 import 'package:palmfarm/feature/device/connector/connector_view_model.dart';
 import 'package:palmfarm/feature/device/detail/device_detail_view_model.dart';
+import 'package:palmfarm/feature/device/detail/led_setting/led_setting_view_model.dart';
 import 'package:palmfarm/feature/device/detail/private_setting/private_setting_view_model.dart';
 import 'package:palmfarm/feature/home/home_view_model.dart';
 import 'package:palmfarm/injector.dart';
@@ -39,4 +40,10 @@ final privateSettingViewModelProvider = Provider.autoDispose<PrivateSettingViewM
   final bleRepository = getIt<BleRepository>();
   final localRepository = ref.watch(localRepositoryProvider);
   return PrivateSettingViewModel(bleRepository, localRepository);
+});
+
+final ledSettingViewModelProvider = Provider.autoDispose<LedSettingViewModel>((ref) {
+  final bleRepository = getIt<BleRepository>();
+  final localRepository = ref.watch(localRepositoryProvider);
+  return LedSettingViewModel(bleRepository,localRepository);
 });

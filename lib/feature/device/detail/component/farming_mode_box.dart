@@ -11,9 +11,10 @@ import 'package:palmfarm/utils/extension/margin_extension.dart';
 enum FarmingMode { vegetable, strawberry, flowers }
 
 class FarmingModeBox extends StatelessWidget {
-  const FarmingModeBox({super.key, required this.farmingMode});
+  const FarmingModeBox({super.key, required this.farmingMode, required this.deviceId});
 
   final FarmingMode farmingMode;
+  final String deviceId;
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +24,8 @@ class FarmingModeBox extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.zero,
         child: GestureDetector(
-          onLongPress: () => context.router.push(LedSettingRoute()),
-          onTap: () {
-
-          },
+          onLongPress: () => context.router.push(LedSettingRoute(mode: farmingMode, deviceId: deviceId)),
+          onTap: () {},
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(

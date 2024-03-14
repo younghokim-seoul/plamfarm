@@ -99,7 +99,7 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
               viewModel: _viewModel,
             ),
             Gap(24.h),
-            const DeviceFarmingModeView(),
+            DeviceFarmingModeView(deviceId: widget.palmFarmDevice.macAddress),
             Gap(16.h),
             DevicePrivateModeView(
               viewModel: _viewModel,

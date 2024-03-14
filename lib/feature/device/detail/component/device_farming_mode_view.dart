@@ -5,7 +5,9 @@ import 'package:gap/gap.dart';
 import 'package:palmfarm/feature/device/detail/component/farming_mode_box.dart';
 
 class DeviceFarmingModeView extends ConsumerWidget {
-  const DeviceFarmingModeView({super.key});
+  const DeviceFarmingModeView({super.key, required this.deviceId});
+
+  final String deviceId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,16 +18,19 @@ class DeviceFarmingModeView extends ConsumerWidget {
           Flexible(
               child: FarmingModeBox(
             farmingMode: FarmingMode.vegetable,
+            deviceId: deviceId,
           )),
           Gap(10.w),
           Flexible(
               child: FarmingModeBox(
             farmingMode: FarmingMode.strawberry,
+            deviceId: deviceId,
           )),
           Gap(10.w),
           Flexible(
               child: FarmingModeBox(
             farmingMode: FarmingMode.flowers,
+            deviceId: deviceId,
           )),
         ],
       ),

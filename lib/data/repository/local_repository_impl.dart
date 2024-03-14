@@ -25,4 +25,7 @@ class LocalRepositoryImpl extends LocalRepository {
 
   @override
   Future<void> savePrivateSettings(List<PrivateSetting> models) async => await _palmFarmDAO.insertPrivateSettings(models);
+
+  @override
+  Future<PalmFarmDevice?> findPalmFarmDevice(String macAddress) async => _palmFarmDAO.findPalmFarmDevice(macAddress);
 }

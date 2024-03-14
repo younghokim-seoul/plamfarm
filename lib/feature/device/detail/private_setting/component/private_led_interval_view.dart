@@ -12,7 +12,19 @@ import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
 
 class PrivateLedIntervalView extends ConsumerWidget {
-  const PrivateLedIntervalView({super.key});
+
+  const PrivateLedIntervalView({
+     this.ledOnHourController,
+     this.ledOnMinuteController,
+     this.ledOffHourController,
+     this.ledOffMinuteController,
+     super.key,
+   });
+
+  final TextEditingController? ledOnHourController;
+  final TextEditingController? ledOnMinuteController;
+  final TextEditingController? ledOffHourController;
+  final TextEditingController? ledOffMinuteController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,10 +34,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
         Text(
           "LED ON 시각",
           style: PlamFarmTextStyles.headline6Bold.copyWith(
-              color: PlamFarmColors.palmFarmNormalTextColor,
-              fontSize: 16,
-              height: 1.1,
-              fontWeight: FontWeight.w800),
+              color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16, height: 1.1, fontWeight: FontWeight.w800),
         ),
         Gap(16.h),
         _buildLedOnSettingGroup(ref),
@@ -33,10 +42,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
         Text(
           "LED OFF 시각",
           style: PlamFarmTextStyles.headline6Bold.copyWith(
-              color: PlamFarmColors.palmFarmNormalTextColor,
-              fontSize: 16,
-              height: 1.1,
-              fontWeight: FontWeight.w800),
+              color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16, height: 1.1, fontWeight: FontWeight.w800),
         ),
         Gap(16.h),
         _buildLedOffSettingGroup(ref),
@@ -52,20 +58,15 @@ class PrivateLedIntervalView extends ConsumerWidget {
               children: [
                 Expanded(
                   child: LabeledInputField(
-                    controller: TextEditingController(
-                        text: ref.read(privateStateProvider).ledOnHour != -1 ? ref.read(privateStateProvider).ledOnHour.toString()
-                            : ""),
+                    controller: ledOnHourController,
                     hintText: '00 ~ 23',
                     errorText: null,
                     keyboardType: TextInputType.number,
-                    onChanged: (v) {
-                      Log.d("::::v => " + v);
-                      ref.watch(privateStateProvider.notifier).setLedOnHour(v);
-                    },
                     formatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       CustomRangeTextInputFormatter(min: 0, max: 23),
                     ],
+                    onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOnHour(v),
                   ),
                 ),
                 Gap(16.w),
@@ -87,23 +88,15 @@ class PrivateLedIntervalView extends ConsumerWidget {
               children: [
                 Expanded(
                   child: LabeledInputField(
-                    controller: TextEditingController(
-                        text: ref.read(privateStateProvider).ledOnMinute != -1
-                            ? ref
-                                .read(privateStateProvider)
-                                .ledOnMinute
-                                .toString()
-                            : ""),
+                    controller: ledOnMinuteController,
                     hintText: '00 ~ 59',
                     errorText: null,
                     keyboardType: TextInputType.number,
-                    onChanged: (v) => ref
-                        .watch(privateStateProvider.notifier)
-                        .setLedOnMinute(v),
                     formatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       CustomRangeTextInputFormatter(min: 0, max: 59),
                     ],
+                    onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOnMinute(v),
                   ),
                 ),
                 Gap(16.w),
@@ -129,13 +122,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
               children: [
                 Expanded(
                   child: LabeledInputField(
-                    controller: TextEditingController(
-                        text: ref.read(privateStateProvider).ledOffHour != -1
-                            ? ref
-                                .read(privateStateProvider)
-                                .ledOffHour
-                                .toString()
-                            : ""),
+                    controller: ledOffHourController,
                     hintText: '00 ~ 23',
                     errorText: null,
                     keyboardType: TextInputType.number,
@@ -143,9 +130,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
                       FilteringTextInputFormatter.digitsOnly,
                       CustomRangeTextInputFormatter(min: 0, max: 23),
                     ],
-                    onChanged: (v) => ref
-                        .watch(privateStateProvider.notifier)
-                        .setLedOffHour(v),
+                    onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOffHour(v),
                   ),
                 ),
                 Gap(16.w),
@@ -167,13 +152,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
               children: [
                 Expanded(
                   child: LabeledInputField(
-                    controller: TextEditingController(
-                        text: ref.read(privateStateProvider).ledOffMinute != -1
-                            ? ref
-                                .read(privateStateProvider)
-                                .ledOffMinute
-                                .toString()
-                            : ""),
+                    controller: ledOffMinuteController,
                     hintText: '00 ~ 59',
                     errorText: null,
                     keyboardType: TextInputType.number,
@@ -181,9 +160,7 @@ class PrivateLedIntervalView extends ConsumerWidget {
                       FilteringTextInputFormatter.digitsOnly,
                       CustomRangeTextInputFormatter(min: 0, max: 59),
                     ],
-                    onChanged: (v) => ref
-                        .watch(privateStateProvider.notifier)
-                        .setLedOffMinute(v),
+                    onChanged: (v) => ref.watch(privateStateProvider.notifier).setLedOffMinute(v),
                   ),
                 ),
                 Gap(16.w),

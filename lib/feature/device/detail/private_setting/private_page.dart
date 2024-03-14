@@ -13,13 +13,16 @@ import 'package:palmfarm/feature/device/detail/private_setting/component/private
 import 'package:palmfarm/feature/device/detail/private_setting/component/private_pump_interval_view.dart';
 import 'package:palmfarm/feature/device/detail/private_setting/private_setting_view_model.dart';
 import 'package:palmfarm/feature/device/detail/private_setting/provider/private_provider.dart';
+
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
 import 'package:palmfarm/feature/widget/appbar/flex_icon_button.dart';
 import 'package:palmfarm/feature/widget/label_text_filed/labeled_input_field.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/dev_log.dart';
+
 import 'package:palmfarm/utils/extension/margin_extension.dart';
+import 'package:palmfarm/utils/extension/value_extension.dart';
 
 @RoutePage()
 class PrivateSettingPage extends ConsumerStatefulWidget {
@@ -36,18 +39,37 @@ class PrivateSettingPage extends ConsumerStatefulWidget {
 class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
   late PrivateSettingViewModel _viewModel;
 
+  late TextEditingController _modeNameController;
+  late  TextEditingController _pumpOnTimeController;
+  late TextEditingController _pumpOffTimeController;
+  late TextEditingController _ledOnHourController;
+  late TextEditingController _ledOnMinuteController;
+  late TextEditingController _ledOffHourController;
+  late TextEditingController _ledOffMinuteController;
+
   @override
   void initState() {
     super.initState();
-    _viewModel = ref.read(privateSettingViewModelProvider);
+
+    final model = widget.privateSetting;
+    _modeNameController = TextEditingController(text: "");
+    _pumpOnTimeController =
+        TextEditingController(text: model.pumpOnInterval != -1 ? model.pumpOnInterval.toString() : "");
+    _pumpOffTimeController =
+        TextEditingController(text: model.pumpOffInterval != -1 ? model.pumpOffInterval.toString() : "");
+    _ledOnHourController =
+        TextEditingController(text: model.ledOnStartTime != -1 ? model.ledOnStartTime.toString() : "");
+    _ledOnMinuteController = TextEditingController(text: model.ledOnEndTime != -1 ? model.ledOnEndTime.toString() : "");
+    _ledOffHourController =
+        TextEditingController(text: model.ledOffStartTime != -1 ? model.ledOffStartTime.toString() : "");
+    _ledOffMinuteController =
+        TextEditingController(text: model.ledOffEndTime != -1 ? model.ledOffEndTime.toString() : "");
+
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Log.d("::::widget ..  " + widget.privateSetting.toString());
-      ref.read(privateStateProvider.notifier).setPrivateSettingModel(widget.privateSetting);
+      _viewModel = ref.read(privateSettingViewModelProvider);
     });
   }
-
-
 
   @override
   void dispose() {
@@ -57,6 +79,8 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
 
   @override
   Widget build(BuildContext context) {
+
+
 
 
     return Scaffold(
@@ -82,9 +106,17 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
             Gap(32.h),
             PrivateLedModeView(),
             Gap(32.h),
-            PrivatePumpIntervalView(),
+            PrivatePumpIntervalView(
+              pumpOnTimeController: _pumpOnTimeController,
+              pumpOffTimeController: _pumpOffTimeController,
+            ),
             Gap(32.h),
-            PrivateLedIntervalView(),
+            PrivateLedIntervalView(
+              ledOnHourController: _ledOnHourController,
+              ledOnMinuteController: _ledOnMinuteController,
+              ledOffHourController: _ledOffHourController,
+              ledOffMinuteController: _ledOnMinuteController,
+            ),
             Gap(32.h),
             PrivateLedLifeTimeView(),
             Gap(32.h),
@@ -107,7 +139,27 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
           ),
           child: InkWell(
             onTap: () async {
-             final state = ref.read(privateStateProvider);
+
+              final modeName = _modeNameController.text.isNullOrEmpty ? "" : _modeNameController.text;
+              final pumpOnTime = _pumpOnTimeController.text.isNullOrEmpty ? "-1" :  _pumpOnTimeController.text;
+              final pumpOffTime = _pumpOffTimeController.text.isNullOrEmpty ? "-1" :  _pumpOffTimeController.text;
+              final ledOnHour = _ledOnHourController.text.isNullOrEmpty ? "-1" :  _ledOnHourController.text;
+              final ledOnMinute = _ledOnMinuteController.text.isNullOrEmpty ? "-1" :  _ledOnMinuteController.text;
+              final ledOffHour = _ledOffHourController.text.isNullOrEmpty ? "-1" :  _ledOffHourController.text;
+              final ledOffMinute = _ledOffMinuteController.text.isNullOrEmpty ? "-1" :  _ledOffMinuteController.text;
+
+
+              final privateSettingModel = widget.privateSetting.copyWith(
+                modeName: modeName,
+                pumpOnInterval: int.parse(pumpOnTime),
+                pumpOffInterval: int.parse(pumpOffTime),
+                ledOnStartTime: int.parse(ledOnHour),
+                ledOnEndTime: int.parse(ledOnMinute),
+                ledOffStartTime: int.parse(ledOffHour),
+                ledOffEndTime: int.parse(ledOffMinute),
+              );
+
+              Log.d("privateSettingModel... " + privateSettingModel.toString());
             },
             child: Text(
               '등록',
@@ -117,11 +169,12 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
         ).paddingOnly(bottom: 24),
       );
 
-  Widget _buildNameInputTextFiled() => LabeledInputField(
-        controller: TextEditingController(text: ref.read(privateStateProvider).modeName),
-        hintText: '등록할 개인모드 명칭을 입력하세요.',
-        errorText: null,
-        keyboardType: TextInputType.text,
-        onChanged: (v) => ref.read(privateStateProvider.notifier).onChangedModelName(v),
-      ).paddingSymmetric(horizontal: 20.w);
+  Widget _buildNameInputTextFiled() {
+    return LabeledInputField(
+      controller: _modeNameController,
+      hintText: '등록할 개인모드 명칭을 입력하세요.',
+      errorText: null,
+      keyboardType: TextInputType.text,
+    ).paddingSymmetric(horizontal: 20.w);
+  }
 }

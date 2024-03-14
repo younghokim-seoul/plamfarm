@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `PalmFarmDevice` (`macAddress` TEXT NOT NULL, `reName` TEXT NOT NULL, `originName` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY (`macAddress`))');
+            'CREATE TABLE IF NOT EXISTS `PalmFarmDevice` (`macAddress` TEXT NOT NULL, `reName` TEXT NOT NULL, `originName` TEXT NOT NULL, `vegetableLedTime` TEXT NOT NULL, `strawBerryLedTime` TEXT NOT NULL, `flowersLedTime` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY (`macAddress`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `PrivateSetting` (`deviceCode` TEXT NOT NULL, `macAddress` TEXT NOT NULL, `modeName` TEXT NOT NULL, `ledMode` INTEGER NOT NULL, `pumpOnInterval` INTEGER NOT NULL, `pumpOffInterval` INTEGER NOT NULL, `ledOnStartTime` INTEGER NOT NULL, `ledOnEndTime` INTEGER NOT NULL, `ledOffStartTime` INTEGER NOT NULL, `ledOffEndTime` INTEGER NOT NULL, `secretNumber` INTEGER NOT NULL, PRIMARY KEY (`deviceCode`))');
 
@@ -113,6 +113,9 @@ class _$PalmFarmDAO extends PalmFarmDAO {
                   'macAddress': item.macAddress,
                   'reName': item.reName,
                   'originName': item.originName,
+                  'vegetableLedTime': item.vegetableLedTime,
+                  'strawBerryLedTime': item.strawBerryLedTime,
+                  'flowersLedTime': item.flowersLedTime,
                   'createdAt': _dateTimeConverter.encode(item.createdAt)
                 },
             changeListener),
@@ -141,6 +144,9 @@ class _$PalmFarmDAO extends PalmFarmDAO {
                   'macAddress': item.macAddress,
                   'reName': item.reName,
                   'originName': item.originName,
+                  'vegetableLedTime': item.vegetableLedTime,
+                  'strawBerryLedTime': item.strawBerryLedTime,
+                  'flowersLedTime': item.flowersLedTime,
                   'createdAt': _dateTimeConverter.encode(item.createdAt)
                 },
             changeListener);
@@ -165,9 +171,27 @@ class _$PalmFarmDAO extends PalmFarmDAO {
             row['macAddress'] as String,
             row['reName'] as String,
             row['originName'] as String,
+            row['vegetableLedTime'] as String,
+            row['strawBerryLedTime'] as String,
+            row['flowersLedTime'] as String,
             _dateTimeConverter.decode(row['createdAt'] as int)),
         queryableName: 'PalmFarmDevice',
         isView: false);
+  }
+
+  @override
+  Future<PalmFarmDevice?> findPalmFarmDevice(String macAddress) async {
+    return _queryAdapter.query(
+        'SELECT * FROM PalmFarmDevice WHERE macAddress = ?1',
+        mapper: (Map<String, Object?> row) => PalmFarmDevice(
+            row['macAddress'] as String,
+            row['reName'] as String,
+            row['originName'] as String,
+            row['vegetableLedTime'] as String,
+            row['strawBerryLedTime'] as String,
+            row['flowersLedTime'] as String,
+            _dateTimeConverter.decode(row['createdAt'] as int)),
+        arguments: [macAddress]);
   }
 
   @override

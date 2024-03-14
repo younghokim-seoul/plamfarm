@@ -38,9 +38,14 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     LedSettingRoute.name: (routeData) {
+      final args = routeData.argsAs<LedSettingRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const LedSettingPage(),
+        child: LedSettingPage(
+          key: args.key,
+          mode: args.mode,
+          deviceId: args.deviceId,
+        ),
       );
     },
     PrivateSettingRoute.name: (routeData) {
@@ -136,16 +141,45 @@ class HomeRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [LedSettingPage]
-class LedSettingRoute extends PageRouteInfo<void> {
-  const LedSettingRoute({List<PageRouteInfo>? children})
-      : super(
+class LedSettingRoute extends PageRouteInfo<LedSettingRouteArgs> {
+  LedSettingRoute({
+    Key? key,
+    required FarmingMode mode,
+    required String deviceId,
+    List<PageRouteInfo>? children,
+  }) : super(
           LedSettingRoute.name,
+          args: LedSettingRouteArgs(
+            key: key,
+            mode: mode,
+            deviceId: deviceId,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'LedSettingRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<LedSettingRouteArgs> page =
+      PageInfo<LedSettingRouteArgs>(name);
+}
+
+class LedSettingRouteArgs {
+  const LedSettingRouteArgs({
+    this.key,
+    required this.mode,
+    required this.deviceId,
+  });
+
+  final Key? key;
+
+  final FarmingMode mode;
+
+  final String deviceId;
+
+  @override
+  String toString() {
+    return 'LedSettingRouteArgs{key: $key, mode: $mode, deviceId: $deviceId}';
+  }
 }
 
 /// generated route for

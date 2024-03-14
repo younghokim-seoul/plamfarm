@@ -3,30 +3,31 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:palmfarm/feature/device/detail/private_setting/provider/private_provider.dart';
 import 'package:palmfarm/feature/widget/label_text_filed/labeled_input_field.dart';
 import 'package:palmfarm/feature/widget/label_text_filed/range_text_input_formatter.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
-import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
 
 class PrivatePumpIntervalView extends ConsumerWidget {
-  const PrivatePumpIntervalView({super.key});
+   PrivatePumpIntervalView({
+    this.pumpOnTimeController,
+    this.pumpOffTimeController,
+    super.key,
+  });
+
+  final TextEditingController? pumpOnTimeController;
+  final TextEditingController? pumpOffTimeController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Log.d("리빌드..");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "펌프 주기",
           style: PlamFarmTextStyles.headline6Bold.copyWith(
-              color: PlamFarmColors.palmFarmNormalTextColor,
-              fontSize: 16,
-              height: 1.1,
-              fontWeight: FontWeight.w800),
+              color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16, height: 1.1, fontWeight: FontWeight.w800),
         ),
         Gap(16.h),
         SizedBox(
@@ -44,12 +45,7 @@ class PrivatePumpIntervalView extends ConsumerWidget {
               Gap(16.w),
               Expanded(
                 child: LabeledInputField(
-                  controller: TextEditingController(text: ref.read(privateStateProvider).pumpOffInterval != -1
-                      ? ref
-                      .read(privateStateProvider)
-                      .pumpOnInterval
-                      .toString()
-                      : ""),
+                  controller: pumpOnTimeController,
                   hintText: '00 ~ 59',
                   errorText: null,
                   keyboardType: TextInputType.number,
@@ -57,9 +53,6 @@ class PrivatePumpIntervalView extends ConsumerWidget {
                     FilteringTextInputFormatter.digitsOnly,
                     CustomRangeTextInputFormatter(min: 0, max: 59),
                   ],
-                  onChanged: (v) => ref
-                      .watch(privateStateProvider.notifier)
-                      .setPumpOnInterval(v),
                 ),
               ),
               Gap(16.w),
@@ -90,13 +83,7 @@ class PrivatePumpIntervalView extends ConsumerWidget {
               Gap(10.w),
               Expanded(
                 child: LabeledInputField(
-                  controller: TextEditingController(
-                      text: ref.read(privateStateProvider).pumpOffInterval != -1
-                          ? ref
-                              .read(privateStateProvider)
-                              .pumpOffInterval
-                              .toString()
-                          : ""),
+                  controller: pumpOffTimeController,
                   hintText: '01 ~ 60',
                   errorText: null,
                   keyboardType: TextInputType.number,
@@ -104,9 +91,6 @@ class PrivatePumpIntervalView extends ConsumerWidget {
                     FilteringTextInputFormatter.digitsOnly,
                     CustomRangeTextInputFormatter(min: 1, max: 60),
                   ],
-                  onChanged: (v) => ref
-                      .watch(privateStateProvider.notifier)
-                      .setPumpOffInterval(v),
                 ),
               ),
               Gap(16.w),
