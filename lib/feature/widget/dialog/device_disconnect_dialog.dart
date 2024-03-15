@@ -3,10 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
-import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
 import 'package:palmfarm/utils/screen_util.dart';
 
@@ -61,7 +59,6 @@ class DeviceDisconnectDialog extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () => {
-                Log.d(":::크흠"),
                 onTap()
               },
               child: Text(

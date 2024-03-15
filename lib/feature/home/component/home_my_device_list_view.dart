@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:palmfarm/feature/home/home_view_model.dart';
+import 'package:palmfarm/feature/widget/dialog/device_setting_dialog.dart';
 import 'package:palmfarm/plam_farm_ui/router/app_route.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
+import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
 import 'package:palmfarm/utils/extension/value_extension.dart';
 
@@ -26,7 +28,24 @@ class HomeMyDeviceListView extends ConsumerWidget {
           itemCount: state.data!.items.length,
           itemBuilder: (context, index) {
             final model = state.data!.items[index];
-            return InkWell(
+            return GestureDetector(
+              onLongPress: () => {
+                showDeviceSettingDialog(
+                  context: context,
+                  title: "기기 이름 수정",
+                  message: "",
+                  device: model,
+                  onSaveTap: (String reName) async {
+                    Log.d("::::변경할 이름... " + reName);
+                    viewModel.onUpdateDevice(model.copyWith(reName: reName));
+                    context.router.pop();
+                  },
+                  onDeleteTap: () async{
+                     await viewModel.onDeleteDevice(model);
+                     context.router.pop();
+                  },
+                ),
+              },
               onTap: () => {context.router.push(DeviceDetailRoute(palmFarmDevice: model))},
               child: Column(
                 children: [

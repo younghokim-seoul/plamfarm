@@ -29,113 +29,6 @@ class DeviceDetailViewModel implements ViewModelInterface {
   final pumpOnOff = false.sbj;
 
 
-
-  Future<void> setRealCurrentTime() async {
-    Log.d("::");
-    try {
-      final data = DateTime.now().convertRTC();
-      Log.d("::::data... " + data);
-      final response = await _bleRepository.write(
-        Request(
-          command: setCurrentTime + data,
-        ),
-      );
-
-      Log.d(":::response... " + response.toString());
-    } catch (e) {
-      Log.e("[setRealCurrentTime] => e " + e.toString());
-      await _bleRepository.disconnect();
-    }
-  }
-
-  void setPrivateGrowingMode(PrivateSetting setting) async {
-
-    Log.d("::setting.. " + setting.toString());
-    if(setting.isEnableSetting()){
-      //- “AAMD/15/0930/2330/02/1530” DATA 값 해석
-      // 재배모드 15(개인모드) / LED ON 시각 09:30 / LED OFF 시각 23:30 / RED LED MODE / 펌프주기 ON:15분 OFF:30분
-      try {
-        final privateModeIndex =  '${setting.secretNumber}';
-        final ledOnTime = setting.ledOnStartTime.toString().padLeft(2, '0') + setting.ledOnEndTime.toString().padLeft(2, '0');
-        final ledOffTime = setting.ledOffStartTime.toString().padLeft(2, '0') + setting.ledOffEndTime.toString().padLeft(2, '0');
-        final redLedMode = setting.ledMode.toString().padLeft(2, '0');
-        final pumpInterval = setting.pumpOnInterval.toString().padLeft(2, '0') + setting.pumpOffInterval.toString().padLeft(2, '0');
-
-
-        final response = await _bleRepository.write(
-          Request(
-            command: setGrowingMode + privateModeIndex + ledOnTime + ledOffTime + redLedMode + pumpInterval,
-          ),
-        );
-
-        Log.d(":::response... " + response.toString());
-      } catch (e) {
-        Log.e("[setBaseGrowingMode] => e " + e.toString());
-        await _bleRepository.disconnect();
-      }
-    }
-  }
-
-  void setBaseGrowingMode(FarmingMode mode,String deviceId) async {
-    final db = await _localRepository.findPalmFarmDevice(deviceId);
-
-    if (!db.isNullOrEmpty) {
-      try {
-        final growingIndex = mode.baseGrowingModeIndex;
-        final growingTime = mode.getGrowingTime(db!);
-        Log.d("::::growingIndex... " + growingIndex);
-        Log.d("::::growingTime... " + growingTime);
-        final response = await _bleRepository.write(
-          Request(
-            command: setGrowingMode + growingIndex + growingTime,
-          ),
-        );
-
-        Log.d(":::response... " + response.toString());
-      } catch (e) {
-        Log.e("[setBaseGrowingMode] => e " + e.toString());
-        await _bleRepository.disconnect();
-      }
-    }
-  }
-
-  void onChangeLedStatus(bool isOn) async {
-    Log.d("::onChangeLedStatus " + isOn.toString());
-
-    try {
-      final response = await _bleRepository.write(
-        Request(
-          command: isOn ? setLedOn : setLedOff,
-        ),
-      );
-
-      if (response is PalmFarmUnknownResponse) {
-        ledOnOff.val = response.data == setLedOn ? true : false;
-      }
-    } catch (e) {
-      Log.e("[onChangeLedStatus] => e " + e.toString());
-      await _bleRepository.disconnect();
-    }
-  }
-
-  void onChangePumpStatus(bool isOn) async {
-    Log.d("::onChangePumpStatus " + isOn.toString());
-    try {
-      final response = await _bleRepository.write(
-        Request(
-          command: isOn ? setPumpOn : setPumpOff,
-        ),
-      );
-
-      if (response is PalmFarmUnknownResponse) {
-        pumpOnOff.val = response.data == setPumpOn ? true : false;
-      }
-    } catch (e) {
-      Log.e("[onChangePumpStatus] => e " + e.toString());
-      await _bleRepository.disconnect();
-    }
-  }
-
   void loadPrivateSetting(String deviceId) {
     _localRepository.getAllPrivateSettingItems(deviceId).listen((event) {
       Log.d(":::private Settings... " + event.length.toString());
@@ -176,17 +69,21 @@ class DeviceDetailViewModel implements ViewModelInterface {
         }));
   }
 
+
+
   Future<void> getCurrentStatus() async {
     try {
-      final response =
-          await _bleRepository.write(Request(command: queryCurrentStatus));
+      final response = await _bleRepository.write(Request(command: queryCurrentStatus));
 
       if (response is PalmFarmPowerOffResponse) {
-        if (response.isPowerOn) {
-          getCurrentStatus();
-        } else {
-          Log.i("::켜줘 야됨..");
-          await _bleRepository.write(Request(command: setPowerOn));
+        Log.d("::::PalmFarmPowerOffResponse " + response.toString());
+        final isPowerOn = await _bleRepository.write(Request(command: setPowerOn));
+
+        if(isPowerOn is PalmFarmPowerOffResponse){
+          Log.d("::::isPowerOn => " + isPowerOn.toString());
+          if(isPowerOn.isPowerOn){
+            getCurrentStatus();
+          }
         }
       }
 
@@ -197,6 +94,123 @@ class DeviceDetailViewModel implements ViewModelInterface {
       }
     } catch (e) {
       Log.e("::::e " + e.toString());
+      await _bleRepository.disconnect();
+    }
+  }
+
+
+  Future<void> setRealCurrentTime() async {
+    Log.d("::");
+    try {
+      final data = DateTime.now().convertRTC();
+      Log.d("::::data... " + data);
+      final response = await _bleRepository.write(
+        Request(
+          command: setCurrentTime + data,
+        ),
+      );
+
+      Log.d(":::[setCurrentTime] response... " + response.toString());
+    } catch (e) {
+      Log.e("[setRealCurrentTime] => e " + e.toString());
+      await _bleRepository.disconnect();
+    }
+  }
+
+  void setPrivateGrowingMode(PrivateSetting setting) async {
+
+    Log.d("::setting.. " + setting.toString());
+    if(setting.isEnableSetting()){
+      //- “AAMD/15/0930/2330/02/1530” DATA 값 해석
+      // 재배모드 15(개인모드) / LED ON 시각 09:30 / LED OFF 시각 23:30 / RED LED MODE / 펌프주기 ON:15분 OFF:30분
+      try {
+        final privateModeIndex =  '${setting.secretNumber}';
+        final ledOnTime = setting.ledOnStartTime.toString().padLeft(2, '0') + setting.ledOnEndTime.toString().padLeft(2, '0');
+        final ledOffTime = setting.ledOffStartTime.toString().padLeft(2, '0') + setting.ledOffEndTime.toString().padLeft(2, '0');
+        final redLedMode = setting.ledMode.toString().padLeft(2, '0');
+        final pumpInterval = setting.pumpOnInterval.toString().padLeft(2, '0') + setting.pumpOffInterval.toString().padLeft(2, '0');
+
+
+        final response = await _bleRepository.write(
+          Request(
+            command: setGrowingMode + privateModeIndex + ledOnTime + ledOffTime + redLedMode + pumpInterval,
+          ),
+        );
+        Log.d(":::setGrowingMode response... " + response.toString());
+        if(response is PalmFarmSetGrowingModeResponse){
+          if(response.isSet){
+            getCurrentStatus();
+          }
+        }
+
+      } catch (e) {
+        Log.e("[setBaseGrowingMode] => e " + e.toString());
+        await _bleRepository.disconnect();
+      }
+    }
+  }
+
+  void setBaseGrowingMode(FarmingMode mode,String deviceId) async {
+    final db = await _localRepository.findPalmFarmDevice(deviceId);
+
+    if (!db.isNullOrEmpty) {
+      try {
+        final growingIndex = mode.baseGrowingModeIndex;
+        final growingTime = mode.getGrowingTime(db!);
+        Log.d("::::growingIndex... " + growingIndex);
+        Log.d("::::growingTime... " + growingTime);
+        final response = await _bleRepository.write(
+          Request(
+            command: setGrowingMode + growingIndex + growingTime,
+          ),
+        );
+
+        Log.d(":::setBaseGrowingMode response... " + response.toString());
+        if(response is PalmFarmSetGrowingModeResponse){
+          if(response.isSet){
+            getCurrentStatus();
+          }
+        }
+      } catch (e) {
+        Log.e("[setBaseGrowingMode] => e " + e.toString());
+        await _bleRepository.disconnect();
+      }
+    }
+  }
+
+  void onChangeLedStatus(bool isOn) async {
+    Log.d("::onChangeLedStatus " + isOn.toString());
+
+    try {
+      final response = await _bleRepository.write(
+        Request(
+          command: isOn ? setLedOn : setLedOff,
+        ),
+      );
+
+      if (response is PalmFarmUnknownResponse) {
+        ledOnOff.val = response.data == setLedOn ? true : false;
+      }
+    } catch (e) {
+      Log.e("[onChangeLedStatus] => e " + e.toString());
+      await _bleRepository.disconnect();
+    }
+  }
+
+  void onChangePumpStatus(bool isOn) async {
+    Log.d("::onChangePumpStatus " + isOn.toString());
+    try {
+      final response = await _bleRepository.write(
+        Request(
+          command: isOn ? setPumpOn : setPumpOff,
+        ),
+      );
+
+      if (response is PalmFarmUnknownResponse) {
+        pumpOnOff.val = response.data == setPumpOn ? true : false;
+      }
+    } catch (e) {
+      Log.e("[onChangePumpStatus] => e " + e.toString());
       await _bleRepository.disconnect();
     }
   }

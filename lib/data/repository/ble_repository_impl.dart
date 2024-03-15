@@ -43,7 +43,7 @@ class BleRepositoryImpl extends BleRepository {
     _devices.clear();
     _scanSubscription?.cancel();
     _scanSubscription = flutterReactiveBle.scanForDevices(
-        withServices: [],
+        withServices: [Uuid.parse(serviceUuid)],
         scanMode: ScanMode.lowLatency).listen((device) {
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
@@ -198,7 +198,6 @@ class BleRepositoryImpl extends BleRepository {
           value: utf8.encode(request.command),
         );
         final response = await _responseCompleter.future.timeout(Duration(seconds: 3));
-        Log.d("::::결과값.. " + response.toString());
         completer.complete(response);
       } catch (e, t) {
         Log.e("::::e => " + e.toString() + " t " + t.toString());

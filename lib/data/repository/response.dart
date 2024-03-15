@@ -1,18 +1,26 @@
 import 'package:equatable/equatable.dart';
 
-sealed class PalmFarmResponse extends Equatable  {
+sealed class PalmFarmResponse extends Equatable {
   @override
   List<Object?> get props;
 }
 
 
-class PalmFarmPowerOffResponse extends PalmFarmResponse {
 
+class PalmFarmErrorResponse extends PalmFarmResponse {
+  PalmFarmErrorResponse({required this.code,required this.reason});
+
+  final int code;
+  final String reason;
+
+  @override
+  List<Object?> get props => [code,reason];
+}
+
+class PalmFarmPowerOffResponse extends PalmFarmResponse {
   PalmFarmPowerOffResponse({required this.isPowerOn});
 
-
   final bool isPowerOn;
-
 
   @override
   // TODO: implement props
@@ -41,7 +49,8 @@ class PalmFarmCurrentStatusResponse extends PalmFarmResponse {
   final String pumpStatus;
 
   @override
-  List<Object?> get props => [currentTime, currentMode,pumpOnInterval,pumpOffInterval,ledOnTime,ledOffTime,ledStatus,pumpStatus];
+  List<Object?> get props =>
+      [currentTime, currentMode, pumpOnInterval, pumpOffInterval, ledOnTime, ledOffTime, ledStatus, pumpStatus];
 }
 
 class PalmFarmSetCurrentTimeResponse extends PalmFarmResponse {
@@ -51,6 +60,16 @@ class PalmFarmSetCurrentTimeResponse extends PalmFarmResponse {
 
   @override
   List<Object?> get props => [data];
+}
+
+class PalmFarmSetGrowingModeResponse extends PalmFarmResponse {
+  PalmFarmSetGrowingModeResponse({required this.data,required this.isSet});
+
+  final String data;
+  final bool isSet;
+
+  @override
+  List<Object?> get props => [data,isSet];
 }
 
 class PalmFarmUnknownResponse extends PalmFarmResponse {

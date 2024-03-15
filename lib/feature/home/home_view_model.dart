@@ -1,3 +1,4 @@
+import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
 import 'package:palmfarm/domain/repository/local_repository.dart';
 import 'package:palmfarm/feature/home/home_list_ui_state.dart';
 import 'package:palmfarm/feature/viewmodel_interface.dart';
@@ -17,6 +18,11 @@ class HomeViewModel implements ViewModelInterface {
       homeListUiState.val = HomeListUiState(items: event);
     });
   }
+
+  Future<void> onUpdateDevice(PalmFarmDevice device) async => await _localRepository.saveDevice(device);
+
+  Future<void> onDeleteDevice(PalmFarmDevice device) async => await _localRepository.deleteDevice(device);
+
   @override
   disposeAll() {
     Log.d(":::HomeViewModel disposeAll");

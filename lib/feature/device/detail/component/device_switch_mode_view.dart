@@ -66,7 +66,7 @@ class DeviceSwitchModeView extends ConsumerWidget {
               ],
             ),
             child: InkWell(
-              onTap: () {},
+              onTap: () => viewModel.getCurrentStatus(),
               child: Text(
                 '새로고침',
                 style: PlamFarmTextStyles.body2Bold

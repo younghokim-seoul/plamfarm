@@ -29,6 +29,9 @@ const setPumpOff = 'AAPF';
 
 const setPowerOn = 'AAON';
 
+
+const powerOff = 'AAMD00';
+
 PalmFarmResponse parseResponse(String data) {
   try {
     //1302540205150730213010
@@ -72,9 +75,18 @@ PalmFarmResponse parseResponse(String data) {
     if(data.startsWith(setPowerOn)){
       return PalmFarmPowerOffResponse(isPowerOn: true);
     }
+
+    if(data.startsWith(setGrowingMode) || data.startsWith(powerOff)){
+      Log.d(":::growing parse => " + data);
+      return PalmFarmSetGrowingModeResponse(data: data, isSet: data == powerOff ? false : true);
+    }
     return PalmFarmUnknownResponse(data: data);
   } catch (e, t) {
-    Log.d(":::뭔데 씨바알.... " + e.toString());
+    Log.d(":::parseResponse error.... " + e.toString());
     throw PalmFarmResponseParseException(e, t);
   }
 }
+
+
+
+

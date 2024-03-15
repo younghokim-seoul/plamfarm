@@ -30,7 +30,7 @@ class PrivateDeleteHistoryView extends ConsumerWidget {
             }
           },
           child: Text(
-            "개인모드 삭제",
+            "개인모드 초기화",
             style: PlamFarmTextStyles.headline6Bold.copyWith(
                 color: state.data == true
                     ? PlamFarmColors.palmFarmPrimary5
