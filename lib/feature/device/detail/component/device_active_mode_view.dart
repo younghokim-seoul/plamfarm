@@ -55,30 +55,30 @@ class DeviceActiveModeView extends StatelessWidget {
                   title: '재배모드',
                   value: (!state.hasData || state.data.isNullOrEmpty)
                       ? ""
-                      : state.data!.model.currentMode.growingMode),
+                      : state.data!.modeName),
               Gap(12.h),
               _buildSettingTile(context,
                   title: '펌프 가동주기',
                   value: (!state.hasData || state.data.isNullOrEmpty)
                       ? ""
                       : "ON:" +
-                          state.data!.model.pumpOnInterval +
+                          state.data!.pumpOnInterval +
                           "분" +
                           " OFF:" +
-                          state.data!.model.pumpOffInterval +
+                          state.data!.pumpOffInterval +
                           "분"),
               Gap(12.h),
               _buildSettingTile(context,
                   title: 'LED ON 시각',
                   value: (!state.hasData || state.data.isNullOrEmpty)
                       ? ""
-                      : state.data!.model.ledOnTime.formatTimeString),
+                      : state.data!.ledOnTime.formatTimeString),
               Gap(12.h),
               _buildSettingTile(context,
                   title: 'LED OFF 시각',
                   value: (!state.hasData || state.data.isNullOrEmpty)
                       ? ""
-                      : state.data!.model.ledOffTime.formatTimeString),
+                      : state.data!.ledOffTime.formatTimeString),
               Gap(24.h),
             ],
           ).paddingSymmetric(horizontal: 36.w);
@@ -132,17 +132,6 @@ extension ConvertGrowingMode on String {
         return "딸기모드";
       case "03":
         return "화훼모드";
-      case "04":
-      case "05":
-      case "06":
-      case "07":
-      case "08":
-      case "09":
-      case "10":
-      case "11":
-      case "12":
-      case "13":
-        return "개인모드 " + this;
       default:
         return "";
     }

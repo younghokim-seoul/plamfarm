@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:palmfarm/assets/assets.gen.dart';
 import 'package:palmfarm/feature/home/home_view_model.dart';
 import 'package:palmfarm/feature/widget/dialog/device_setting_dialog.dart';
 import 'package:palmfarm/plam_farm_ui/router/app_route.dart';
-import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
@@ -52,22 +52,7 @@ class HomeMyDeviceListView extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        width: 40.h,
-                        height: 40.h,
-                        decoration: const BoxDecoration(
-                          color: PlamFarmColors.palmFarmPrimary4,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          (index + 1).toString(),
-                          textAlign: TextAlign.center,
-                          style: PlamFarmTextStyles.body2Bold
-                              .copyWith(color: Colors.black, fontWeight: FontWeight.w700, height: 1.583, fontSize: 16),
-                        ).marginOnly(top: 4),
-                      ),
+                      Assets.image.icDevice.image(width: 80,height: 80,fit: BoxFit.fill),
                       Gap(16.w),
                       Flexible(
                           child: Text(
@@ -79,7 +64,7 @@ class HomeMyDeviceListView extends ConsumerWidget {
                   ),
                   Gap(4.h),
                 ],
-              ),
+              ).paddingSymmetric(vertical: 4),
             );
           });
     });

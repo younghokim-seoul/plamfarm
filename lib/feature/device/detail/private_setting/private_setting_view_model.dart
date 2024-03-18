@@ -39,9 +39,10 @@ class PrivateSettingViewModel implements ViewModelInterface {
     _calLedLiveTime();
   }
 
-  PrivateSettingState get() =>currentPrivateSetting;
+  PrivateSettingState get() => currentPrivateSetting;
 
   void onChangedLedMode(int mode) {
+    Log.d("::onChangedLedMode.. " +  mode.toString());
     currentPrivateSetting = currentPrivateSetting.copyWith(ledMode: mode);
     loadState(currentPrivateSetting);
   }

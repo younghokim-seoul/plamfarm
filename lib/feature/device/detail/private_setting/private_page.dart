@@ -88,7 +88,19 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
             Gap(16.h),
             PrivateDeleteHistoryView(
                 viewModel: _viewModel,
-                onTap: () {
+                onTap: () async {
+                  await _viewModel.savePrivateSetting(
+                    widget.privateSetting.copyWith(
+                      modeName: "",
+                      ledMode: 1,
+                      pumpOnInterval: -1,
+                      pumpOffInterval: -1,
+                      ledOnStartTime: -1,
+                      ledOnEndTime: -1,
+                      ledOffStartTime: -1,
+                      ledOffEndTime: -1,
+                    ),
+                  );
                   context.router.pop();
                 }),
             Gap(16.h),

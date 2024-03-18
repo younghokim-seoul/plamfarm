@@ -33,19 +33,23 @@ class DevicePrivateModeView extends ConsumerWidget {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: PlamFarmColors.palmFarmPrimary6.withOpacity(0.3),
+                            color: PlamFarmColors.palmFarmPrimary6
+                                .withOpacity(0.3),
                             blurRadius: 8,
                             offset: const Offset(0, 1),
                           )
                         ],
                       ),
                       child: GestureDetector(
-                        onLongPress: () => context.router.push(PrivateSettingRoute(privateSetting: e)),
+                        onLongPress: () => context.router
+                            .push(PrivateSettingRoute(privateSetting: e)),
                         onTap: () => viewModel.setPrivateGrowingMode(e),
                         child: SizedBox(
-                          width: (1.sw - 2 * 20.w - 14.w) / 2,
+                          width: 1.sw >= 320 ? (1.sw - 2 * 20.w - 14.w) / 2 : 1.sw,
                           child: Text(
-                            e.modeName.isNullOrEmpty ? '개인모드 ' + (e.secretNumber - 10).toString() : e.modeName,
+                            e.modeName.isNullOrEmpty
+                                ? '개인모드 ' + (e.secretNumber - 10).toString()
+                                : e.modeName,
                             textAlign: TextAlign.center,
                             style: PlamFarmTextStyles.headline6Bold.copyWith(
                                 color: PlamFarmColors.palmFarmPrimary8,

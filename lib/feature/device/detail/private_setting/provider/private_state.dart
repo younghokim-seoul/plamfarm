@@ -21,7 +21,7 @@ class PrivateSettingState with _$PrivateSettingState {
   factory PrivateSettingState.create() =>
       PrivateSettingState(
         modeName: "",
-        ledMode: 0,
+        ledMode: 1,
         pumpOnInterval: -1,
         pumpOffInterval: -1,
         ledOnHour: -1,

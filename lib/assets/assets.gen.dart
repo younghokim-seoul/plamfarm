@@ -16,8 +16,16 @@ class $AssetsImageGen {
   AssetGenImage get appLanding =>
       const AssetGenImage('assets/image/app_landing.jpg');
 
+  /// File path: assets/image/ic_banner.jpg
+  AssetGenImage get icBanner =>
+      const AssetGenImage('assets/image/ic_banner.jpg');
+
   /// File path: assets/image/ic_ble.png
   AssetGenImage get icBle => const AssetGenImage('assets/image/ic_ble.png');
+
+  /// File path: assets/image/ic_device.jpg
+  AssetGenImage get icDevice =>
+      const AssetGenImage('assets/image/ic_device.jpg');
 
   /// File path: assets/image/ic_flowers_mode.png
   AssetGenImage get icFlowersMode =>
@@ -27,13 +35,25 @@ class $AssetsImageGen {
   AssetGenImage get icStrawberryMode =>
       const AssetGenImage('assets/image/ic_strawberry_mode.png');
 
+  /// File path: assets/image/ic_title_device.jpg
+  AssetGenImage get icTitleDevice =>
+      const AssetGenImage('assets/image/ic_title_device.jpg');
+
   /// File path: assets/image/ic_vegetable_mode.png
   AssetGenImage get icVegetableMode =>
       const AssetGenImage('assets/image/ic_vegetable_mode.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [appLanding, icBle, icFlowersMode, icStrawberryMode, icVegetableMode];
+  List<AssetGenImage> get values => [
+        appLanding,
+        icBanner,
+        icBle,
+        icDevice,
+        icFlowersMode,
+        icStrawberryMode,
+        icTitleDevice,
+        icVegetableMode
+      ];
 }
 
 class Assets {

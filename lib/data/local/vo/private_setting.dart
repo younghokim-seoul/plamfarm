@@ -45,7 +45,7 @@ class PrivateSetting {
         deviceCode,
         macAddress,
         modeName ?? "",
-        ledMode ?? 0,
+        ledMode ?? 1,
         pumpOnInterval ?? -1,
         pumpOffInterval ?? -1,
         ledOnStartTime ?? -1,

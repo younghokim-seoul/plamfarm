@@ -34,8 +34,8 @@ class PrivateLedModeView extends ConsumerWidget {
                 (index) => RadioGroup<int>(
                       contentPadding: EdgeInsets.zero,
                       value: index,
-                      groupValue: viewModel.get().ledMode,
-                      onChanged: (v) => {viewModel.onChangedLedMode(v!)},
+                      groupValue: viewModel.get().ledMode -1,
+                      onChanged: (v) => {viewModel.onChangedLedMode(v! + 1)},
                       toggleable: false,
                       title: Text(
                         index == 0 ? "PURPLE MODE" : "RED MODE",

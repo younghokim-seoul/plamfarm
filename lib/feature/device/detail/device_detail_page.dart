@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:palmfarm/app_providers.dart';
+import 'package:palmfarm/assets/assets.gen.dart';
 import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
 import 'package:palmfarm/feature/device/connection_ui_state.dart';
 import 'package:palmfarm/feature/device/detail/component/device_active_mode_view.dart';
@@ -107,10 +108,12 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
             DevicePrivateModeView(
               viewModel: _viewModel,
             ),
-            Gap(16.h),
+            Gap(24.h),
+            Assets.image.icBanner.image(width:1.sw,height: 66.h,fit: BoxFit.fill),
           ],
         ),
       )),
     );
   }
 }
+

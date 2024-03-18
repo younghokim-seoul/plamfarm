@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:palmfarm/app_providers.dart';
+import 'package:palmfarm/assets/assets.gen.dart';
 import 'package:palmfarm/feature/home/component/home_my_device_list_view.dart';
 import 'package:palmfarm/feature/home/home_view_model.dart';
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
@@ -56,7 +57,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: HomeMyDeviceListView(
                 viewModel: _viewModel,
               ),
-            )
+            ),
+            Assets.image.icBanner.image(width:1.sw,height: 66.h,fit: BoxFit.fill),
           ],
         ),
       ),
