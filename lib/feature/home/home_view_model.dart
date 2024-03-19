@@ -12,16 +12,30 @@ class HomeViewModel implements ViewModelInterface {
 
   final homeListUiState = ArcSubject<HomeListUiState>();
 
+  final userIdState = ArcSubject<String>();
+
   void onLoadData() async {
     _localRepository.getAllPalmFarmItems().listen((event) {
       Log.d(":::event... $event");
-      homeListUiState.val = HomeListUiState(userId: "",items: event);
+      homeListUiState.val = HomeListUiState(items: event);
     });
   }
 
-  Future<void> onUpdateDevice(PalmFarmDevice device) async => await _localRepository.saveDevice(device);
+  Future<void> saveUserId(String userIds) async {
+    await _localRepository.saveUserName(userIds: userIds);
+    onLoadUserId();
+  }
 
-  Future<void> onDeleteDevice(PalmFarmDevice device) async => await _localRepository.deleteDevice(device);
+  void onLoadUserId() async {
+    String userId = await _localRepository.getUserName();
+    userIdState.val = userId;
+  }
+
+  Future<void> onUpdateDevice(PalmFarmDevice device) async =>
+      await _localRepository.saveDevice(device);
+
+  Future<void> onDeleteDevice(PalmFarmDevice device) async =>
+      await _localRepository.deleteDevice(device);
 
   @override
   disposeAll() {

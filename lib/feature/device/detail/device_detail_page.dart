@@ -19,6 +19,7 @@ import 'package:palmfarm/feature/widget/dialog/device_disconnect_dialog.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/utils/constant.dart';
 import 'package:palmfarm/utils/dev_log.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class DeviceDetailPage extends ConsumerStatefulWidget {
@@ -113,7 +114,14 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
           ),
         ),
       ),
-      bottomNavigationBar: Assets.image.icBanner.image(width: 1.sw, height: 66.h, fit: BoxFit.fill),
+      bottomNavigationBar: InkWell(
+        onTap: () => launchUrl(Uri.parse('https://cafe.naver.com/palmfarmmarket')),
+        child: Assets.image.icBanner.image(
+          width: 1.sw,
+          height: 66.h,
+          fit: BoxFit.fill,
+        ),
+      ),
     );
   }
 }

@@ -13,6 +13,8 @@ import 'package:palmfarm/plam_farm_ui/router/app_route.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
+import 'package:palmfarm/utils/extension/value_extension.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class HomePage extends ConsumerStatefulWidget {
@@ -33,6 +35,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.initState();
     _viewModel = ref.read(homeViewModelProvider);
     _viewModel.onLoadData();
+    _viewModel.onLoadUserId();
   }
 
   @override
@@ -58,8 +61,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                 viewModel: _viewModel,
               ),
             ),
-            Assets.image.icBanner.image(width:1.sw,height: 66.h,fit: BoxFit.fill),
           ],
+        ),
+      ),
+      bottomNavigationBar: InkWell(
+        onTap: () =>
+            launchUrl(Uri.parse('https://cafe.naver.com/palmfarmmarket')),
+        child: Assets.image.icBanner.image(
+          width: 1.sw,
+          height: 66.h,
+          fit: BoxFit.fill,
         ),
       ),
     );
@@ -88,14 +99,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                 Gap(10.w),
                 Expanded(
                     child: InkWell(
-                  splashFactory: InkRipple.splashFactory,
-                  onTap: () => showNickNameDialog(
-                      context: context, title: "이름 수정하기", message: ""),
-                  child: const Text(
-                    'asdaasdasdasd',
-                    style: PlamFarmTextStyles.body2Bold,
-                  ),
-                )),
+                        splashFactory: InkRipple.splashFactory,
+                        onTap: () => showNickNameDialog(
+                            context: context,
+                            title: "이름 수정하기",
+                            message: _viewModel.userIdState.val,
+                            onSaveTap: (val) async {
+                              await _viewModel.saveUserId(val);
+                              context.router.pop();
+                            }),
+                        child: _viewModel.userIdState.ui(
+                            builder: (context, state) {
+                          return Text(
+                              state.data.isNullOrEmpty
+                                  ? "사용자 닉네임"
+                                  : state.data!,
+                              style: PlamFarmTextStyles.body2Bold);
+                        }))),
                 Gap(10.w),
                 DecoratedBox(
                     decoration: BoxDecoration(

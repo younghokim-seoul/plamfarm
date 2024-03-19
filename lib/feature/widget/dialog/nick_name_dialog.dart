@@ -7,6 +7,8 @@ import 'package:palmfarm/feature/widget/label_text_filed/labeled_input_field.dar
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
+import 'package:palmfarm/utils/extension/value_extension.dart';
+import 'package:palmfarm/utils/helper_message.dart';
 import 'package:palmfarm/utils/screen_util.dart';
 
 const kMaxWidth = 300.0;
@@ -15,28 +17,41 @@ Future<void> showNickNameDialog({
   required BuildContext context,
   required String title,
   required String message,
+  required Function(String reName) onSaveTap,
 }) {
   return showDialog(
     context: context,
-    builder: (context) => NickNameDialog(
+    builder: (context) => NickNameDialog.preset(
       title: title,
       message: message,
+      onSaveTap: onSaveTap,
     ),
   );
 }
 
 class NickNameDialog extends StatelessWidget {
-  const NickNameDialog({
+  NickNameDialog({
     required this.title,
     required this.message,
+    required this.textEditingController,
+    required this.onSaveTap,
     super.key,
   });
 
+  NickNameDialog.preset({
+    required this.title,
+    required this.message,
+    required this.onSaveTap,
+  }) : textEditingController = TextEditingController(text: message);
+
   final String title;
   final String message;
+  final TextEditingController textEditingController;
+  final Function(String reName) onSaveTap;
 
   @override
   Widget build(BuildContext context) {
+
     return AlertDialog(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(32))),
@@ -54,12 +69,16 @@ class NickNameDialog extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () {
-                context.router.pop();
+                if(textEditingController.text.isNullOrEmpty){
+                  AppMessage.showMessage("이름을 입력해주세요.");
+                  return;
+                }
+                onSaveTap.call(textEditingController.text);
               },
               child: Text(
                 '저장하기',
                 style:
-                PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
+                    PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
               ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
             ),
           ).paddingOnly(right: 24, bottom: 24),
@@ -108,8 +127,8 @@ class NickNameDialog extends StatelessWidget {
         children: [
           Text(
             title,
-            style: PlamFarmTextStyles.buttonLarge
-                .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16),
+            style: PlamFarmTextStyles.buttonLarge.copyWith(
+                color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16),
           ),
           InkWell(
             splashFactory: InkRipple.splashFactory,
@@ -124,12 +143,11 @@ class NickNameDialog extends StatelessWidget {
       );
 
   Widget _buildNameInputTextFiled() => LabeledInputField(
-    controller: TextEditingController(),
-    hintText: '이름을 입력해주세요.',
-    errorText: null,
-    keyboardType: TextInputType.text,
-  );
-
+        controller: textEditingController,
+        hintText: '이름을 입력해주세요.',
+        errorText: null,
+        keyboardType: TextInputType.text,
+      );
 }
 
 class _Icon extends StatelessWidget {

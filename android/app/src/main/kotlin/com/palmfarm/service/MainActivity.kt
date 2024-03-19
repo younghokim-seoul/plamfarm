@@ -1,4 +1,4 @@
-package com.palmfarm.service.palmfarm
+package com.palmfarm.service
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.palmfarm.service.palmfarm"
+    namespace "com.palmfarm.service"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
