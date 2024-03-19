@@ -86,34 +86,34 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
         ),
       ),
       body: SafeArea(
-          child: SingleChildScrollView(
-        padding: EdgeInsets.zero,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Gap(16.h),
-            DeviceActiveModeView(
-              viewModel: _viewModel,
-            ),
-            Gap(24.h),
-            DeviceSwitchModeView(
-              viewModel: _viewModel,
-            ),
-            Gap(24.h),
-            DeviceFarmingModeView(
-              deviceId: widget.palmFarmDevice.macAddress,
-              viewModel: _viewModel,
-            ),
-            Gap(16.h),
-            DevicePrivateModeView(
-              viewModel: _viewModel,
-            ),
-            Gap(24.h),
-            Assets.image.icBanner.image(width:1.sw,height: 66.h,fit: BoxFit.fill),
-          ],
+        child: SingleChildScrollView(
+          padding: EdgeInsets.zero,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Gap(16.h),
+              DeviceActiveModeView(
+                viewModel: _viewModel,
+              ),
+              Gap(24.h),
+              DeviceSwitchModeView(
+                viewModel: _viewModel,
+              ),
+              Gap(24.h),
+              DeviceFarmingModeView(
+                deviceId: widget.palmFarmDevice.macAddress,
+                viewModel: _viewModel,
+              ),
+              Gap(16.h),
+              DevicePrivateModeView(
+                viewModel: _viewModel,
+              ),
+              Gap(24.h),
+            ],
+          ),
         ),
-      )),
+      ),
+      bottomNavigationBar: Assets.image.icBanner.image(width: 1.sw, height: 66.h, fit: BoxFit.fill),
     );
   }
 }
-

@@ -6,6 +6,7 @@ part 'home_list_ui_state.freezed.dart';
 @freezed
 class HomeListUiState with _$HomeListUiState {
   factory HomeListUiState({
+    required String userId,
     required List<PalmFarmDevice> items,
   }) = _HomeListUiState;
 }

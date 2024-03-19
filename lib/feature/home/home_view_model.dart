@@ -15,7 +15,7 @@ class HomeViewModel implements ViewModelInterface {
   void onLoadData() async {
     _localRepository.getAllPalmFarmItems().listen((event) {
       Log.d(":::event... $event");
-      homeListUiState.val = HomeListUiState(items: event);
+      homeListUiState.val = HomeListUiState(userId: "",items: event);
     });
   }
 

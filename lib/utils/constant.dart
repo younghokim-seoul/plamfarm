@@ -4,6 +4,8 @@ class Const {
   static LogLevel logLevel = LogLevel.v;
   static bool useProxy = false;
   static String proxyAddress = "192.168.206.119:8888";
+
+  static String pref_nick_name = "NickName";
 }
 
 const String serviceUuid = "21408141-1fb5-459e-8fcc-c5c9c2140814";

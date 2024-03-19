@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,7 +55,7 @@ class HomeMyDeviceListView extends ConsumerWidget {
                     children: [
                       Assets.image.icDevice.image(width: 80,height: 80,fit: BoxFit.fill),
                       Gap(16.w),
-                      Flexible(
+                      Expanded(
                           child: Text(
                         model.reName,
                         style: PlamFarmTextStyles.body2Bold

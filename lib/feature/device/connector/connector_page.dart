@@ -207,15 +207,17 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
     DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfoPlugin.androidInfo;
+
       permissions.addAll([
         Permission.bluetoothScan,
         Permission.bluetoothConnect,
       ]);
 
       // Android 11 (API 레벨 30) 이하일 경우 위치 권한 추가
-      if (androidInfo.version.sdkInt < 30) {
+      if (androidInfo.version.sdkInt < 31) {
         permissions.add(Permission.location);
       }
+
     } else if (Platform.isIOS) {
       // iOS의 경우 위치 권한 추가
       permissions.add(Permission.locationWhenInUse);

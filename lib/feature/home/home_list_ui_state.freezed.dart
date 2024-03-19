@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$HomeListUiState {
+  String get userId => throw _privateConstructorUsedError;
   List<PalmFarmDevice> get items => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,7 +30,7 @@ abstract class $HomeListUiStateCopyWith<$Res> {
           HomeListUiState value, $Res Function(HomeListUiState) then) =
       _$HomeListUiStateCopyWithImpl<$Res, HomeListUiState>;
   @useResult
-  $Res call({List<PalmFarmDevice> items});
+  $Res call({String userId, List<PalmFarmDevice> items});
 }
 
 /// @nodoc
@@ -45,9 +46,14 @@ class _$HomeListUiStateCopyWithImpl<$Res, $Val extends HomeListUiState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? userId = null,
     Object? items = null,
   }) {
     return _then(_value.copyWith(
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       items: null == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
@@ -64,7 +70,7 @@ abstract class _$$HomeListUiStateImplCopyWith<$Res>
       __$$HomeListUiStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<PalmFarmDevice> items});
+  $Res call({String userId, List<PalmFarmDevice> items});
 }
 
 /// @nodoc
@@ -78,9 +84,14 @@ class __$$HomeListUiStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? userId = null,
     Object? items = null,
   }) {
     return _then(_$HomeListUiStateImpl(
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       items: null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
@@ -92,9 +103,12 @@ class __$$HomeListUiStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$HomeListUiStateImpl implements _HomeListUiState {
-  _$HomeListUiStateImpl({required final List<PalmFarmDevice> items})
+  _$HomeListUiStateImpl(
+      {required this.userId, required final List<PalmFarmDevice> items})
       : _items = items;
 
+  @override
+  final String userId;
   final List<PalmFarmDevice> _items;
   @override
   List<PalmFarmDevice> get items {
@@ -105,7 +119,7 @@ class _$HomeListUiStateImpl implements _HomeListUiState {
 
   @override
   String toString() {
-    return 'HomeListUiState(items: $items)';
+    return 'HomeListUiState(userId: $userId, items: $items)';
   }
 
   @override
@@ -113,12 +127,13 @@ class _$HomeListUiStateImpl implements _HomeListUiState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HomeListUiStateImpl &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             const DeepCollectionEquality().equals(other._items, _items));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
+  int get hashCode => Object.hash(
+      runtimeType, userId, const DeepCollectionEquality().hash(_items));
 
   @JsonKey(ignore: true)
   @override
@@ -129,9 +144,12 @@ class _$HomeListUiStateImpl implements _HomeListUiState {
 }
 
 abstract class _HomeListUiState implements HomeListUiState {
-  factory _HomeListUiState({required final List<PalmFarmDevice> items}) =
-      _$HomeListUiStateImpl;
+  factory _HomeListUiState(
+      {required final String userId,
+      required final List<PalmFarmDevice> items}) = _$HomeListUiStateImpl;
 
+  @override
+  String get userId;
   @override
   List<PalmFarmDevice> get items;
   @override
