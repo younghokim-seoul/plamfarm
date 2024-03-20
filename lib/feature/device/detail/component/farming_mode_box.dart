@@ -30,7 +30,7 @@ class FarmingModeBox extends StatelessWidget {
         padding: EdgeInsets.zero,
         child: GestureDetector(
           onLongPress: () => context.router
-              .push(LedSettingRoute(mode: farmingMode, deviceId: deviceId)),
+              .push(LedSettingRoute(mode: farmingMode, deviceId: deviceId,detailViewModel: viewModel)),
           onTap: () => viewModel.setBaseGrowingMode(farmingMode, deviceId),
           child: Container(
             width: double.infinity,

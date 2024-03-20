@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:palmfarm/data/local/vo/private_setting.dart';
@@ -27,12 +29,13 @@ class DeviceDetailViewModel implements ViewModelInterface {
   final deviceCurrentStateUiState = ArcSubject<DeviceCurrentState>();
   final privateSettings = ArcSubject<List<PrivateSetting>>();
 
+  StreamSubscription? settingLiveData;
+
   final ledOnOff = false.sbj;
   final pumpOnOff = false.sbj;
 
   void loadPrivateSetting(String deviceId) {
-    _localRepository.getAllPrivateSettingItems(deviceId).listen((event) {
-      Log.d(":::private Settings... " + event.length.toString());
+    settingLiveData = _localRepository.getAllPrivateSettingItems(deviceId).listen((event) {
       privateSettings.val = event;
     });
   }
@@ -57,9 +60,7 @@ class DeviceDetailViewModel implements ViewModelInterface {
           }
         }, onDeviceScanDiscovered: (val) {
           Log.d(":::scanDevice " + val.toString());
-          final scanDevice = val.discoveredDevices
-              .where((element) => element.id == address)
-              .firstOrNull;
+          final scanDevice = val.discoveredDevices.where((element) => element.id == address).firstOrNull;
 
           Log.d(":::scanDevice " + scanDevice.toString());
 
@@ -72,14 +73,12 @@ class DeviceDetailViewModel implements ViewModelInterface {
 
   Future<void> getCurrentStatus() async {
     try {
-      final response =
-          await _bleRepository.write(Request(command: queryCurrentStatus));
+      final response = await _bleRepository.write(Request(command: queryCurrentStatus));
 
       if (response is PalmFarmPowerOffResponse) {
         Log.d("::::PalmFarmPowerOffResponse " + response.toString());
 
-
-        if (!kReleaseMode){
+        if (!kReleaseMode) {
           Log.d("::::테스트 버전 일때는 직접 전원 On");
           final isPowerOn = await _bleRepository.write(Request(command: setPowerOn));
 
@@ -89,15 +88,13 @@ class DeviceDetailViewModel implements ViewModelInterface {
               getCurrentStatus();
             }
           }
-        }else{
+        } else {
           Log.d("::::릴리즈 버전일때는 전원을 키지 않고 Disconnect 처리.");
           await _bleRepository.disconnect();
         }
-
       }
 
       if (response is PalmFarmCurrentStatusResponse) {
-
         Log.d(":::PalmFarmCurrentStatusResponse " + response.toString());
         loadState(
           DeviceCurrentState(
@@ -145,24 +142,19 @@ class DeviceDetailViewModel implements ViewModelInterface {
       // 재배모드 15(개인모드) / LED ON 시각 09:30 / LED OFF 시각 23:30 / RED LED MODE / 펌프주기 ON:15분 OFF:30분
       try {
         final privateModeIndex = '${setting.secretNumber}';
-        final ledOnTime = setting.ledOnStartTime.toString().padLeft(2, '0') +
-            setting.ledOnEndTime.toString().padLeft(2, '0');
-        final ledOffTime = setting.ledOffStartTime.toString().padLeft(2, '0') +
-            setting.ledOffEndTime.toString().padLeft(2, '0');
+        final ledOnTime =
+            setting.ledOnStartTime.toString().padLeft(2, '0') + setting.ledOnEndTime.toString().padLeft(2, '0');
+        final ledOffTime =
+            setting.ledOffStartTime.toString().padLeft(2, '0') + setting.ledOffEndTime.toString().padLeft(2, '0');
         final redLedMode = setting.ledMode.toString().padLeft(2, '0');
-        final pumpInterval = setting.pumpOnInterval.toString().padLeft(2, '0') +
-            setting.pumpOffInterval.toString().padLeft(2, '0');
+        final pumpInterval =
+            setting.pumpOnInterval.toString().padLeft(2, '0') + setting.pumpOffInterval.toString().padLeft(2, '0');
 
         Log.d(":::redLedMode " + redLedMode);
 
         final response = await _bleRepository.write(
           Request(
-            command: setGrowingMode +
-                privateModeIndex +
-                ledOnTime +
-                ledOffTime +
-                redLedMode +
-                pumpInterval,
+            command: setGrowingMode + privateModeIndex + ledOnTime + ledOffTime + redLedMode + pumpInterval,
           ),
         );
         Log.d(":::setGrowingMode response... " + response.toString());
@@ -175,6 +167,33 @@ class DeviceDetailViewModel implements ViewModelInterface {
         Log.e("[setBaseGrowingMode] => e " + e.toString());
         await _bleRepository.disconnect();
       }
+    }
+  }
+
+  void setImmediatelyLed(FarmingMode mode, String hour, String minute) async {
+    try {
+      final growingIndex = mode.baseGrowingModeIndex;
+
+      String hourTime = int.parse(hour).crateTime();
+      String minuteTime = int.parse(minute).crateTime();
+      final growingTime = hourTime + minuteTime;
+      Log.d("::::growingIndex... " + growingIndex);
+      Log.d("::::growingTime... " + growingTime);
+      final response = await _bleRepository.write(
+        Request(
+          command: setGrowingMode + growingIndex + growingTime,
+        ),
+      );
+
+      Log.d(":::setImmediatelyLed response... " + response.toString());
+      if (response is PalmFarmSetGrowingModeResponse) {
+        if (response.isSet) {
+          getCurrentStatus();
+        }
+      }
+    } catch (e) {
+      Log.e("[setBaseGrowingMode] => e " + e.toString());
+      await _bleRepository.disconnect();
     }
   }
 
@@ -257,11 +276,7 @@ class DeviceDetailViewModel implements ViewModelInterface {
   @override
   disposeAll() async {
     await _bleRepository.disconnect();
-    connectionUiState.close();
-    privateSettings.close();
-    deviceCurrentStateUiState.close();
-    pumpOnOff.close();
-    ledOnOff.close();
+    settingLiveData?.cancel();
     _bleRepository.removeAllChannelListener();
   }
 

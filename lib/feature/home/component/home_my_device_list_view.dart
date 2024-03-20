@@ -41,9 +41,9 @@ class HomeMyDeviceListView extends ConsumerWidget {
                     viewModel.onUpdateDevice(model.copyWith(reName: reName));
                     context.router.pop();
                   },
-                  onDeleteTap: () async{
-                     await viewModel.onDeleteDevice(model);
-                     context.router.pop();
+                  onDeleteTap: () async {
+                    await viewModel.onDeleteDevice(model);
+                    context.router.pop();
                   },
                 ),
               },
@@ -53,7 +53,7 @@ class HomeMyDeviceListView extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Assets.image.icDevice.image(width: 80,height: 80,fit: BoxFit.fill),
+                      Assets.image.icDevice.image(width: 80, height: 80, fit: BoxFit.fill),
                       Gap(16.w),
                       Expanded(
                           child: Text(

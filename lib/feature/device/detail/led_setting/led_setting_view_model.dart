@@ -64,7 +64,9 @@ class LedSettingViewModel implements ViewModelInterface {
     Log.d("::::response => " + response.toString());
   }
 
-  void onClickOnlyDeviceSetting(String hour, String minute) {}
+  void onClickOnlyDeviceSetting(String hour, String minute) {
+
+  }
 
   @override
   disposeAll() {}

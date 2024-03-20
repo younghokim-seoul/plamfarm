@@ -3,18 +3,19 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:palmfarm/assets/assets.gen.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_theme.dart';
 import 'package:palmfarm/utils/extension/margin_extension.dart';
+import 'package:palmfarm/utils/extension/value_extension.dart';
 
 final kCustomAppBarSize = Size.fromHeight(40.h);
 
-
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-
   const CustomAppBar({
     this.leading,
+    this.deviceIcon,
     this.title,
     this.actions,
     this.padding = const EdgeInsets.symmetric(
@@ -24,6 +25,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   });
 
   final Widget? leading;
+  final Widget? deviceIcon;
   final String? title;
   final List<Widget>? actions;
   final EdgeInsets padding;
@@ -35,9 +37,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<CustomAppBar> createState() => CustomAppBarState();
 }
 
-
 class CustomAppBarState extends State<CustomAppBar> {
-
   bool isScrolledUnder = false;
 
   ScrollNotificationObserverState? _scrollNotificationObserver;
@@ -112,16 +112,31 @@ class CustomAppBarState extends State<CustomAppBar> {
                     id: _CustomAppBarSlot.leading,
                     child: widget.leading!,
                   ),
-                if (widget.title != null)
+                if (widget.title != null && widget.deviceIcon != null)
+                  LayoutId(
+                    id: _CustomAppBarSlot.title,
+                    child: IntrinsicWidth(
+                      child: Row(
+                        children: [
+                          Assets.image.icDevice.image(),
+                          Gap(8.w),
+                          Text(
+                            widget.title!,
+                            style: PlamFarmTextStyles.headline6Bold.copyWith(
+                                color: PlamFarmColors.palmFarmPrimary8, fontWeight: FontWeight.w700, fontSize: 16),
+                            overflow: TextOverflow.ellipsis,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                if (widget.title != null && widget.deviceIcon.isNullOrEmpty)
                   LayoutId(
                     id: _CustomAppBarSlot.title,
                     child: Text(
                       widget.title!,
-                      style: PlamFarmTextStyles.headline6Bold.copyWith(
-                        color: PlamFarmColors.palmFarmPrimary8,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16
-                      ),
+                      style: PlamFarmTextStyles.headline6Bold
+                          .copyWith(color: PlamFarmColors.palmFarmPrimary8, fontWeight: FontWeight.w700, fontSize: 16),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -131,9 +146,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: widget.actions!
-                          .intersperse(const Gap(4))
-                          .toList(),
+                      children: widget.actions!.intersperse(const Gap(4)).toList(),
                     ),
                   ),
               ],

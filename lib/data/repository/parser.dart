@@ -47,6 +47,7 @@ PalmFarmResponse parseResponse(String data) {
     //0707360110200700
 
     if(data.startsWith(setCurrentTime)){
+      Log.d(":::setCurrentTime data " + data);
       return PalmFarmSetCurrentTimeResponse(data: data);
     }
 

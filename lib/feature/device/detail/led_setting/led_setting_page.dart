@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:palmfarm/app_providers.dart';
 import 'package:palmfarm/feature/device/detail/component/farming_mode_box.dart';
+import 'package:palmfarm/feature/device/detail/device_detail_view_model.dart';
 import 'package:palmfarm/feature/device/detail/led_setting/led_provider.dart';
 import 'package:palmfarm/feature/device/detail/led_setting/led_setting_view_model.dart';
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
@@ -25,10 +26,11 @@ import 'package:palmfarm/utils/helper_message.dart';
 class LedSettingPage extends ConsumerStatefulWidget {
   static const routeName = '/led_setting';
 
-  const LedSettingPage({super.key, required this.mode, required this.deviceId});
+  const LedSettingPage({super.key, required this.mode, required this.deviceId, required this.detailViewModel});
 
   final FarmingMode mode;
   final String deviceId;
+  final DeviceDetailViewModel detailViewModel;
 
   @override
   ConsumerState createState() => _LedSettingPageeState();
@@ -42,7 +44,6 @@ class _LedSettingPageeState extends ConsumerState<LedSettingPage> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     _viewModel = ref.read(ledSettingViewModelProvider);
     _viewModel.setPreset(widget.mode, widget.deviceId);
@@ -192,11 +193,8 @@ class _LedSettingPageeState extends ConsumerState<LedSettingPage> {
                 showLedTimeSettingDialog(
                   context: context,
                   message: '입력한 LED ON 시각 정보를\n기기에 적용하시겠습니까?',
-                  onTap: () async {
-                    await _viewModel.onClickOnlySave(hour, minute);
-                    context.router.pop();
-                  },
-                  onImmediateTap: () => _viewModel.onClickOnlyDeviceSetting(hour, minute),
+                  onTap: () async => await _viewModel.onClickOnlySave(hour, minute),
+                  onImmediateTap: () => widget.detailViewModel.setImmediatelyLed(widget.mode, hour, minute),
                 );
               } else {
                 AppMessage.showMessage("시간을 모두 입력해주세요");

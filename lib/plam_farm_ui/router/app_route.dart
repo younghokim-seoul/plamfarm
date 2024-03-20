@@ -5,6 +5,7 @@ import 'package:palmfarm/data/local/vo/private_setting.dart';
 import 'package:palmfarm/feature/device/connector/connector_page.dart';
 import 'package:palmfarm/feature/device/detail/component/farming_mode_box.dart';
 import 'package:palmfarm/feature/device/detail/device_detail_page.dart';
+import 'package:palmfarm/feature/device/detail/device_detail_view_model.dart';
 import 'package:palmfarm/feature/device/detail/led_setting/led_setting_page.dart';
 import 'package:palmfarm/feature/device/detail/private_setting/private_page.dart';
 import 'package:palmfarm/feature/device/scan/scan_page.dart';

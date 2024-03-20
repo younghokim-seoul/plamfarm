@@ -80,7 +80,8 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
         ),
-        title: "연결된 기기 정보",
+        deviceIcon: Assets.image.icDevice.image(),
+        title: widget.palmFarmDevice.reName,
         leading: FlexIconButton.medium(
           icon: CupertinoIcons.left_chevron,
           onPressed: () => context.router.pop(),

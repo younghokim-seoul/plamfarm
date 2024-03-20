@@ -45,6 +45,7 @@ abstract class _$AppRouter extends RootStackRouter {
           key: args.key,
           mode: args.mode,
           deviceId: args.deviceId,
+          detailViewModel: args.detailViewModel,
         ),
       );
     },
@@ -146,6 +147,7 @@ class LedSettingRoute extends PageRouteInfo<LedSettingRouteArgs> {
     Key? key,
     required FarmingMode mode,
     required String deviceId,
+    required DeviceDetailViewModel detailViewModel,
     List<PageRouteInfo>? children,
   }) : super(
           LedSettingRoute.name,
@@ -153,6 +155,7 @@ class LedSettingRoute extends PageRouteInfo<LedSettingRouteArgs> {
             key: key,
             mode: mode,
             deviceId: deviceId,
+            detailViewModel: detailViewModel,
           ),
           initialChildren: children,
         );
@@ -168,6 +171,7 @@ class LedSettingRouteArgs {
     this.key,
     required this.mode,
     required this.deviceId,
+    required this.detailViewModel,
   });
 
   final Key? key;
@@ -176,9 +180,11 @@ class LedSettingRouteArgs {
 
   final String deviceId;
 
+  final DeviceDetailViewModel detailViewModel;
+
   @override
   String toString() {
-    return 'LedSettingRouteArgs{key: $key, mode: $mode, deviceId: $deviceId}';
+    return 'LedSettingRouteArgs{key: $key, mode: $mode, deviceId: $deviceId, detailViewModel: $detailViewModel}';
   }
 }
 

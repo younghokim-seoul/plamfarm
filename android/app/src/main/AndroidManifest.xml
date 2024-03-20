@@ -30,7 +30,7 @@
 
 
     <application
-        android:label="palmfarm"
+        android:label="팜팜마켓"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

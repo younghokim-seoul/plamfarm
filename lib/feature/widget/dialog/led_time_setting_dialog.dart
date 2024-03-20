@@ -18,11 +18,12 @@ Future<void> showLedTimeSettingDialog({
 }) {
   return showDialog(
     context: context,
-    builder: (context) => LedTimeSettingDialog(
-      message: message,
-      onTap: onTap,
-      onImmediateTap:onImmediateTap
-    ),
+    builder: (context) =>
+        LedTimeSettingDialog(
+            message: message,
+            onTap: onTap,
+            onImmediateTap: onImmediateTap
+        ),
   );
 }
 
@@ -58,7 +59,10 @@ class LedTimeSettingDialog extends StatelessWidget {
               ),
             ),
             child: InkWell(
-              onTap: () => onImmediateTap(),
+              onTap: () {
+                context.router.pop();
+                onImmediateTap.call();
+              },
               child: Text(
                 '바로 적용',
                 style: PlamFarmTextStyles.body2Bold.copyWith(color: PlamFarmColors.palmFarmPrimary5),
@@ -77,7 +81,10 @@ class LedTimeSettingDialog extends StatelessWidget {
               ),
             ),
             child: InkWell(
-              onTap: () => onTap(),
+              onTap: () {
+                context.router.pop();
+                onTap.call();
+              },
               child: Text(
                 '저장 하기',
                 style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
@@ -118,7 +125,10 @@ class LedTimeSettingDialog extends StatelessWidget {
                 Text(
                   message,
                   style: PlamFarmTextStyles.body2Bold
-                      .copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16, fontWeight: FontWeight.w400,height: 1.1),
+                      .copyWith(color: PlamFarmColors.palmFarmNormalTextColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      height: 1.1),
                 ).paddingSymmetric(horizontal: 5.w),
                 Gap(52.h),
               ],
@@ -127,7 +137,8 @@ class LedTimeSettingDialog extends StatelessWidget {
         ));
   }
 
-  Widget _buildTitleArea(BuildContext context) => Row(
+  Widget _buildTitleArea(BuildContext context) =>
+      Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           InkWell(
