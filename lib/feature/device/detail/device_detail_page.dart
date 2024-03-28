@@ -56,7 +56,7 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
           showDeviceDisconnectDialog(
               context: context,
               title: dialog_disconnect_title,
-              message: dialog_disconnect_content,
+              message: event.code == 0 ? dialog_disconnect_case_1 : dialog_disconnect_case_2,
               onTap: () {
                 context.router.pop();
                 _viewModel.connect(widget.palmFarmDevice.macAddress);
@@ -68,7 +68,7 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
 
   @override
   void dispose() {
-    // _viewModel.disposeAll();
+    _viewModel.disposeAll();
     super.dispose();
   }
 

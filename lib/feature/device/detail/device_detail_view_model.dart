@@ -44,8 +44,8 @@ class DeviceDetailViewModel implements ViewModelInterface {
     _bleRepository.startScan();
     _bleRepository.addChannelListener(
         DeviceDetailPage.routeName,
-        BleChannelListener(onDeviceStatusChanged: (update) async {
-          Log.d(":::onDeviceStatusChanged... " + update.toString());
+        BleChannelListener(onDeviceStatusChanged: (code ,update) async {
+          Log.d(":::onDeviceStatusChanged... " + update.toString() + " code " + code.toString());
           switch (update.connectionState) {
             case DeviceConnectionState.connected:
               await setRealCurrentTime();
@@ -53,7 +53,7 @@ class DeviceDetailViewModel implements ViewModelInterface {
               loadState(Connected());
               break;
             case DeviceConnectionState.disconnected:
-              loadState(Disconnected());
+              loadState(Disconnected(code: code));
               break;
             default:
               break;
@@ -90,7 +90,7 @@ class DeviceDetailViewModel implements ViewModelInterface {
           }
         } else {
           Log.d("::::릴리즈 버전일때는 전원을 키지 않고 Disconnect 처리.");
-          await _bleRepository.disconnect();
+          await _bleRepository.disconnect(code: 1);
         }
       }
 

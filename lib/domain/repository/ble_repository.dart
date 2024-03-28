@@ -9,7 +9,7 @@ abstract class BleRepository {
 
   Future<void> connect(String address);
 
-  Future<void> disconnect();
+  Future<void> disconnect({int code = 0});
 
   Future<PalmFarmResponse> write(Request request);
 
