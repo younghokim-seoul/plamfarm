@@ -31,6 +31,7 @@ class HomeMyDeviceListView extends ConsumerWidget {
             final model = state.data!.items[index];
             return GestureDetector(
               onLongPress: () => {
+                Log.d(":::롱클릭"),
                 showDeviceSettingDialog(
                   context: context,
                   title: "기기 이름 수정",
@@ -47,7 +48,10 @@ class HomeMyDeviceListView extends ConsumerWidget {
                   },
                 ),
               },
-              onTap: () => {context.router.push(DeviceDetailRoute(palmFarmDevice: model))},
+              onTap: () => {
+                Log.d(":::원클릭"),
+                context.router.push(DeviceDetailRoute(palmFarmDevice: model))
+              },
               child: Column(
                 children: [
                   Row(

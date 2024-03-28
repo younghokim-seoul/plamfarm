@@ -24,6 +24,7 @@ class ScanViewModel implements ViewModelInterface {
 
     _bleRepository.addChannelListener(ScanPage.routeName,
         BleChannelListener(onDeviceScanDiscovered: (val) {
+          Log.d("::val... " + val.toString());
           scanListUiState.val = val;
         }));
   }

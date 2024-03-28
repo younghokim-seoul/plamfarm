@@ -68,7 +68,7 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
 
   @override
   void dispose() {
-    _viewModel.disposeAll();
+    // _viewModel.disposeAll();
     super.dispose();
   }
 

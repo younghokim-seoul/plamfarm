@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:injectable/injectable.dart';
@@ -119,7 +120,10 @@ class BleRepositoryImpl extends BleRepository {
 
   Future<void> subscribeCharacteristic() async {
 
-    await flutterReactiveBle.requestMtu(deviceId: macAddress!, mtu: 128);
+
+    if(Platform.isAndroid){
+      await flutterReactiveBle.requestMtu(deviceId: macAddress!, mtu: 128);
+    }
 
 
     final characteristic = QualifiedCharacteristic(
@@ -185,6 +189,8 @@ class BleRepositoryImpl extends BleRepository {
     _requestQueue.add(() async {
       try {
         Log.i("::[Request Queue] " + request.toString());
+
+
         final characteristic = QualifiedCharacteristic(
           serviceId: Uuid.parse(serviceUuid),
           characteristicId: Uuid.parse(writeUuid),
@@ -193,14 +199,14 @@ class BleRepositoryImpl extends BleRepository {
 
         await Future.delayed(Duration(milliseconds: 200));
 
-        await flutterReactiveBle.writeCharacteristicWithoutResponse(
+        await flutterReactiveBle.writeCharacteristicWithResponse(
           characteristic,
           value: utf8.encode(request.command),
         );
         final response = await _responseCompleter.future.timeout(Duration(seconds: 3));
         completer.complete(response);
       } catch (e, t) {
-        Log.e("::::e => " + e.toString() + " t " + t.toString());
+        Log.e("::::send error => " + e.toString() + " t " + t.toString());
         completer.completeError(BleException(e, t));
       }
 

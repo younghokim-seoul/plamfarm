@@ -118,7 +118,6 @@ class DeviceDetailViewModel implements ViewModelInterface {
   }
 
   Future<void> setRealCurrentTime() async {
-    Log.d("::");
     try {
       final data = DateTime.now().convertRTC();
       Log.d("::::data... " + data);

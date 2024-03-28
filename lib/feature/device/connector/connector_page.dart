@@ -219,8 +219,7 @@ class _ConnectorPageState extends ConsumerState<ConnectorPage> {
       }
 
     } else if (Platform.isIOS) {
-      // iOS의 경우 위치 권한 추가
-      permissions.add(Permission.locationWhenInUse);
+
     }
 
     return permissions;
