@@ -9,7 +9,7 @@ class AppMessage {
     Fluttertoast.showToast(
         msg: message,
         toastLength: length,
-        gravity: ToastGravity.SNACKBAR,
+        gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black,
         textColor: Colors.white,
         fontSize: fontSize);

@@ -185,6 +185,9 @@ class _LedSettingPageeState extends ConsumerState<LedSettingPage> {
           child: InkWell(
             onTap: () async {
               if (!mounted) return;
+
+              FocusScope.of(context).unfocus();
+
               String hour = _hourController?.text ?? "";
               String minute = _minuteController?.text ?? "";
 

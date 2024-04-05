@@ -7,6 +7,7 @@ import 'package:palmfarm/feature/device/connector/connector_view_model.dart';
 import 'package:palmfarm/feature/device/detail/device_detail_view_model.dart';
 import 'package:palmfarm/feature/device/detail/led_setting/led_setting_view_model.dart';
 import 'package:palmfarm/feature/device/detail/private_setting/private_setting_view_model.dart';
+import 'package:palmfarm/feature/device/scan/scan_view_model.dart';
 import 'package:palmfarm/feature/home/home_view_model.dart';
 import 'package:palmfarm/injector.dart';
 import 'package:palmfarm/plam_farm_ui/router/app_route.dart';
@@ -46,4 +47,11 @@ final ledSettingViewModelProvider = Provider.autoDispose<LedSettingViewModel>((r
   final bleRepository = getIt<BleRepository>();
   final localRepository = ref.watch(localRepositoryProvider);
   return LedSettingViewModel(bleRepository,localRepository);
+});
+
+
+final scanViewModelProvider = Provider.autoDispose<ScanViewModel>((ref) {
+  final bleRepository = getIt<BleRepository>();
+  final localRepository = ref.watch(localRepositoryProvider);
+  return ScanViewModel(bleRepository, localRepository);
 });

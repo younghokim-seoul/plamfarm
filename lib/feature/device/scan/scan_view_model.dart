@@ -1,17 +1,18 @@
-import 'package:injectable/injectable.dart';
 import 'package:palmfarm/data/repository/ble_channel_listener.dart';
 import 'package:palmfarm/domain/entity/ble_scanner_state.dart';
 import 'package:palmfarm/domain/repository/ble_repository.dart';
+import 'package:palmfarm/domain/repository/local_repository.dart';
 import 'package:palmfarm/feature/device/scan/scan_page.dart';
 import 'package:palmfarm/feature/viewmodel_interface.dart';
 import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/reactive/arc_subject.dart';
 
-@Injectable()
-class ScanViewModel implements ViewModelInterface {
-  final BleRepository _bleRepository;
 
-  ScanViewModel(this._bleRepository);
+class ScanViewModel implements ViewModelInterface {
+  ScanViewModel(this._bleRepository, this._localRepository);
+
+  final BleRepository _bleRepository;
+  final LocalRepository _localRepository;
 
 
   final scanListUiState = ArcSubject<BleScannerState>(seed: BleScannerState(discoveredDevices: [], scanIsInProgress: true));
@@ -20,8 +21,7 @@ class ScanViewModel implements ViewModelInterface {
     _bleRepository.startScan();
   }
 
-  void setScanCallback() {
-
+  void setScanCallback() async {
     _bleRepository.addChannelListener(ScanPage.routeName,
         BleChannelListener(onDeviceScanDiscovered: (val) {
           Log.d("::val... " + val.toString());

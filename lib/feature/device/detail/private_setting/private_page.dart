@@ -146,6 +146,9 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
           ),
           child: InkWell(
             onTap: () async {
+
+              FocusScope.of(context).unfocus();
+
               final modeName = _modeNameController.text.trim().isEmpty
                   ? ""
                   : _modeNameController.text.trim();

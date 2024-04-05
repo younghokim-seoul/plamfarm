@@ -42,8 +42,7 @@ class BleRepositoryImpl extends BleRepository {
   void startScan() {
     _devices.clear();
     _scanSubscription?.cancel();
-    _scanSubscription = flutterReactiveBle
-        .scanForDevices(withServices: [Uuid.parse(serviceUuid)], scanMode: ScanMode.lowLatency).listen((device) {
+    _scanSubscription = flutterReactiveBle.scanForDevices(withServices: [Uuid.parse(serviceUuid)], scanMode: ScanMode.lowLatency).listen((device) {
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
         _devices[knownDeviceIndex] = device;
@@ -185,7 +184,7 @@ class BleRepositoryImpl extends BleRepository {
 
         await Future.delayed(Duration(milliseconds: 300));
 
-        await flutterReactiveBle.writeCharacteristicWithoutResponse(
+        await flutterReactiveBle.writeCharacteristicWithResponse(
           characteristic,
           value: utf8.encode(request.command),
         );

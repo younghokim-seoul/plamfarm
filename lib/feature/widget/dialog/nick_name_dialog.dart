@@ -51,7 +51,6 @@ class NickNameDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(32))),
@@ -69,7 +68,8 @@ class NickNameDialog extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () {
-                if(textEditingController.text.isNullOrEmpty){
+                if (textEditingController.text.isNullOrEmpty) {
+                  FocusScope.of(context).unfocus();
                   AppMessage.showMessage("이름을 입력해주세요.");
                   return;
                 }

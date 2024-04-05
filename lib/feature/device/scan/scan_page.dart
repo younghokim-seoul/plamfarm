@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:palmfarm/app_providers.dart';
 import 'package:palmfarm/feature/device/scan/component/scan_result_list_view.dart';
 import 'package:palmfarm/feature/device/scan/scan_view_model.dart';
 import 'package:palmfarm/feature/widget/appbar/custom_app_bar.dart';
 import 'package:palmfarm/feature/widget/appbar/flex_icon_button.dart';
-import 'package:palmfarm/injector.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_color.dart';
 import 'package:palmfarm/plam_farm_ui/theme/plam_farm_text_styles.dart';
 import 'package:palmfarm/utils/dev_log.dart';
@@ -24,11 +24,12 @@ class ScanPage extends ConsumerStatefulWidget {
 }
 
 class _ScanPageState extends ConsumerState<ScanPage> {
-  final _viewModel = getIt<ScanViewModel>();
+  late ScanViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
+    _viewModel = ref.read(scanViewModelProvider);
     _viewModel.startScan();
     _viewModel.setScanCallback();
   }
