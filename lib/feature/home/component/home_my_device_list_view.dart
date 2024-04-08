@@ -40,10 +40,12 @@ class HomeMyDeviceListView extends ConsumerWidget {
                   onSaveTap: (String reName) async {
                     Log.d("::::변경할 이름... " + reName);
                     viewModel.onUpdateDevice(model.copyWith(reName: reName));
+                    FocusScope.of(context).unfocus();
                     context.router.pop();
                   },
                   onDeleteTap: () async {
                     await viewModel.onDeleteDevice(model);
+                    FocusScope.of(context).unfocus();
                     context.router.pop();
                   },
                 ),

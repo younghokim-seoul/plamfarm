@@ -7,28 +7,27 @@ import 'package:palmfarm/feature/viewmodel_interface.dart';
 import 'package:palmfarm/utils/dev_log.dart';
 import 'package:palmfarm/utils/reactive/arc_subject.dart';
 
-
 class ScanViewModel implements ViewModelInterface {
   ScanViewModel(this._bleRepository, this._localRepository);
 
   final BleRepository _bleRepository;
   final LocalRepository _localRepository;
 
+  final scanListUiState =
+      ArcSubject<BleScannerState>(seed: BleScannerState(discoveredDevices: [], scanIsInProgress: true));
 
-  final scanListUiState = ArcSubject<BleScannerState>(seed: BleScannerState(discoveredDevices: [], scanIsInProgress: true));
-
-  void startScan() {
+  void startScan() async {
+    final myDeviceList = await _localRepository.getOnceAllPalmFarmDevices();
     _bleRepository.startScan();
+    _bleRepository.scanFilter(myDeviceList);
   }
 
   void setScanCallback() async {
-    _bleRepository.addChannelListener(ScanPage.routeName,
-        BleChannelListener(onDeviceScanDiscovered: (val) {
-          Log.d("::val... " + val.toString());
-          scanListUiState.val = val;
-        }));
-  }
+    _bleRepository.addChannelListener(ScanPage.routeName, BleChannelListener(onDeviceScanDiscovered: (val) {
+      scanListUiState.val = val;
+    }));
 
+  }
   @override
   disposeAll() async {
     Log.d(":::ScanViewModel disposeAll ");
@@ -40,4 +39,10 @@ class ScanViewModel implements ViewModelInterface {
   loadState(state) {
     scanListUiState.val = state;
   }
+
+
+
 }
+
+
+

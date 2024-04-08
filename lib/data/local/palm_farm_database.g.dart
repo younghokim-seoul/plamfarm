@@ -164,6 +164,20 @@ class _$PalmFarmDAO extends PalmFarmDAO {
   final DeletionAdapter<PalmFarmDevice> _palmFarmDeviceDeletionAdapter;
 
   @override
+  Future<List<PalmFarmDevice>> findAllPalmFarmDevices() async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM PalmFarmDevice ORDER BY createdAt',
+        mapper: (Map<String, Object?> row) => PalmFarmDevice(
+            row['macAddress'] as String,
+            row['reName'] as String,
+            row['originName'] as String,
+            row['vegetableLedTime'] as String,
+            row['strawBerryLedTime'] as String,
+            row['flowersLedTime'] as String,
+            _dateTimeConverter.decode(row['createdAt'] as int)));
+  }
+
+  @override
   Stream<List<PalmFarmDevice>> findAllPalmFarmDevicesAsStream() {
     return _queryAdapter.queryListStream(
         'SELECT * FROM PalmFarmDevice ORDER BY createdAt',

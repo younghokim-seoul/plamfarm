@@ -10,6 +10,7 @@ abstract class LocalRepository {
 
   Future<void> saveDevice(PalmFarmDevice model);
   Future<void> deleteDevice(PalmFarmDevice model);
+  Future<List<PalmFarmDevice>> getOnceAllPalmFarmDevices();
   Stream<List<PalmFarmDevice>> getAllPalmFarmItems();
   Future<PalmFarmDevice?> findPalmFarmDevice(String macAddress);
 

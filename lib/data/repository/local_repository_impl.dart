@@ -45,4 +45,7 @@ class LocalRepositoryImpl extends LocalRepository {
     final prefs = await _instanceFuture;
     await prefs.setString(Const.pref_nick_name, userIds);
   }
+
+  @override
+  Future<List<PalmFarmDevice>> getOnceAllPalmFarmDevices() async => await _palmFarmDAO.findAllPalmFarmDevices();
 }

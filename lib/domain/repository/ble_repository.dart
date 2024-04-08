@@ -1,9 +1,12 @@
+import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
 import 'package:palmfarm/data/repository/ble_channel_listener.dart';
 import 'package:palmfarm/data/repository/request.dart';
 import 'package:palmfarm/data/repository/response.dart';
 
 abstract class BleRepository {
   void startScan();
+
+  void scanFilter(List<PalmFarmDevice> filters);
 
   Future<void> stopScan();
 

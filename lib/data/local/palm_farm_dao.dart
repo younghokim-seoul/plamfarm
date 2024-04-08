@@ -12,6 +12,9 @@ abstract class PalmFarmDAO {
   Future<void> deletePalmFarmDevice(PalmFarmDevice model);
 
   @Query('SELECT * FROM PalmFarmDevice ORDER BY createdAt')
+  Future<List<PalmFarmDevice>> findAllPalmFarmDevices();
+
+  @Query('SELECT * FROM PalmFarmDevice ORDER BY createdAt')
   Stream<List<PalmFarmDevice>> findAllPalmFarmDevicesAsStream();
 
   @Query('SELECT * FROM PalmFarmDevice WHERE macAddress = :macAddress')

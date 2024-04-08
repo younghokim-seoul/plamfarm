@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:injectable/injectable.dart';
+import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
 import 'package:palmfarm/data/repository/ble_channel_listener.dart';
 import 'package:palmfarm/data/repository/parser.dart';
 import 'package:palmfarm/data/repository/request.dart';
@@ -29,11 +31,13 @@ class BleRepositoryImpl extends BleRepository {
   final _requestQueue = Queue<Future<void> Function()>();
 
   final _devices = <DiscoveredDevice>[];
+  var _filterDevices = <PalmFarmDevice>[];
   String? macAddress;
 
   @override
   Future<void> stopScan() async {
     _devices.clear();
+    _filterDevices.clear();
     _scanSubscription?.cancel();
     _scanSubscription = null;
   }
@@ -42,7 +46,9 @@ class BleRepositoryImpl extends BleRepository {
   void startScan() {
     _devices.clear();
     _scanSubscription?.cancel();
-    _scanSubscription = flutterReactiveBle.scanForDevices(withServices: [Uuid.parse(serviceUuid)], scanMode: ScanMode.lowLatency).listen((device) {
+    _scanSubscription = flutterReactiveBle.scanForDevices(withServices: [Uuid.parse(serviceUuid)], scanMode: ScanMode.lowLatency)
+        .where((event) => _filterDevices.isEmpty || _filterDevices.any((filter) => filter.macAddress != event.id))
+        .listen((device) {
       final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
       if (knownDeviceIndex >= 0) {
         _devices[knownDeviceIndex] = device;
@@ -184,10 +190,18 @@ class BleRepositoryImpl extends BleRepository {
 
         await Future.delayed(Duration(milliseconds: 300));
 
-        await flutterReactiveBle.writeCharacteristicWithResponse(
-          characteristic,
-          value: utf8.encode(request.command),
-        );
+        if(Platform.isAndroid){
+          await flutterReactiveBle.writeCharacteristicWithoutResponse(
+            characteristic,
+            value: utf8.encode(request.command),
+          );
+        }else{
+          await flutterReactiveBle.writeCharacteristicWithResponse(
+            characteristic,
+            value: utf8.encode(request.command),
+          );
+        }
+
         final response = await _responseCompleter.future.timeout(Duration(seconds: 3));
         completer.complete(response);
       } catch (e, t) {
@@ -214,6 +228,11 @@ class BleRepositoryImpl extends BleRepository {
     }
 
     _isProcessingQueue = false;
+  }
+
+  @override
+  void scanFilter(List<PalmFarmDevice> filters) {
+    this._filterDevices = filters;
   }
 }
 
