@@ -147,8 +147,6 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
           child: InkWell(
             onTap: () async {
 
-              FocusScope.of(context).unfocus();
-
               final modeName = _modeNameController.text.trim().isEmpty
                   ? ""
                   : _modeNameController.text.trim();
@@ -171,7 +169,7 @@ class _PrivateSettingPageState extends ConsumerState<PrivateSettingPage> {
                   ledMode: ledModel);
 
               if (!privateSettingModel.isEnableSetting()) {
-                AppMessage.showMessage("모든 값을 입력해주세요.");
+                AppMessage.unfocusAndShowMessage("모든 값을 입력해주세요.");
                 return;
               }
 

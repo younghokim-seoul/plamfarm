@@ -186,13 +186,12 @@ class _LedSettingPageeState extends ConsumerState<LedSettingPage> {
             onTap: () async {
               if (!mounted) return;
 
-              FocusScope.of(context).unfocus();
-
               String hour = _hourController?.text ?? "";
               String minute = _minuteController?.text ?? "";
 
               Log.d("::::과연.. hour " + hour + " minute " + minute);
               if (_viewModel.isTextFormCheck(hour, minute)) {
+                FocusScope.of(context).unfocus();
                 showLedTimeSettingDialog(
                   context: context,
                   message: '입력한 LED ON 시각 정보를\n기기에 적용하시겠습니까?',
@@ -200,7 +199,7 @@ class _LedSettingPageeState extends ConsumerState<LedSettingPage> {
                   onImmediateTap: () => widget.detailViewModel.setImmediatelyLed(widget.mode, hour, minute),
                 );
               } else {
-                AppMessage.showMessage("시간을 모두 입력해주세요");
+                AppMessage.unfocusAndShowMessage("시간을 모두 입력해주세요");
               }
             },
             child: Text(

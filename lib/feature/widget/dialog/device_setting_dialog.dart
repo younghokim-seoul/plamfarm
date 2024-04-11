@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:palmfarm/data/local/vo/palm_farm_device.dart';
@@ -102,7 +101,7 @@ class DeviceSettingDialog extends StatelessWidget {
             child: InkWell(
               onTap: () {
                 if(textEditingController.text.isNullOrEmpty){
-                  AppMessage.showMessage("이름을 입력해주세요.");
+                  AppMessage.unfocusAndShowMessage("이름을 입력해주세요.");
                   return;
                 }
                 onSaveTap.call(textEditingController.text);

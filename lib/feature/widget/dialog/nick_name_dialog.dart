@@ -52,8 +52,7 @@ class NickNameDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32))),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32))),
         elevation: 0,
         actionsAlignment: MainAxisAlignment.end,
         actionsPadding: EdgeInsets.zero,
@@ -67,18 +66,16 @@ class NickNameDialog extends StatelessWidget {
               ),
             ),
             child: InkWell(
-              onTap: () {
+              onTap: () async {
                 if (textEditingController.text.isNullOrEmpty) {
-                  FocusScope.of(context).unfocus();
-                  AppMessage.showMessage("이름을 입력해주세요.");
+                  AppMessage.unfocusAndShowMessage("이름을 입력해주세요.");
                   return;
                 }
                 onSaveTap.call(textEditingController.text);
               },
               child: Text(
                 '저장하기',
-                style:
-                    PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
+                style: PlamFarmTextStyles.body2Bold.copyWith(color: Colors.white),
               ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
             ),
           ).paddingOnly(right: 24, bottom: 24),
@@ -99,8 +96,7 @@ class NickNameDialog extends StatelessWidget {
               },
               child: Text(
                 '닫기',
-                style: PlamFarmTextStyles.body2Bold
-                    .copyWith(color: PlamFarmColors.palmFarmPrimary5),
+                style: PlamFarmTextStyles.body2Bold.copyWith(color: PlamFarmColors.palmFarmPrimary5),
               ).paddingSymmetric(horizontal: 12.w, vertical: 8.h),
             ),
           ).paddingOnly(bottom: 24, right: 24),
@@ -127,8 +123,7 @@ class NickNameDialog extends StatelessWidget {
         children: [
           Text(
             title,
-            style: PlamFarmTextStyles.buttonLarge.copyWith(
-                color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16),
+            style: PlamFarmTextStyles.buttonLarge.copyWith(color: PlamFarmColors.palmFarmNormalTextColor, fontSize: 16),
           ),
           InkWell(
             splashFactory: InkRipple.splashFactory,
